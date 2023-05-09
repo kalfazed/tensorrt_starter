@@ -18,8 +18,6 @@ private:
     std::shared_ptr<nvinfer1::ICudaEngine> mEngine;
     bool constructNetwork();
     bool preprocess();
-    void fileRead(const std::string& path, void* memory, int& size);
-
 };
 
-#endif
+#endif // __MODEL_HPP__

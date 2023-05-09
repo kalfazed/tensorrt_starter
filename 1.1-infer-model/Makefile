@@ -93,7 +93,7 @@ install: $(APP)
 clean:
 	rm -rf $(APP)
 	rm -rf build
-	rm -rf models/*.engine
+	# rm -rf models/*.engine
 
 reinstall: $(APP)
 	@echo "Re installing $(APP)"

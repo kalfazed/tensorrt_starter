@@ -11,5 +11,8 @@ int main(int argc, char const *argv[])
     if(!model.build()){
         cout << "fail in building model" << endl;
     }
-    return 0;
+    
+    if (model.infer()){
+        cout << "fail in infer model" << endl;
+    }
 }

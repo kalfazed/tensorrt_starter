@@ -1,11 +1,13 @@
+#include <memory>
+#include <iostream>
+#include <string>
+#include <type_traits>
+
 #include "model.hpp"
 #include "NvInfer.h"
 #include "NvOnnxParser.h"
-#include <memory>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
+#include "utils.hpp"
+#include "cuda_runtime.h"
 
 using namespace std;
 
@@ -39,6 +41,10 @@ template <typename T>
 using make_unique = std::unique_ptr<T, InferDeleter>;
 
 bool Model::build(){
+    if (fileExists("models/example.engine")){
+        cout << "trt engine has been generated!" << endl;
+        return true;
+    }
     Logger logger;
     auto builder       = make_unique<nvinfer1::IBuilder>(nvinfer1::createInferBuilder(logger));
     auto network       = make_unique<nvinfer1::INetworkDefinition>(builder->createNetworkV2(1));
@@ -47,7 +53,7 @@ bool Model::build(){
 
     config->setMaxWorkspaceSize(1<<28);
 
-    if (!parser->parseFromFile("models/mnist.onnx", 1)){
+    if (!parser->parseFromFile("models/example.onnx", 1)){
         return false;
     }
 
@@ -55,7 +61,7 @@ bool Model::build(){
     auto plan          = builder->buildSerializedNetwork(*network, *config);
     auto runtime       = make_unique<nvinfer1::IRuntime>(nvinfer1::createInferRuntime(logger));
 
-    auto f = fopen("models/mnist.engine", "wb");
+    auto f = fopen("models/example.engine", "wb");
     fwrite(plan->data(), 1, plan->size(), f);
     fclose(f);
 
@@ -65,56 +71,68 @@ bool Model::build(){
     return true;
 };
 
-void Model::fileRead(const string& path, void* memory, int& size){
-    stringstream sModel;
-    ifstream cache(path);
-
-    /* 将engine的内容写入sModel中*/
-    sModel.seekg(0, sModel.beg);
-    sModel << cache.rdbuf();
-    cache.close();
-
-    /* 计算model的大小*/
-    sModel.seekg(0, ios::end);
-    size = sModel.tellg();
-    sModel.seekg(0, ios::beg);
-    memory = malloc(size);
-
-    /* 将sModel中的stream通过read函数写入modelMem中*/
-    sModel.read((char*)memory, size);
-}
-
-
 bool Model::infer(){
     /*
         我们在infer需要做的事情
         1. 读取model => 创建runtime, engine, context
-        2. 预处理 (读取数据，创建buff存储数据，并且将数据从0~255缩放到0~1)
-        3. 把数据进行host->device传输
-        4. 使用context推理
-        5. 把数据进行device->host传输
-        6. 后处理 (计算softmax，获取最大值并打印)
+        2. 把数据进行host->device传输
+        3. 使用context推理
+        4. 把数据进行device->host传输
     */
 
-    // 1. 读取model => 创建runtime, engine, context
-    string planFilePath = "models/mnist.engine";
-    void* modelMemory;
-    int modelSize;
-    fileRead(planFilePath, modelMemory, modelSize);
+    /* 1. 读取model => 创建runtime, engine, context */
+    string planFilePath = "models/example.engine";
+    if (!fileExists(planFilePath)) {
+        return false;
+    }
+
+    vector<unsigned char> modelData;
+    modelData = loadFile(planFilePath);
     
     Logger logger;
-    auto runtime = make_unique<nvinfer1::IRuntime>(nvinfer1::createInferRuntime(logger));
-    auto engine  = make_unique<nvinfer1::ICudaEngine>(runtime->deserializeCudaEngine(modelMemory, modelSize));
-    auto context = make_unique<nvinfer1::IExecutionContext>(engine->createExecutionContext());
+    auto runtime     = make_unique<nvinfer1::IRuntime>(nvinfer1::createInferRuntime(logger));
+    auto engine      = make_unique<nvinfer1::ICudaEngine>(runtime->deserializeCudaEngine(modelData.data(), modelData.size()));
+    auto context     = make_unique<nvinfer1::IExecutionContext>(engine->createExecutionContext());
 
+    auto input_dims   = context->getBindingDimensions(0);
+    auto output_dims  = context->getBindingDimensions(1);
 
-    // 2. 预处理 (读取数据，创建buff存储数据，并且将数据从0~255缩放到0~1)
-    // 3. 把数据进行host->device传输
-    // 4. 使用context推理
-    // 5. 把数据进行device->host传输
-    // 6. 后处理 (计算softmax，获取最大值并打印)
+    cout << "input dim shape is:  " << printDims(input_dims) << endl;
+    cout << "output dim shape is: " << printDims(output_dims) << endl;
 
-   return true;
+    /* 2. host->device的数据传递 */
+    cudaStream_t stream;
+    cudaStreamCreate(&stream);
+
+    /* host memory上的数据*/
+    float input_host[]    = {1, 2, 3, 4};
+    float output_host[3];
+
+    /* device memory上的数据*/
+    float* input_device = nullptr;
+    float* weight_device = nullptr;
+    float* output_device = nullptr;
+
+    int input_size = 4;
+    int output_size = 3;
+
+    /* 分配空间, 并传送数据从host到device*/
+    cudaMalloc((void**)input_device, sizeof(input_host));
+    cudaMalloc((void**)output_device, sizeof(output_host));
+    cudaMemcpyAsync(input_device, input_host, sizeof(input_host), cudaMemcpyKind::cudaMemcpyHostToDevice, stream);
+
+    /* 3. 模型推理, 最后做同步处理 */
+    float* bindings[] = {input_device, output_device};
+    bool success = context->enqueueV2((void**)bindings, stream, nullptr);
+
+    /* 4. device->host的数据传递 */
+    cudaMemcpyAsync(output_host, output_device, sizeof(output_host), cudaMemcpyKind::cudaMemcpyDeviceToHost, stream);
+    cudaStreamSynchronize(stream);
+    
+    cout << "input data is: " << printTensor(input_host, input_size) << endl;
+    cout << "output data is:" << printTensor(output_host, output_size) << endl;
+    cout << "finished inference" << endl;
+    return true;
 }
 
 
