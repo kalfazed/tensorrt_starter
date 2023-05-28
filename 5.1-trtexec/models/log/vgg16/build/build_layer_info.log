@@ -1,0 +1,860 @@
+{"Layers": [{
+  "Name": "/features/features.0/Conv + /features/features.1/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "input0",
+    "Location": "Device",
+    "Dimensions": [1,3,224,224],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,224,224],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 1728},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "HasReLU": 1,
+  "TacticName": "ampere_scudnn_128x64_relu_small_nn_v1",
+  "TacticValue": "0x3f243c490d502deb"
+},{
+  "Name": "/features/features.2/Conv + /features/features.3/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/features/features.1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,224,224],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.3/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,224,224],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 36864},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "HasReLU": 1,
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a"
+},{
+  "Name": "/features/features.4/MaxPool",
+  "LayerType": "CaskPooling",
+  "Inputs": [
+  {
+    "Name": "/features/features.3/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,224,224],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.4/MaxPool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,112,112],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Pooling",
+  "PoolingType": "MAX",
+  "WindowSize": [2,2],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [2,2],
+  "BlendFactor": 0,
+  "AverageCountExcludesPadding": 1,
+  "TacticName": "sm50_xmma_pooling_tiled_FP32NCHW_kMAX_tP2_tQ16_tR2_tS2_tU2_tV2_tUnroll8_tThreads128",
+  "TacticValue": "0x2802f161f2fbd8fa"
+},{
+  "Name": "/features/features.5/Conv + /features/features.6/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/features/features.4/MaxPool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,112,112],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.6/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,128,112,112],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 128,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 73728},
+  "Bias": {"Type": "Float", "Count": 128},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "HasReLU": 1,
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a"
+},{
+  "Name": "/features/features.7/Conv + /features/features.8/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/features/features.6/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,128,112,112],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.8/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,128,112,112],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 128,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 147456},
+  "Bias": {"Type": "Float", "Count": 128},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "HasReLU": 1,
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a"
+},{
+  "Name": "/features/features.9/MaxPool",
+  "LayerType": "CaskPooling",
+  "Inputs": [
+  {
+    "Name": "/features/features.8/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,128,112,112],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.9/MaxPool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,128,56,56],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Pooling",
+  "PoolingType": "MAX",
+  "WindowSize": [2,2],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [2,2],
+  "BlendFactor": 0,
+  "AverageCountExcludesPadding": 1,
+  "TacticName": "sm50_xmma_pooling_tiled_FP32NCHW_kMAX_tP2_tQ16_tR2_tS2_tU2_tV2_tUnroll8_tThreads128",
+  "TacticValue": "0x2802f161f2fbd8fa"
+},{
+  "Name": "/features/features.10/Conv + /features/features.11/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/features/features.9/MaxPool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,128,56,56],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.11/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,256,56,56],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 256,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 294912},
+  "Bias": {"Type": "Float", "Count": 256},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "HasReLU": 1,
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a"
+},{
+  "Name": "/features/features.12/Conv + /features/features.13/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/features/features.11/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,256,56,56],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.13/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,256,56,56],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 256,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 589824},
+  "Bias": {"Type": "Float", "Count": 256},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "HasReLU": 1,
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a"
+},{
+  "Name": "/features/features.14/Conv + /features/features.15/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/features/features.13/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,256,56,56],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.15/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,256,56,56],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 256,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 589824},
+  "Bias": {"Type": "Float", "Count": 256},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "HasReLU": 1,
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a"
+},{
+  "Name": "/features/features.16/MaxPool",
+  "LayerType": "CaskPooling",
+  "Inputs": [
+  {
+    "Name": "/features/features.15/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,256,56,56],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.16/MaxPool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,256,28,28],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Pooling",
+  "PoolingType": "MAX",
+  "WindowSize": [2,2],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [2,2],
+  "BlendFactor": 0,
+  "AverageCountExcludesPadding": 1,
+  "TacticName": "sm50_xmma_pooling_tiled_FP32NCHW_kMAX_tP2_tQ16_tR2_tS2_tU2_tV2_tUnroll6_tThreads128",
+  "TacticValue": "0xf4b20242f8c135e7"
+},{
+  "Name": "/features/features.17/Conv + /features/features.18/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/features/features.16/MaxPool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,256,28,28],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.18/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,28,28],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 512,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 1179648},
+  "Bias": {"Type": "Float", "Count": 512},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "HasReLU": 1,
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a"
+},{
+  "Name": "/features/features.19/Conv + /features/features.20/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/features/features.18/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,28,28],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.20/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,28,28],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 512,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 2359296},
+  "Bias": {"Type": "Float", "Count": 512},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "HasReLU": 1,
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a"
+},{
+  "Name": "/features/features.21/Conv + /features/features.22/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "/features/features.20/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,28,28],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.22/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,28,28],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 512,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 2359296},
+  "Bias": {"Type": "Float", "Count": 512},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "HasReLU": 1,
+  "TacticName": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+  "TacticValue": "0x94119b4c514b211a"
+},{
+  "Name": "/features/features.23/MaxPool",
+  "LayerType": "CaskPooling",
+  "Inputs": [
+  {
+    "Name": "/features/features.22/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,28,28],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.23/MaxPool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,14,14],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Pooling",
+  "PoolingType": "MAX",
+  "WindowSize": [2,2],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [2,2],
+  "BlendFactor": 0,
+  "AverageCountExcludesPadding": 1,
+  "TacticName": "sm50_xmma_pooling_tiled_FP32NCHW_kMAX_tP2_tQ16_tR2_tS2_tU2_tV2_tUnroll6_tThreads128",
+  "TacticValue": "0xf4b20242f8c135e7"
+},{
+  "Name": "/features/features.24/Conv + /features/features.25/Relu",
+  "LayerType": "FusedConvActConvolution",
+  "Inputs": [
+  {
+    "Name": "/features/features.23/MaxPool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,14,14],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.25/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,14,14],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 512,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 2359296},
+  "Bias": {"Type": "Float", "Count": 512},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "ConvolutionTacticIndex": 151,
+  "TacticValue": "0x000000000097ffff"
+},{
+  "Name": "/features/features.26/Conv + /features/features.27/Relu",
+  "LayerType": "FusedConvActConvolution",
+  "Inputs": [
+  {
+    "Name": "/features/features.25/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,14,14],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.27/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,14,14],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 512,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 2359296},
+  "Bias": {"Type": "Float", "Count": 512},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "ConvolutionTacticIndex": 151,
+  "TacticValue": "0x000000000097ffff"
+},{
+  "Name": "/features/features.28/Conv + /features/features.29/Relu",
+  "LayerType": "FusedConvActConvolution",
+  "Inputs": [
+  {
+    "Name": "/features/features.27/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,14,14],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.29/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,14,14],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [1,1],
+  "PostPadding": [1,1],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 512,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 2359296},
+  "Bias": {"Type": "Float", "Count": 512},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "ConvolutionTacticIndex": 151,
+  "TacticValue": "0x000000000097ffff"
+},{
+  "Name": "/features/features.30/MaxPool",
+  "LayerType": "CaskPooling",
+  "Inputs": [
+  {
+    "Name": "/features/features.29/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,14,14],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/features/features.30/MaxPool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,7,7],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Pooling",
+  "PoolingType": "MAX",
+  "WindowSize": [2,2],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [2,2],
+  "BlendFactor": 0,
+  "AverageCountExcludesPadding": 1,
+  "TacticName": "sm50_xmma_pooling_tiled_FP32NCHW_kMAX_tP2_tQ16_tR2_tS2_tU2_tV2_tUnroll6_tThreads128",
+  "TacticValue": "0xf4b20242f8c135e7"
+},{
+  "Name": "/avgpool/AveragePool",
+  "LayerType": "CaskPooling",
+  "Inputs": [
+  {
+    "Name": "/features/features.30/MaxPool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,7,7],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/avgpool/AveragePool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,7,7],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Pooling",
+  "PoolingType": "AVERAGE",
+  "WindowSize": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "BlendFactor": 0,
+  "AverageCountExcludesPadding": 1,
+  "TacticName": "sm50_xmma_pooling_nd_NCDHW_kAVERAGE_kGENERIC_3D_POOLING_MODE_kFLOAT_0",
+  "TacticValue": "0xba33c80addb15739"
+},{
+  "Name": "/Flatten + reshape_before_/classifier/classifier.0/Gemm",
+  "LayerType": "NoOp",
+  "Inputs": [
+  {
+    "Name": "/avgpool/AveragePool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,512,7,7],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "reshape_before_/classifier/classifier.0/Gemm_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,25088,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "TacticValue": "0x0000000000000000"
+},{
+  "Name": "classifier.0.bias + (Unnamed Layer* 36) [Shuffle] + unsqueeze_node_after_(Unnamed Layer* 36) [Shuffle]_(Unnamed Layer* 36) [Shuffle]_output",
+  "LayerType": "Constant",
+  "Inputs": [],
+  "Outputs": [
+  {
+    "Name": "unsqueeze_tensor_after_(Unnamed Layer* 36) [Shuffle]_(Unnamed Layer* 36) [Shuffle]_output_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,4096,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Constant",
+  "weights": {"Type": "Float", "Count": 4096},
+  "dimensions": [1,4096,1,1],
+  "TacticValue": "0x0000000000000000"
+},{
+  "Name": "/classifier/classifier.0/Gemm + (Unnamed Layer* 37) [ElementWise] + /classifier/classifier.1/Relu",
+  "LayerType": "CaskGemmConvolution",
+  "Inputs": [
+  {
+    "Name": "reshape_before_/classifier/classifier.0/Gemm_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,25088,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  },
+  {
+    "Name": "unsqueeze_tensor_after_(Unnamed Layer* 36) [Shuffle]_(Unnamed Layer* 36) [Shuffle]_output_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,4096,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/classifier/classifier.1/Relu_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,4096,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 4096,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 102760448},
+  "Bias": {"Type": "Float", "Count": 0},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 1,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "TacticName": "sm50_xmma_cublas_gemvx_f32f32_f32_f32_tn_n_int32_unit_n_launch_param4x32x32_strided_unit_stride",
+  "TacticValue": "0x0000000000020460"
+},{
+  "Name": "/classifier/classifier.3/Gemm + classifier.0.bias_clone_1 + (Unnamed Layer* 41) [Shuffle] + unsqueeze_node_after_(Unnamed Layer* 41) [Shuffle]_(Unnamed Layer* 41) [Shuffle]_output + (Unnamed Layer* 42) [ElementWise] + /classifier/classifier.4/Relu",
+  "LayerType": "CaskGemmConvolution",
+  "Inputs": [
+  {
+    "Name": "/classifier/classifier.1/Relu_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,4096,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/classifier/classifier.4/Relu_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,4096,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 4096,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 16777216},
+  "Bias": {"Type": "Float", "Count": 4096},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "TacticName": "sm50_xmma_cublas_gemvx_f32f32_f32_f32_tn_n_int32_unit_n_launch_param8x32x32_strided_unit_stride",
+  "TacticValue": "0x00000000000204b2"
+},{
+  "Name": "/classifier/classifier.6/Gemm",
+  "LayerType": "CaskGemmConvolution",
+  "Inputs": [
+  {
+    "Name": "/classifier/classifier.4/Relu_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,4096,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/classifier/classifier.6/Gemm_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,1000,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 1000,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 4096000},
+  "Bias": {"Type": "Float", "Count": 1000},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "sm50_xmma_cublas_gemvx_f32f32_f32_f32_tn_n_int32_unit_n_launch_param8x32x32_strided_unit_stride",
+  "TacticValue": "0x00000000000204b2"
+},{
+  "Name": "reshape_after_/classifier/classifier.6/Gemm",
+  "LayerType": "NoOp",
+  "Inputs": [
+  {
+    "Name": "/classifier/classifier.6/Gemm_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,1000,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "output0",
+    "Location": "Device",
+    "Dimensions": [1,1000],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "TacticValue": "0x0000000000000000"
+}],
+"Bindings": ["input0"
+,"output0"
+]}

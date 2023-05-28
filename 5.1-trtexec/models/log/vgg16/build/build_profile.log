@@ -1,0 +1,28 @@
+[
+  { "count" : 1360 }
+, { "name" : "/features/features.0/Conv + /features/features.1/Relu", "timeMs" : 47.0163, "averageMs" : 0.0345708, "medianMs" : 0.034816, "percentage" : 1.4966 }
+, { "name" : "/features/features.2/Conv + /features/features.3/Relu", "timeMs" : 216.985, "averageMs" : 0.159548, "medianMs" : 0.15968, "percentage" : 6.90696 }
+, { "name" : "/features/features.4/MaxPool", "timeMs" : 37.3878, "averageMs" : 0.027491, "medianMs" : 0.027648, "percentage" : 1.19011 }
+, { "name" : "/features/features.5/Conv + /features/features.6/Relu", "timeMs" : 111.626, "averageMs" : 0.082078, "medianMs" : 0.08192, "percentage" : 3.55322 }
+, { "name" : "/features/features.7/Conv + /features/features.8/Relu", "timeMs" : 193.159, "averageMs" : 0.142029, "medianMs" : 0.141552, "percentage" : 6.14855 }
+, { "name" : "/features/features.9/MaxPool", "timeMs" : 20.0094, "averageMs" : 0.0147128, "medianMs" : 0.014336, "percentage" : 0.63693 }
+, { "name" : "/features/features.10/Conv + /features/features.11/Relu", "timeMs" : 129.62, "averageMs" : 0.0953087, "medianMs" : 0.095232, "percentage" : 4.12599 }
+, { "name" : "/features/features.12/Conv + /features/features.13/Relu", "timeMs" : 239.433, "averageMs" : 0.176053, "medianMs" : 0.175872, "percentage" : 7.62149 }
+, { "name" : "/features/features.14/Conv + /features/features.15/Relu", "timeMs" : 240.334, "averageMs" : 0.176716, "medianMs" : 0.176128, "percentage" : 7.65018 }
+, { "name" : "/features/features.16/MaxPool", "timeMs" : 11.467, "averageMs" : 0.00843161, "medianMs" : 0.008192, "percentage" : 0.365011 }
+, { "name" : "/features/features.17/Conv + /features/features.18/Relu", "timeMs" : 126.755, "averageMs" : 0.0932025, "medianMs" : 0.093184, "percentage" : 4.03481 }
+, { "name" : "/features/features.19/Conv + /features/features.20/Relu", "timeMs" : 235.164, "averageMs" : 0.172915, "medianMs" : 0.172736, "percentage" : 7.48563 }
+, { "name" : "/features/features.21/Conv + /features/features.22/Relu", "timeMs" : 236.135, "averageMs" : 0.173629, "medianMs" : 0.173088, "percentage" : 7.51653 }
+, { "name" : "/features/features.23/MaxPool", "timeMs" : 7.58608, "averageMs" : 0.005578, "medianMs" : 0.005408, "percentage" : 0.241476 }
+, { "name" : "/features/features.24/Conv + /features/features.25/Relu", "timeMs" : 108.851, "averageMs" : 0.0800372, "medianMs" : 0.079872, "percentage" : 3.46487 }
+, { "name" : "/features/features.26/Conv + /features/features.27/Relu", "timeMs" : 107.719, "averageMs" : 0.0792055, "medianMs" : 0.078848, "percentage" : 3.42887 }
+, { "name" : "/features/features.28/Conv + /features/features.29/Relu", "timeMs" : 107.827, "averageMs" : 0.0792843, "medianMs" : 0.078848, "percentage" : 3.43228 }
+, { "name" : "/features/features.30/MaxPool", "timeMs" : 5.8113, "averageMs" : 0.00427302, "medianMs" : 0.004096, "percentage" : 0.184982 }
+, { "name" : "/avgpool/AveragePool", "timeMs" : 5.60469, "averageMs" : 0.0041211, "medianMs" : 0.004096, "percentage" : 0.178406 }
+, { "name" : "/Flatten + reshape_before_/classifier/classifier.0/Gemm", "timeMs" : 0, "averageMs" : 0, "medianMs" : 0, "percentage" : 0 }
+, { "name" : "classifier.0.bias + (Unnamed Layer* 36) [Shuffle] + unsqueeze_node_after_(Unnamed Layer* 36) [Shuffle]_(Unnamed Layer* 36) [Shuffle]_output", "timeMs" : 0, "averageMs" : 0, "medianMs" : 0, "percentage" : 0 }
+, { "name" : "/classifier/classifier.0/Gemm + (Unnamed Layer* 37) [ElementWise] + /classifier/classifier.1/Relu", "timeMs" : 780.666, "averageMs" : 0.574019, "medianMs" : 0.574464, "percentage" : 24.8497 }
+, { "name" : "/classifier/classifier.3/Gemm + classifier.0.bias_clone_1 + (Unnamed Layer* 41) [Shuffle] + unsqueeze_node_after_(Unnamed Layer* 41) [Shuffle]_(Unnamed Layer* 41) [Shuffle]_output + (Unnamed Layer* 42) [ElementWise] + /classifier/classifier.4/Relu", "timeMs" : 134.177, "averageMs" : 0.0986596, "medianMs" : 0.098304, "percentage" : 4.27105 }
+, { "name" : "/classifier/classifier.6/Gemm", "timeMs" : 38.211, "averageMs" : 0.0280963, "medianMs" : 0.027776, "percentage" : 1.21631 }
+, { "name" : "reshape_after_/classifier/classifier.6/Gemm", "timeMs" : 0, "averageMs" : 0, "medianMs" : 0, "percentage" : 0 }
+]

@@ -33,3 +33,7 @@
 
 # Others
 archive/
+*.onnx
+*.engine
+*.o
+*.mk

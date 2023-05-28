@@ -1,0 +1,65 @@
+[
+  { "count" : 2147 }
+, { "name" : "/conv1/Conv + /relu/Relu", "timeMs" : 59.7096, "averageMs" : 0.0278107, "medianMs" : 0.027648, "percentage" : 1.92539 }
+, { "name" : "/maxpool/MaxPool", "timeMs" : 12.6677, "averageMs" : 0.00590017, "medianMs" : 0.006144, "percentage" : 0.408479 }
+, { "name" : "/layer1/layer1.0/conv1/Conv + /layer1/layer1.0/relu/Relu", "timeMs" : 22.54, "averageMs" : 0.0104984, "medianMs" : 0.01024, "percentage" : 0.72682 }
+, { "name" : "/layer1/layer1.0/conv2/Conv + /layer1/layer1.0/relu_1/Relu", "timeMs" : 36.546, "averageMs" : 0.0170219, "medianMs" : 0.017408, "percentage" : 1.17845 }
+, { "name" : "/layer1/layer1.0/downsample/downsample.0/Conv", "timeMs" : 33.812, "averageMs" : 0.0157485, "medianMs" : 0.01536, "percentage" : 1.09029 }
+, { "name" : "/layer1/layer1.0/conv3/Conv + /layer1/layer1.0/Add + /layer1/layer1.0/relu_2/Relu", "timeMs" : 36.7701, "averageMs" : 0.0171263, "medianMs" : 0.017408, "percentage" : 1.18568 }
+, { "name" : "/layer1/layer1.1/conv1/Conv + /layer1/layer1.1/relu/Relu", "timeMs" : 37.999, "averageMs" : 0.0176987, "medianMs" : 0.017408, "percentage" : 1.22531 }
+, { "name" : "/layer1/layer1.1/conv2/Conv + /layer1/layer1.1/relu_1/Relu", "timeMs" : 36.3164, "averageMs" : 0.016915, "medianMs" : 0.017088, "percentage" : 1.17105 }
+, { "name" : "/layer1/layer1.1/conv3/Conv + /layer1/layer1.1/Add + /layer1/layer1.1/relu_2/Relu", "timeMs" : 37.0534, "averageMs" : 0.0172582, "medianMs" : 0.017408, "percentage" : 1.19482 }
+, { "name" : "/layer1/layer1.2/conv1/Conv + /layer1/layer1.2/relu/Relu", "timeMs" : 37.8419, "averageMs" : 0.0176255, "medianMs" : 0.017408, "percentage" : 1.22024 }
+, { "name" : "/layer1/layer1.2/conv2/Conv + /layer1/layer1.2/relu_1/Relu", "timeMs" : 36.3661, "averageMs" : 0.0169381, "medianMs" : 0.017152, "percentage" : 1.17266 }
+, { "name" : "/layer1/layer1.2/conv3/Conv + /layer1/layer1.2/Add + /layer1/layer1.2/relu_2/Relu", "timeMs" : 36.8106, "averageMs" : 0.0171451, "medianMs" : 0.017408, "percentage" : 1.18699 }
+, { "name" : "/layer2/layer2.0/conv1/Conv + /layer2/layer2.0/relu/Relu", "timeMs" : 49.5937, "averageMs" : 0.0230991, "medianMs" : 0.023456, "percentage" : 1.59919 }
+, { "name" : "/layer2/layer2.0/conv2/Conv + /layer2/layer2.0/relu_1/Relu", "timeMs" : 84.4742, "averageMs" : 0.0393452, "medianMs" : 0.038912, "percentage" : 2.72394 }
+, { "name" : "/layer2/layer2.0/downsample/downsample.0/Conv", "timeMs" : 55.4867, "averageMs" : 0.0258438, "medianMs" : 0.0256, "percentage" : 1.78921 }
+, { "name" : "/layer2/layer2.0/conv3/Conv + /layer2/layer2.0/Add + /layer2/layer2.0/relu_2/Relu", "timeMs" : 37.4223, "averageMs" : 0.01743, "medianMs" : 0.017408, "percentage" : 1.20671 }
+, { "name" : "/layer2/layer2.1/conv1/Conv + /layer2/layer2.1/relu/Relu", "timeMs" : 47.8115, "averageMs" : 0.022269, "medianMs" : 0.022528, "percentage" : 1.54172 }
+, { "name" : "/layer2/layer2.1/conv2/Conv + /layer2/layer2.1/relu_1/Relu", "timeMs" : 47.885, "averageMs" : 0.0223032, "medianMs" : 0.022528, "percentage" : 1.54409 }
+, { "name" : "/layer2/layer2.1/conv3/Conv + /layer2/layer2.1/Add + /layer2/layer2.1/relu_2/Relu", "timeMs" : 35.0453, "averageMs" : 0.0163229, "medianMs" : 0.016384, "percentage" : 1.13006 }
+, { "name" : "/layer2/layer2.2/conv1/Conv + /layer2/layer2.2/relu/Relu", "timeMs" : 47.3822, "averageMs" : 0.022069, "medianMs" : 0.0224, "percentage" : 1.52788 }
+, { "name" : "/layer2/layer2.2/conv2/Conv + /layer2/layer2.2/relu_1/Relu", "timeMs" : 47.7711, "averageMs" : 0.0222501, "medianMs" : 0.022528, "percentage" : 1.54042 }
+, { "name" : "/layer2/layer2.2/conv3/Conv + /layer2/layer2.2/Add + /layer2/layer2.2/relu_2/Relu", "timeMs" : 35.0874, "averageMs" : 0.0163425, "medianMs" : 0.016384, "percentage" : 1.13142 }
+, { "name" : "/layer2/layer2.3/conv1/Conv + /layer2/layer2.3/relu/Relu", "timeMs" : 47.5655, "averageMs" : 0.0221544, "medianMs" : 0.022528, "percentage" : 1.53379 }
+, { "name" : "/layer2/layer2.3/conv2/Conv + /layer2/layer2.3/relu_1/Relu", "timeMs" : 47.6988, "averageMs" : 0.0222165, "medianMs" : 0.022528, "percentage" : 1.53809 }
+, { "name" : "/layer2/layer2.3/conv3/Conv + /layer2/layer2.3/Add + /layer2/layer2.3/relu_2/Relu", "timeMs" : 35.1364, "averageMs" : 0.0163653, "medianMs" : 0.016384, "percentage" : 1.133 }
+, { "name" : "/layer3/layer3.0/conv1/Conv + /layer3/layer3.0/relu/Relu", "timeMs" : 44.6832, "averageMs" : 0.0208119, "medianMs" : 0.02048, "percentage" : 1.44085 }
+, { "name" : "Reformatting CopyNode for Input Tensor 0 to /layer3/layer3.0/conv2/Conv + /layer3/layer3.0/relu_1/Relu", "timeMs" : 19.2692, "averageMs" : 0.00897495, "medianMs" : 0.009216, "percentage" : 0.621351 }
+, { "name" : "/layer3/layer3.0/conv2/Conv + /layer3/layer3.0/relu_1/Relu", "timeMs" : 116.437, "averageMs" : 0.0542323, "medianMs" : 0.054272, "percentage" : 3.75459 }
+, { "name" : "/layer3/layer3.0/downsample/downsample.0/Conv", "timeMs" : 63.5004, "averageMs" : 0.0295763, "medianMs" : 0.029696, "percentage" : 2.04762 }
+, { "name" : "Reformatting CopyNode for Input Tensor 0 to /layer3/layer3.0/conv3/Conv + /layer3/layer3.0/Add + /layer3/layer3.0/relu_2/Relu", "timeMs" : 9.86814, "averageMs" : 0.00459625, "medianMs" : 0.004416, "percentage" : 0.318206 }
+, { "name" : "/layer3/layer3.0/conv3/Conv + /layer3/layer3.0/Add + /layer3/layer3.0/relu_2/Relu", "timeMs" : 37.8187, "averageMs" : 0.0176147, "medianMs" : 0.017408, "percentage" : 1.21949 }
+, { "name" : "/layer3/layer3.1/conv1/Conv + /layer3/layer3.1/relu/Relu", "timeMs" : 50.6222, "averageMs" : 0.0235781, "medianMs" : 0.023552, "percentage" : 1.63235 }
+, { "name" : "/layer3/layer3.1/conv2/Conv + /layer3/layer3.1/relu_1/Relu", "timeMs" : 76.8972, "averageMs" : 0.0358161, "medianMs" : 0.03584, "percentage" : 2.47961 }
+, { "name" : "/layer3/layer3.1/conv3/Conv + /layer3/layer3.1/Add + /layer3/layer3.1/relu_2/Relu", "timeMs" : 38.4006, "averageMs" : 0.0178857, "medianMs" : 0.0176, "percentage" : 1.23826 }
+, { "name" : "/layer3/layer3.2/conv1/Conv + /layer3/layer3.2/relu/Relu", "timeMs" : 50.2899, "averageMs" : 0.0234233, "medianMs" : 0.023552, "percentage" : 1.62164 }
+, { "name" : "/layer3/layer3.2/conv2/Conv + /layer3/layer3.2/relu_1/Relu", "timeMs" : 76.4611, "averageMs" : 0.035613, "medianMs" : 0.03584, "percentage" : 2.46555 }
+, { "name" : "/layer3/layer3.2/conv3/Conv + /layer3/layer3.2/Add + /layer3/layer3.2/relu_2/Relu", "timeMs" : 37.875, "averageMs" : 0.0176409, "medianMs" : 0.017408, "percentage" : 1.22131 }
+, { "name" : "/layer3/layer3.3/conv1/Conv + /layer3/layer3.3/relu/Relu", "timeMs" : 50.326, "averageMs" : 0.0234401, "medianMs" : 0.023552, "percentage" : 1.6228 }
+, { "name" : "/layer3/layer3.3/conv2/Conv + /layer3/layer3.3/relu_1/Relu", "timeMs" : 76.5156, "averageMs" : 0.0356384, "medianMs" : 0.03584, "percentage" : 2.46731 }
+, { "name" : "/layer3/layer3.3/conv3/Conv + /layer3/layer3.3/Add + /layer3/layer3.3/relu_2/Relu", "timeMs" : 38.3776, "averageMs" : 0.017875, "medianMs" : 0.017504, "percentage" : 1.23752 }
+, { "name" : "/layer3/layer3.4/conv1/Conv + /layer3/layer3.4/relu/Relu", "timeMs" : 50.2384, "averageMs" : 0.0233994, "medianMs" : 0.023552, "percentage" : 1.61998 }
+, { "name" : "/layer3/layer3.4/conv2/Conv + /layer3/layer3.4/relu_1/Relu", "timeMs" : 76.5019, "averageMs" : 0.035632, "medianMs" : 0.03584, "percentage" : 2.46686 }
+, { "name" : "/layer3/layer3.4/conv3/Conv + /layer3/layer3.4/Add + /layer3/layer3.4/relu_2/Relu", "timeMs" : 37.989, "averageMs" : 0.017694, "medianMs" : 0.017408, "percentage" : 1.22499 }
+, { "name" : "/layer3/layer3.5/conv1/Conv + /layer3/layer3.5/relu/Relu", "timeMs" : 50.3704, "averageMs" : 0.0234608, "medianMs" : 0.023552, "percentage" : 1.62424 }
+, { "name" : "/layer3/layer3.5/conv2/Conv + /layer3/layer3.5/relu_1/Relu", "timeMs" : 76.5095, "averageMs" : 0.0356355, "medianMs" : 0.03584, "percentage" : 2.46711 }
+, { "name" : "/layer3/layer3.5/conv3/Conv + /layer3/layer3.5/Add + /layer3/layer3.5/relu_2/Relu", "timeMs" : 38.2309, "averageMs" : 0.0178067, "medianMs" : 0.017408, "percentage" : 1.23279 }
+, { "name" : "/layer4/layer4.0/conv1/Conv + /layer4/layer4.0/relu/Relu", "timeMs" : 52.4544, "averageMs" : 0.0244315, "medianMs" : 0.024576, "percentage" : 1.69143 }
+, { "name" : "Reformatting CopyNode for Input Tensor 0 to /layer4/layer4.0/conv2/Conv + /layer4/layer4.0/relu_1/Relu", "timeMs" : 11.5467, "averageMs" : 0.00537808, "medianMs" : 0.00512, "percentage" : 0.372334 }
+, { "name" : "/layer4/layer4.0/conv2/Conv + /layer4/layer4.0/relu_1/Relu", "timeMs" : 226.644, "averageMs" : 0.105563, "medianMs" : 0.105472, "percentage" : 7.30833 }
+, { "name" : "Reformatting CopyNode for Input Tensor 0 to /layer4/layer4.0/downsample/downsample.0/Conv", "timeMs" : 15.3437, "averageMs" : 0.00714659, "medianMs" : 0.007168, "percentage" : 0.494771 }
+, { "name" : "/layer4/layer4.0/downsample/downsample.0/Conv", "timeMs" : 76.4149, "averageMs" : 0.0355915, "medianMs" : 0.03584, "percentage" : 2.46406 }
+, { "name" : "/layer4/layer4.0/conv3/Conv + /layer4/layer4.0/Add + /layer4/layer4.0/relu_2/Relu", "timeMs" : 44.1323, "averageMs" : 0.0205553, "medianMs" : 0.02048, "percentage" : 1.42308 }
+, { "name" : "Reformatting CopyNode for Output Tensor 0 to /layer4/layer4.0/conv3/Conv + /layer4/layer4.0/Add + /layer4/layer4.0/relu_2/Relu", "timeMs" : 10.2334, "averageMs" : 0.00476636, "medianMs" : 0.00512, "percentage" : 0.329984 }
+, { "name" : "/layer4/layer4.1/conv1/Conv + /layer4/layer4.1/relu/Relu", "timeMs" : 47.738, "averageMs" : 0.0222348, "medianMs" : 0.022528, "percentage" : 1.53935 }
+, { "name" : "/layer4/layer4.1/conv2/Conv + /layer4/layer4.1/relu_1/Relu", "timeMs" : 131.76, "averageMs" : 0.0613691, "medianMs" : 0.06144, "percentage" : 4.24869 }
+, { "name" : "/layer4/layer4.1/conv3/Conv + /layer4/layer4.1/Add + /layer4/layer4.1/relu_2/Relu", "timeMs" : 50.1206, "averageMs" : 0.0233445, "medianMs" : 0.023552, "percentage" : 1.61618 }
+, { "name" : "/layer4/layer4.2/conv1/Conv + /layer4/layer4.2/relu/Relu", "timeMs" : 47.2704, "averageMs" : 0.0220169, "medianMs" : 0.022144, "percentage" : 1.52427 }
+, { "name" : "/layer4/layer4.2/conv2/Conv + /layer4/layer4.2/relu_1/Relu", "timeMs" : 131.813, "averageMs" : 0.0613941, "medianMs" : 0.06144, "percentage" : 4.25042 }
+, { "name" : "/layer4/layer4.2/conv3/Conv + /layer4/layer4.2/Add + /layer4/layer4.2/relu_2/Relu", "timeMs" : 49.1547, "averageMs" : 0.0228946, "medianMs" : 0.022528, "percentage" : 1.58503 }
+, { "name" : "/avgpool/GlobalAveragePool", "timeMs" : 11.2143, "averageMs" : 0.00522326, "medianMs" : 0.00512, "percentage" : 0.361616 }
+, { "name" : "/fc/Gemm", "timeMs" : 35.3641, "averageMs" : 0.0164714, "medianMs" : 0.016384, "percentage" : 1.14034 }
+, { "name" : "reshape_after_/fc/Gemm", "timeMs" : 0, "averageMs" : 0, "medianMs" : 0, "percentage" : 0 }
+]

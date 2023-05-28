@@ -1,0 +1,6 @@
+[
+  { "count" : 82126 }
+, { "name" : "reshape_before_/linear/MatMul", "timeMs" : 0, "averageMs" : 0, "medianMs" : 0, "percentage" : 0 }
+, { "name" : "/linear/MatMul", "timeMs" : 1296.28, "averageMs" : 0.0157841, "medianMs" : 0.01552, "percentage" : 100 }
+, { "name" : "reshape_after_/linear/MatMul", "timeMs" : 0, "averageMs" : 0, "medianMs" : 0, "percentage" : 0 }
+]

@@ -1,0 +1,197 @@
+{"Layers": [{
+  "Name": "/conv1/Conv + /act1/Relu",
+  "LayerType": "CaskConvolution",
+  "Inputs": [
+  {
+    "Name": "input0",
+    "Location": "Device",
+    "Dimensions": [1,3,64,64],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/act1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,16,62,62],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [3,3],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 16,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 432},
+  "Bias": {"Type": "Float", "Count": 16},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "HasReLU": 1,
+  "TacticName": "sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_t1r3s3_aligna4_alignc4",
+  "TacticValue": "0x8ad32616b1424be4"
+},{
+  "Name": "/conv2/Conv + /act2/Relu",
+  "LayerType": "FusedConvActConvolution",
+  "Inputs": [
+  {
+    "Name": "/act1/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,16,62,62],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/act2/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,58,58],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [5,5],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 64,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 25600},
+  "Bias": {"Type": "Float", "Count": 64},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "RELU",
+  "HasBias": 1,
+  "ConvolutionTacticIndex": 37,
+  "TacticValue": "0x000000000025ffff"
+},{
+  "Name": "/Reshape",
+  "LayerType": "NoOp",
+  "Inputs": [
+  {
+    "Name": "/act2/Relu_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,58,58],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/Reshape_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,3364],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "TacticValue": "0x0000000000000000"
+},{
+  "Name": "/avgpool/GlobalAveragePool",
+  "LayerType": "Reduce",
+  "Inputs": [
+  {
+    "Name": "/Reshape_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,3364],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/avgpool/GlobalAveragePool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Reduce",
+  "Operation": "AVG",
+  "ReduceAxes": [0,0,1],
+  "KeepDimensions": 1,
+  "TacticValue": "0x0000000000000001"
+},{
+  "Name": "/Flatten + reshape_before_/head/Gemm",
+  "LayerType": "NoOp",
+  "Inputs": [
+  {
+    "Name": "/avgpool/GlobalAveragePool_output_0",
+    "Location": "Device",
+    "Dimensions": [1,64,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "reshape_before_/head/Gemm_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,64,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "TacticValue": "0x0000000000000000"
+},{
+  "Name": "/head/Gemm",
+  "LayerType": "CaskGemmConvolution",
+  "Inputs": [
+  {
+    "Name": "reshape_before_/head/Gemm_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,64,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "/head/Gemm_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,10,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "ParameterType": "Convolution",
+  "Kernel": [1,1],
+  "PaddingMode": "kEXPLICIT_ROUND_DOWN",
+  "PrePadding": [0,0],
+  "PostPadding": [0,0],
+  "Stride": [1,1],
+  "Dilation": [1,1],
+  "OutMaps": 10,
+  "Groups": 1,
+  "Weights": {"Type": "Float", "Count": 640},
+  "Bias": {"Type": "Float", "Count": 10},
+  "HasSparseWeights": 0,
+  "HasDynamicFilter": 0,
+  "HasDynamicBias": 0,
+  "HasResidual": 0,
+  "ConvXAsActInputIdx": -1,
+  "BiasAsActInputIdx": -1,
+  "ResAsActInputIdx": -1,
+  "Activation": "NONE",
+  "TacticName": "sm70_xmma_gemm_as_conv1x1_f32f32_f32_f32_tn_n_simt_small_batch_bias_relu",
+  "TacticValue": "0x00000000000205c0"
+},{
+  "Name": "reshape_after_/head/Gemm",
+  "LayerType": "NoOp",
+  "Inputs": [
+  {
+    "Name": "/head/Gemm_out_tensor",
+    "Location": "Device",
+    "Dimensions": [1,10,1,1],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "Outputs": [
+  {
+    "Name": "output0",
+    "Location": "Device",
+    "Dimensions": [1,10],
+    "Format/Datatype": "Row major linear FP32"
+  }],
+  "TacticValue": "0x0000000000000000"
+}],
+"Bindings": ["input0"
+,"output0"
+]}

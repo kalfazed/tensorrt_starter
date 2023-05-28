@@ -1,0 +1,594 @@
+&&&& RUNNING TensorRT.trtexec [TensorRT v8501] # trtexec --onnx=sample.onnx --memPoolSize=workspace:2048 --saveEngine=sample.engine --verbose --profilingVerbosity=detailed --dumpOutput --dumpProfile --dumpLayerInfo --exportOutput=log/sample/build/build_output.log --exportProfile=log/sample/build/build_profile.log --exportLayerInfo=log/sample/build/build_layer_info.log --warmUp=200 --iterations=50
+[05/25/2023-09:11:52] [I] === Model Options ===
+[05/25/2023-09:11:52] [I] Format: ONNX
+[05/25/2023-09:11:52] [I] Model: sample.onnx
+[05/25/2023-09:11:52] [I] Output:
+[05/25/2023-09:11:52] [I] === Build Options ===
+[05/25/2023-09:11:52] [I] Max batch: explicit batch
+[05/25/2023-09:11:52] [I] Memory Pools: workspace: 2048 MiB, dlaSRAM: default, dlaLocalDRAM: default, dlaGlobalDRAM: default
+[05/25/2023-09:11:52] [I] minTiming: 1
+[05/25/2023-09:11:52] [I] avgTiming: 8
+[05/25/2023-09:11:52] [I] Precision: FP32
+[05/25/2023-09:11:52] [I] LayerPrecisions: 
+[05/25/2023-09:11:52] [I] Calibration: 
+[05/25/2023-09:11:52] [I] Refit: Disabled
+[05/25/2023-09:11:52] [I] Sparsity: Disabled
+[05/25/2023-09:11:52] [I] Safe mode: Disabled
+[05/25/2023-09:11:52] [I] DirectIO mode: Disabled
+[05/25/2023-09:11:52] [I] Restricted mode: Disabled
+[05/25/2023-09:11:52] [I] Build only: Disabled
+[05/25/2023-09:11:52] [I] Save engine: sample.engine
+[05/25/2023-09:11:52] [I] Load engine: 
+[05/25/2023-09:11:52] [I] Profiling verbosity: 2
+[05/25/2023-09:11:52] [I] Tactic sources: Using default tactic sources
+[05/25/2023-09:11:52] [I] timingCacheMode: local
+[05/25/2023-09:11:52] [I] timingCacheFile: 
+[05/25/2023-09:11:52] [I] Heuristic: Disabled
+[05/25/2023-09:11:52] [I] Preview Features: Use default preview flags.
+[05/25/2023-09:11:52] [I] Input(s)s format: fp32:CHW
+[05/25/2023-09:11:52] [I] Output(s)s format: fp32:CHW
+[05/25/2023-09:11:52] [I] Input build shapes: model
+[05/25/2023-09:11:52] [I] Input calibration shapes: model
+[05/25/2023-09:11:52] [I] === System Options ===
+[05/25/2023-09:11:52] [I] Device: 0
+[05/25/2023-09:11:52] [I] DLACore: 
+[05/25/2023-09:11:52] [I] Plugins:
+[05/25/2023-09:11:52] [I] === Inference Options ===
+[05/25/2023-09:11:52] [I] Batch: Explicit
+[05/25/2023-09:11:52] [I] Input inference shapes: model
+[05/25/2023-09:11:52] [I] Iterations: 50
+[05/25/2023-09:11:52] [I] Duration: 3s (+ 200ms warm up)
+[05/25/2023-09:11:52] [I] Sleep time: 0ms
+[05/25/2023-09:11:52] [I] Idle time: 0ms
+[05/25/2023-09:11:52] [I] Streams: 1
+[05/25/2023-09:11:52] [I] ExposeDMA: Disabled
+[05/25/2023-09:11:52] [I] Data transfers: Enabled
+[05/25/2023-09:11:52] [I] Spin-wait: Disabled
+[05/25/2023-09:11:52] [I] Multithreading: Disabled
+[05/25/2023-09:11:52] [I] CUDA Graph: Disabled
+[05/25/2023-09:11:52] [I] Separate profiling: Disabled
+[05/25/2023-09:11:52] [I] Time Deserialize: Disabled
+[05/25/2023-09:11:52] [I] Time Refit: Disabled
+[05/25/2023-09:11:52] [I] NVTX verbosity: 2
+[05/25/2023-09:11:52] [I] Persistent Cache Ratio: 0
+[05/25/2023-09:11:52] [I] Inputs:
+[05/25/2023-09:11:52] [I] === Reporting Options ===
+[05/25/2023-09:11:52] [I] Verbose: Enabled
+[05/25/2023-09:11:52] [I] Averages: 10 inferences
+[05/25/2023-09:11:52] [I] Percentiles: 90,95,99
+[05/25/2023-09:11:52] [I] Dump refittable layers:Disabled
+[05/25/2023-09:11:52] [I] Dump output: Enabled
+[05/25/2023-09:11:52] [I] Profile: Enabled
+[05/25/2023-09:11:52] [I] Export timing to JSON file: 
+[05/25/2023-09:11:52] [I] Export output to JSON file: log/sample/build/build_output.log
+[05/25/2023-09:11:52] [I] Export profile to JSON file: log/sample/build/build_profile.log
+[05/25/2023-09:11:52] [I] 
+[05/25/2023-09:11:52] [I] === Device Information ===
+[05/25/2023-09:11:52] [I] Selected Device: NVIDIA GeForce RTX 3080
+[05/25/2023-09:11:52] [I] Compute Capability: 8.6
+[05/25/2023-09:11:52] [I] SMs: 68
+[05/25/2023-09:11:52] [I] Compute Clock Rate: 1.74 GHz
+[05/25/2023-09:11:52] [I] Device Global Memory: 10009 MiB
+[05/25/2023-09:11:52] [I] Shared Memory per SM: 100 KiB
+[05/25/2023-09:11:52] [I] Memory Bus Width: 320 bits (ECC disabled)
+[05/25/2023-09:11:52] [I] Memory Clock Rate: 9.501 GHz
+[05/25/2023-09:11:52] [I] 
+[05/25/2023-09:11:52] [I] TensorRT version: 8.5.1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::BatchedNMSDynamic_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::BatchedNMS_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::BatchTilePlugin_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::Clip_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::CoordConvAC version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::CropAndResizeDynamic version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::CropAndResize version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::DecodeBbox3DPlugin version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::DetectionLayer_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::EfficientNMS_Explicit_TF_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::EfficientNMS_Implicit_TF_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::EfficientNMS_ONNX_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::EfficientNMS_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::FlattenConcat_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::GenerateDetection_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::GridAnchor_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::GridAnchorRect_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::InstanceNormalization_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::InstanceNormalization_TRT version 2
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::LReLU_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::MultilevelCropAndResize_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::MultilevelProposeROI_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::MultiscaleDeformableAttnPlugin_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::NMSDynamic_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::NMS_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::Normalize_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::PillarScatterPlugin version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::PriorBox_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::ProposalDynamic version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::ProposalLayer_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::Proposal version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::PyramidROIAlign_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::Region_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::Reorg_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::ResizeNearest_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::ROIAlign_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::RPROI_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::ScatterND version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::SpecialSlice_TRT version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::Split version 1
+[05/25/2023-09:11:52] [V] [TRT] Registered plugin creator - ::VoxelGeneratorPlugin version 1
+[05/25/2023-09:11:53] [I] [TRT] [MemUsageChange] Init CUDA: CPU +325, GPU +0, now: CPU 337, GPU 451 (MiB)
+[05/25/2023-09:11:53] [V] [TRT] Trying to load shared library libnvinfer_builder_resource.so.8.5.1
+[05/25/2023-09:11:53] [V] [TRT] Loaded shared library libnvinfer_builder_resource.so.8.5.1
+[05/25/2023-09:11:54] [I] [TRT] [MemUsageChange] Init builder kernel library: CPU +441, GPU +118, now: CPU 833, GPU 569 (MiB)
+[05/25/2023-09:11:54] [I] Start parsing network model
+[05/25/2023-09:11:54] [I] [TRT] ----------------------------------------------------------------
+[05/25/2023-09:11:54] [I] [TRT] Input filename:   sample.onnx
+[05/25/2023-09:11:54] [I] [TRT] ONNX IR version:  0.0.8
+[05/25/2023-09:11:54] [I] [TRT] Opset version:    15
+[05/25/2023-09:11:54] [I] [TRT] Producer name:    pytorch
+[05/25/2023-09:11:54] [I] [TRT] Producer version: 2.0.1
+[05/25/2023-09:11:54] [I] [TRT] Domain:           
+[05/25/2023-09:11:54] [I] [TRT] Model version:    0
+[05/25/2023-09:11:54] [I] [TRT] Doc string:       
+[05/25/2023-09:11:54] [I] [TRT] ----------------------------------------------------------------
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::BatchedNMSDynamic_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::BatchedNMS_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::BatchTilePlugin_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::Clip_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::CoordConvAC version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::CropAndResizeDynamic version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::CropAndResize version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::DecodeBbox3DPlugin version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::DetectionLayer_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::EfficientNMS_Explicit_TF_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::EfficientNMS_Implicit_TF_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::EfficientNMS_ONNX_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::EfficientNMS_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::FlattenConcat_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::GenerateDetection_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::GridAnchor_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::GridAnchorRect_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::InstanceNormalization_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::InstanceNormalization_TRT version 2
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::LReLU_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::MultilevelCropAndResize_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::MultilevelProposeROI_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::MultiscaleDeformableAttnPlugin_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::NMSDynamic_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::NMS_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::Normalize_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::PillarScatterPlugin version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::PriorBox_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::ProposalDynamic version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::ProposalLayer_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::Proposal version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::PyramidROIAlign_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::Region_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::Reorg_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::ResizeNearest_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::ROIAlign_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::RPROI_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::ScatterND version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::SpecialSlice_TRT version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::Split version 1
+[05/25/2023-09:11:54] [V] [TRT] Plugin creator already registered - ::VoxelGeneratorPlugin version 1
+[05/25/2023-09:11:54] [V] [TRT] Adding network input: input0 with dtype: float32, dimensions: (1, 3, 5, 5)
+[05/25/2023-09:11:54] [V] [TRT] Registering tensor: input0 for ONNX tensor: input0
+[05/25/2023-09:11:54] [V] [TRT] Importing initializer: onnx::Conv_12
+[05/25/2023-09:11:54] [V] [TRT] Importing initializer: onnx::Conv_13
+[05/25/2023-09:11:54] [V] [TRT] Parsing node: /conv1/Conv [Conv]
+[05/25/2023-09:11:54] [V] [TRT] Searching for input: input0
+[05/25/2023-09:11:54] [V] [TRT] Searching for input: onnx::Conv_12
+[05/25/2023-09:11:54] [V] [TRT] Searching for input: onnx::Conv_13
+[05/25/2023-09:11:54] [V] [TRT] /conv1/Conv [Conv] inputs: [input0 -> (1, 3, 5, 5)[FLOAT]], [onnx::Conv_12 -> (16, 3, 3, 3)[FLOAT]], [onnx::Conv_13 -> (16)[FLOAT]], 
+[05/25/2023-09:11:54] [V] [TRT] Convolution input dimensions: (1, 3, 5, 5)
+[05/25/2023-09:11:54] [V] [TRT] Registering layer: /conv1/Conv for ONNX node: /conv1/Conv
+[05/25/2023-09:11:54] [V] [TRT] Using kernel: (3, 3), strides: (1, 1), prepadding: (0, 0), postpadding: (0, 0), dilations: (1, 1), numOutputs: 16
+[05/25/2023-09:11:54] [V] [TRT] Convolution output dimensions: (1, 16, 3, 3)
+[05/25/2023-09:11:54] [V] [TRT] Registering tensor: /conv1/Conv_output_0 for ONNX tensor: /conv1/Conv_output_0
+[05/25/2023-09:11:54] [V] [TRT] /conv1/Conv [Conv] outputs: [/conv1/Conv_output_0 -> (1, 16, 3, 3)[FLOAT]], 
+[05/25/2023-09:11:54] [V] [TRT] Parsing node: /act1/Relu [Relu]
+[05/25/2023-09:11:54] [V] [TRT] Searching for input: /conv1/Conv_output_0
+[05/25/2023-09:11:54] [V] [TRT] /act1/Relu [Relu] inputs: [/conv1/Conv_output_0 -> (1, 16, 3, 3)[FLOAT]], 
+[05/25/2023-09:11:54] [V] [TRT] Registering layer: /act1/Relu for ONNX node: /act1/Relu
+[05/25/2023-09:11:54] [V] [TRT] Registering tensor: output0_0 for ONNX tensor: output0
+[05/25/2023-09:11:54] [V] [TRT] /act1/Relu [Relu] outputs: [output0 -> (1, 16, 3, 3)[FLOAT]], 
+[05/25/2023-09:11:54] [V] [TRT] Marking output0_0 as output: output0
+[05/25/2023-09:11:54] [I] Finish parsing network model
+[05/25/2023-09:11:54] [V] [TRT] Original: 2 layers
+[05/25/2023-09:11:54] [V] [TRT] After dead-layer removal: 2 layers
+[05/25/2023-09:11:54] [V] [TRT] Applying generic optimizations to the graph for inference.
+[05/25/2023-09:11:54] [V] [TRT] After Myelin optimization: 2 layers
+[05/25/2023-09:11:54] [V] [TRT] Applying ScaleNodes fusions.
+[05/25/2023-09:11:54] [V] [TRT] After scale fusion: 2 layers
+[05/25/2023-09:11:54] [V] [TRT] Running: ConvReluFusion on /conv1/Conv
+[05/25/2023-09:11:54] [V] [TRT] ConvReluFusion: Fusing /conv1/Conv with /act1/Relu
+[05/25/2023-09:11:54] [V] [TRT] After dupe layer removal: 1 layers
+[05/25/2023-09:11:54] [V] [TRT] After final dead-layer removal: 1 layers
+[05/25/2023-09:11:54] [V] [TRT] After tensor merging: 1 layers
+[05/25/2023-09:11:54] [V] [TRT] After vertical fusions: 1 layers
+[05/25/2023-09:11:54] [V] [TRT] After dupe layer removal: 1 layers
+[05/25/2023-09:11:54] [V] [TRT] After final dead-layer removal: 1 layers
+[05/25/2023-09:11:54] [V] [TRT] After tensor merging: 1 layers
+[05/25/2023-09:11:54] [V] [TRT] After slice removal: 1 layers
+[05/25/2023-09:11:54] [V] [TRT] After concat removal: 1 layers
+[05/25/2023-09:11:54] [V] [TRT] Trying to split Reshape and strided tensor
+[05/25/2023-09:11:54] [V] [TRT] Graph construction and optimization completed in 0.00139595 seconds.
+[05/25/2023-09:11:54] [V] [TRT] Trying to load shared library libcublas.so.11
+[05/25/2023-09:11:54] [V] [TRT] Loaded shared library libcublas.so.11
+[05/25/2023-09:11:54] [V] [TRT] Using cublas as plugin tactic source
+[05/25/2023-09:11:54] [V] [TRT] Trying to load shared library libcublasLt.so.11
+[05/25/2023-09:11:54] [V] [TRT] Loaded shared library libcublasLt.so.11
+[05/25/2023-09:11:54] [V] [TRT] Using cublasLt as core library tactic source
+[05/25/2023-09:11:54] [I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +850, GPU +368, now: CPU 1683, GPU 937 (MiB)
+[05/25/2023-09:11:54] [V] [TRT] Trying to load shared library libcudnn.so.8
+[05/25/2023-09:11:54] [V] [TRT] Loaded shared library libcudnn.so.8
+[05/25/2023-09:11:54] [V] [TRT] Using cuDNN as plugin tactic source
+[05/25/2023-09:11:54] [V] [TRT] Using cuDNN as core library tactic source
+[05/25/2023-09:11:54] [I] [TRT] [MemUsageChange] Init cuDNN: CPU +125, GPU +58, now: CPU 1808, GPU 995 (MiB)
+[05/25/2023-09:11:54] [I] [TRT] Local timing cache in use. Profiling results in this builder pass will not be stored.
+[05/25/2023-09:11:54] [V] [TRT] Constructing optimization profile number 0 [1/1].
+[05/25/2023-09:11:54] [V] [TRT] Reserving memory for host IO tensors. Host: 0 bytes
+[05/25/2023-09:11:54] [V] [TRT] =============== Computing reformatting costs: 
+[05/25/2023-09:11:54] [V] [TRT] *************** Autotuning Reformat: Float(75,25,5,1) -> Float(75,1,15,3) ***************
+[05/25/2023-09:11:54] [V] [TRT] --------------- Timing Runner: Optimizer Reformat(input0 -> <out>) (Reformat)
+[05/25/2023-09:11:54] [V] [TRT] Tactic: 0x00000000000003e8 Time: 0.00247236
+[05/25/2023-09:11:54] [V] [TRT] Tactic: 0x00000000000003ea Time: 0.00393489
+[05/25/2023-09:11:54] [V] [TRT] Tactic: 0x0000000000000000 Time: 0.00247748
+[05/25/2023-09:11:54] [V] [TRT] Fastest Tactic: 0x00000000000003e8 Time: 0.00247236
+[05/25/2023-09:11:54] [V] [TRT] *************** Autotuning Reformat: Float(75,25,5,1) -> Float(25,1:4,5,1) ***************
+[05/25/2023-09:11:54] [V] [TRT] --------------- Timing Runner: Optimizer Reformat(input0 -> <out>) (Reformat)
+[05/25/2023-09:11:54] [V] [TRT] Tactic: 0x00000000000003e8 Time: 0.0026417
+[05/25/2023-09:11:54] [V] [TRT] Tactic: 0x00000000000003ea Time: 0.00397829
+[05/25/2023-09:11:54] [V] [TRT] Tactic: 0x0000000000000000 Time: 0.00266938
+[05/25/2023-09:11:54] [V] [TRT] Fastest Tactic: 0x00000000000003e8 Time: 0.0026417
+[05/25/2023-09:11:54] [V] [TRT] =============== Computing reformatting costs: 
+[05/25/2023-09:11:54] [V] [TRT] *************** Autotuning Reformat: Float(144,1,48,16) -> Float(144,9,3,1) ***************
+[05/25/2023-09:11:54] [V] [TRT] --------------- Timing Runner: Optimizer Reformat(<in> -> output0) (Reformat)
+[05/25/2023-09:11:54] [V] [TRT] Tactic: 0x00000000000003e8 Time: 0.00250667
+[05/25/2023-09:11:54] [V] [TRT] Tactic: 0x00000000000003ea Time: 0.00394984
+[05/25/2023-09:11:54] [V] [TRT] Tactic: 0x0000000000000000 Time: 0.00248126
+[05/25/2023-09:11:54] [V] [TRT] Fastest Tactic: 0x0000000000000000 Time: 0.00248126
+[05/25/2023-09:11:54] [V] [TRT] *************** Autotuning Reformat: Float(36,1:4,12,4) -> Float(144,9,3,1) ***************
+[05/25/2023-09:11:54] [V] [TRT] --------------- Timing Runner: Optimizer Reformat(<in> -> output0) (Reformat)
+[05/25/2023-09:11:54] [V] [TRT] Tactic: 0x00000000000003e8 Time: 0.00251637
+[05/25/2023-09:11:54] [V] [TRT] Tactic: 0x00000000000003ea Time: 0.00397473
+[05/25/2023-09:11:54] [V] [TRT] Tactic: 0x0000000000000000 Time: 0.00251725
+[05/25/2023-09:11:54] [V] [TRT] Fastest Tactic: 0x00000000000003e8 Time: 0.00251637
+[05/25/2023-09:11:54] [V] [TRT] =============== Computing costs for 
+[05/25/2023-09:11:54] [V] [TRT] *************** Autotuning format combination: Float(75,25,5,1) -> Float(144,9,3,1) ***************
+[05/25/2023-09:11:54] [V] [TRT] --------------- Timing Runner: /conv1/Conv + /act1/Relu (CudaDepthwiseConvolution)
+[05/25/2023-09:11:54] [V] [TRT] CudaDepthwiseConvolution has no valid tactics for this config, skipping
+[05/25/2023-09:11:54] [V] [TRT] --------------- Timing Runner: /conv1/Conv + /act1/Relu (FusedConvActConvolution)
+[05/25/2023-09:11:54] [V] [TRT] Tactic: 0x000000000007ffff Time: 0.00614476
+[05/25/2023-09:11:54] [V] [TRT] Fastest Tactic: 0x000000000007ffff Time: 0.00614476
+[05/25/2023-09:11:54] [V] [TRT] --------------- Timing Runner: /conv1/Conv + /act1/Relu (CudnnConvolution)
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000000 Time: 0.0100157
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000001 Time: 0.00892343
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000002 Time: 0.0101522
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000004 Time: 0.0164165
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000005 Time: 0.0253318
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000006 Time: 0.0131391
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000038 Time: 0.00891482
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000039 Time: 0.00892343
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x000000000000003a Time: 0.0101327
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x000000000000003c Time: 0.0164003
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x000000000000003d Time: 0.0253074
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x000000000000003e Time: 0.0131391
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000070 Time: 0.00891482
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000071 Time: 0.00892343
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000072 Time: 0.0101132
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000074 Time: 0.016384
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000075 Time: 0.0253562
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0000000000000076 Time: 0.0131125
+[05/25/2023-09:11:55] [V] [TRT] Fastest Tactic: 0x0000000000000038 Time: 0.00891482
+[05/25/2023-09:11:55] [V] [TRT] --------------- Timing Runner: /conv1/Conv + /act1/Relu (CaskGemmConvolution)
+[05/25/2023-09:11:55] [V] [TRT] CaskGemmConvolution has no valid tactics for this config, skipping
+[05/25/2023-09:11:55] [V] [TRT] --------------- Timing Runner: /conv1/Conv + /act1/Relu (CaskFlattenConvolution)
+[05/25/2023-09:11:55] [V] [TRT] CaskFlattenConvolution has no valid tactics for this config, skipping
+[05/25/2023-09:11:55] [V] [TRT] --------------- Timing Runner: /conv1/Conv + /act1/Relu (CaskConvolution)
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x32_relu_small_nn_v1 Tactic: 0xa8609adc4e0ceb90
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xa8609adc4e0ceb90 Time: 0.00933057
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x64_relu_xregs_large_nn_v1 Tactic: 0x5deb29b7a8e275f7
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x5deb29b7a8e275f7 Time: 0.00992792
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x64_relu_medium_nn_v1 Tactic: 0xf64396b97c889179
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xf64396b97c889179 Time: 0.010005
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_relu_interior_nn_v1 Tactic: 0xa8ef60e712f8ad24
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xa8ef60e712f8ad24 Time: 0.0111838
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x64_relu_interior_nn_v1 Tactic: 0xc3cf6e1d1c6aff27
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xc3cf6e1d1c6aff27 Time: 0.0095683
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_relu_small_nn_v1 Tactic: 0x503619c69ae500ff
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x503619c69ae500ff Time: 0.0113702
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_relu_xregs_large_nn_v1 Tactic: 0x5403ad713f811a18
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x5403ad713f811a18 Time: 0.0115151
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1 Tactic: 0x94119b4c514b211a
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x94119b4c514b211a Time: 0.00645386
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x32_relu_interior_nn_v1 Tactic: 0x9808072e706def96
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x9808072e706def96 Time: 0.00924029
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_aligna4_alignc4 Tactic: 0xcb8a43f748d8a338
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xcb8a43f748d8a338 Time: 0.00698993
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize64x64x8_stage3_warpsize1x4x1_g1_ffma_aligna4_alignc4 Tactic: 0xd828f024626fa982
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xd828f024626fa982 Time: 0.00818844
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize64x64x8_stage3_warpsize1x4x1_g1_ffma_aligna4_alignc4 Tactic: 0xa31d27de74b895ff
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xa31d27de74b895ff Time: 0.00656249
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize128x16x8_stage3_warpsize4x1x1_g1_ffma_aligna4_alignc4 Tactic: 0x40a12e3938221818
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x40a12e3938221818 Time: 0.00949543
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize128x64x8_stage3_warpsize2x2x1_g1_ffma_aligna4_alignc4 Tactic: 0x12dbf7d94ee3696d
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x12dbf7d94ee3696d Time: 0.0118942
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize128x32x8_stage3_warpsize2x2x1_g1_ffma_aligna4_alignc4 Tactic: 0xa9366041633a5135
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xa9366041633a5135 Time: 0.0101114
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize256x128x8_stage3_warpsize4x2x1_g1_ffma_aligna4_alignc4 Tactic: 0xbb8c3889c7eacd30
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xbb8c3889c7eacd30 Time: 0.0241432
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_aligna4_alignc4 Tactic: 0xb0bf940d5e0f9f45
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xb0bf940d5e0f9f45 Time: 0.00542036
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize64x64x8_stage3_warpsize1x4x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0x4727434768e46395
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x4727434768e46395 Time: 0.00650036
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize128x16x8_stage3_warpsize4x1x1_g1_ffma_aligna4_alignc4 Tactic: 0x9d9fdb5fd9945f64
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x9d9fdb5fd9945f64 Time: 0.00637237
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize64x128x8_stage3_warpsize1x4x1_g1_ffma_aligna4_alignc4 Tactic: 0x5aa723e0481da855
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x5aa723e0481da855 Time: 0.0106338
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize256x128x8_stage3_warpsize4x2x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0x4efce38acc876f5c
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x4efce38acc876f5c Time: 0.0228656
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0x8ad32616b1424be4
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x8ad32616b1424be4 Time: 0.00523575
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize64x128x8_stage3_warpsize1x4x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0x01cf8ce2da913006
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x01cf8ce2da913006 Time: 0.0103099
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x64_relu_small_nn_v1 Tactic: 0x3f243c490d502deb
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x3f243c490d502deb Time: 0.00979992
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_relu_medium_nn_v1 Tactic: 0xf067e6205da31c2e
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xf067e6205da31c2e Time: 0.0114307
+[05/25/2023-09:11:55] [V] [TRT] Fastest Tactic: 0x8ad32616b1424be4 Time: 0.00523575
+[05/25/2023-09:11:55] [V] [TRT] >>>>>>>>>>>>>>> Chose Runner Type: CaskConvolution Tactic: 0x8ad32616b1424be4
+[05/25/2023-09:11:55] [V] [TRT] *************** Autotuning format combination: Float(75,1,15,3) -> Float(144,1,48,16) ***************
+[05/25/2023-09:11:55] [V] [TRT] --------------- Timing Runner: /conv1/Conv + /act1/Relu (CaskFlattenConvolution)
+[05/25/2023-09:11:55] [V] [TRT] CaskFlattenConvolution has no valid tactics for this config, skipping
+[05/25/2023-09:11:55] [V] [TRT] --------------- Timing Runner: /conv1/Conv + /act1/Relu (CaskConvolution)
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_relu_exp_interior_nhwc_tn_v1 Tactic: 0x17173deba0b64484
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x17173deba0b64484 Time: 0.014773
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_relu_exp_medium_nhwc_tn_v1 Tactic: 0xd9031472c05adf51
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xd9031472c05adf51 Time: 0.0150802
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_aligna4_alignc4 Tactic: 0x7121ec1db3f80c67
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x7121ec1db3f80c67 Time: 0.00622291
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_relu_exp_small_nhwc_tn_v1 Tactic: 0x5030121339a48bf3
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x5030121339a48bf3 Time: 0.0149678
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0x5953bec563d26434
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x5953bec563d26434 Time: 0.00591324
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc8 Tactic: 0x1acd4f006848c62b
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x1acd4f006848c62b Time: 0.00639105
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x64x8_stage3_warpsize1x4x1_g1_ffma_aligna4_alignc4 Tactic: 0x19b688348f983aa0
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x19b688348f983aa0 Time: 0.00814324
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_aligna4_alignc4 Tactic: 0x0a143be7a52f301a
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0a143be7a52f301a Time: 0.00629505
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x64x8_stage3_warpsize1x4x1_g1_ffma_aligna4_alignc4 Tactic: 0x62835fce994f06dd
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x62835fce994f06dd Time: 0.00820114
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x64x8_stage3_warpsize1x4x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0x94a7db94ba744c45
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x94a7db94ba744c45 Time: 0.008208
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize128x16x8_stage3_warpsize4x1x1_g1_ffma_aligna4_alignc4 Tactic: 0x92ed3100c35fc43e
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x92ed3100c35fc43e Time: 0.00719406
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize128x16x8_stage3_warpsize4x1x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0x32059de4888dfdda
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x32059de4888dfdda Time: 0.00705698
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x32_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4 Tactic: 0xb3e5ce9d1b1da232
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xb3e5ce9d1b1da232 Time: 0.00457771
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize128x16x8_stage3_warpsize4x1x1_g1_ffma_aligna4_alignc4 Tactic: 0x4fd3c46622e98342
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x4fd3c46622e98342 Time: 0.00778851
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize128x64x8_stage3_warpsize2x2x1_g1_ffma_aligna4_alignc4 Tactic: 0x1da91d865428f237
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x1da91d865428f237 Time: 0.0124099
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize128x32x8_stage3_warpsize2x2x1_g1_ffma_aligna4_alignc4 Tactic: 0xa6448a1e79f1ca6f
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xa6448a1e79f1ca6f Time: 0.00877714
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x256x8_stage3_warpsize1x4x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0x3f0c846d6379bc98
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x3f0c846d6379bc98 Time: 0.0215458
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize128x64x8_stage3_warpsize2x2x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0xf48db81f02eca9ee
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xf48db81f02eca9ee Time: 0.0112626
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x32_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc4 Tactic: 0xcf8ea142095f02d2
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xcf8ea142095f02d2 Time: 0.00458914
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc8 Tactic: 0x22cadc265a3b2e32
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x22cadc265a3b2e32 Time: 0.00589696
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_relu_exp_large_nhwc_tn_v1 Tactic: 0xca7eeb8d9143d738
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xca7eeb8d9143d738 Time: 0.0153417
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x128x8_stage3_warpsize1x4x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0xd15dd11d64344e83
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xd15dd11d64344e83 Time: 0.011846
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc4 Tactic: 0xf231cca3335919a4
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xf231cca3335919a4 Time: 0.00500887
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc8 Tactic: 0x7e40882e33c8fbf1
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x7e40882e33c8fbf1 Time: 0.00499594
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4 Tactic: 0x570667f2a28165a0
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x570667f2a28165a0 Time: 0.00485029
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x32_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc8 Tactic: 0x43ffe5cf09cee087
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x43ffe5cf09cee087 Time: 0.00458114
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize256x64x8_stage3_warpsize2x2x1_g1_ffma_aligna4_alignc4 Tactic: 0x8014228ec08b4d49
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x8014228ec08b4d49 Time: 0.0229153
+[05/25/2023-09:11:55] [V] [TRT] Fastest Tactic: 0xb3e5ce9d1b1da232 Time: 0.00457771
+[05/25/2023-09:11:55] [V] [TRT] >>>>>>>>>>>>>>> Chose Runner Type: CaskConvolution Tactic: 0xb3e5ce9d1b1da232
+[05/25/2023-09:11:55] [V] [TRT] *************** Autotuning format combination: Float(25,1:4,5,1) -> Float(36,1:4,12,4) ***************
+[05/25/2023-09:11:55] [V] [TRT] --------------- Timing Runner: /conv1/Conv + /act1/Relu (CudaDepthwiseConvolution)
+[05/25/2023-09:11:55] [V] [TRT] CudaDepthwiseConvolution has no valid tactics for this config, skipping
+[05/25/2023-09:11:55] [V] [TRT] --------------- Timing Runner: /conv1/Conv + /act1/Relu (CaskGemmConvolution)
+[05/25/2023-09:11:55] [V] [TRT] CaskGemmConvolution has no valid tactics for this config, skipping
+[05/25/2023-09:11:55] [V] [TRT] --------------- Timing Runner: /conv1/Conv + /act1/Relu (CaskFlattenConvolution)
+[05/25/2023-09:11:55] [V] [TRT] CaskFlattenConvolution has no valid tactics for this config, skipping
+[05/25/2023-09:11:55] [V] [TRT] --------------- Timing Runner: /conv1/Conv + /act1/Relu (CaskConvolution)
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_relu_exp_interior_nhwc_tn_v1 Tactic: 0x17173deba0b64484
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x17173deba0b64484 Time: 0.0147982
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x32_sliced1x4_ldg4_relu_exp_small_nhwc_tn_v1 Tactic: 0x3e2b881168d9689d
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x3e2b881168d9689d Time: 0.0164693
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_ldg4_relu_exp_small_nhwc_tn_v1 Tactic: 0xf90060ce8193b811
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xf90060ce8193b811 Time: 0.0147113
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_relu_exp_medium_nhwc_tn_v1 Tactic: 0xd9031472c05adf51
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xd9031472c05adf51 Time: 0.0150674
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_ldg4_relu_exp_interior_nhwc_tn_v1 Tactic: 0xe47307053a42b3e4
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xe47307053a42b3e4 Time: 0.0146085
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x64_sliced1x2_ldg4_relu_exp_large_nhwc_tn_v1 Tactic: 0xbdfdef6b84f7ccc9
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xbdfdef6b84f7ccc9 Time: 0.0160091
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x64_sliced1x2_ldg4_relu_exp_medium_nhwc_tn_v1 Tactic: 0x412c44dfeaf9161d
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x412c44dfeaf9161d Time: 0.0159416
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x64_sliced1x2_ldg4_relu_exp_small_nhwc_tn_v1 Tactic: 0x27b316f52c109002
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x27b316f52c109002 Time: 0.0163352
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x64_sliced1x2_ldg4_relu_exp_interior_nhwc_tn_v1 Tactic: 0xae0c89d047932ba3
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xae0c89d047932ba3 Time: 0.0147447
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_ldg4_relu_exp_medium_nhwc_tn_v1 Tactic: 0x7bc32c782b800c48
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x7bc32c782b800c48 Time: 0.0146267
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna8_alignc4 Tactic: 0xf78ec258f27b3e23
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xf78ec258f27b3e23 Time: 0.00524457
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_aligna4_alignc4 Tactic: 0x7121ec1db3f80c67
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x7121ec1db3f80c67 Time: 0.00607505
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_relu_exp_small_nhwc_tn_v1 Tactic: 0x5030121339a48bf3
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x5030121339a48bf3 Time: 0.0150176
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0x5953bec563d26434
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x5953bec563d26434 Time: 0.00585125
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc8 Tactic: 0x1acd4f006848c62b
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x1acd4f006848c62b Time: 0.00637476
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x64x8_stage3_warpsize1x4x1_g1_ffma_aligna4_alignc4 Tactic: 0x19b688348f983aa0
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x19b688348f983aa0 Time: 0.00815924
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_aligna4_alignc4 Tactic: 0x0a143be7a52f301a
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x0a143be7a52f301a Time: 0.0062875
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x64x8_stage3_warpsize1x4x1_g1_ffma_aligna4_alignc4 Tactic: 0x62835fce994f06dd
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x62835fce994f06dd Time: 0.00819098
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x64x8_stage3_warpsize1x4x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0x94a7db94ba744c45
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x94a7db94ba744c45 Time: 0.00818032
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x32_sliced1x4_ldg4_relu_exp_interior_nhwc_tn_v1 Tactic: 0xc7feb33970feefa7
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xc7feb33970feefa7 Time: 0.0161651
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8_alignc4 Tactic: 0xcc46f0f5cee60677
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xcc46f0f5cee60677 Time: 0.00407251
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize128x16x8_stage3_warpsize4x1x1_g1_ffma_aligna4_alignc4 Tactic: 0x92ed3100c35fc43e
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x92ed3100c35fc43e Time: 0.00714297
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize128x16x8_stage3_warpsize4x1x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0x32059de4888dfdda
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x32059de4888dfdda Time: 0.00706046
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna8_alignc4 Tactic: 0x93030576a9fb03f9
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x93030576a9fb03f9 Time: 0.00538717
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna8 Tactic: 0xdb77237fa21087f5
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xdb77237fa21087f5 Time: 0.0053848
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x32_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4 Tactic: 0xb3e5ce9d1b1da232
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xb3e5ce9d1b1da232 Time: 0.00587447
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize128x16x8_stage3_warpsize4x1x1_g1_ffma_aligna4_alignc4 Tactic: 0x4fd3c46622e98342
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x4fd3c46622e98342 Time: 0.00779308
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x128x16_stage4_warpsize2x2x1_g1_tensor16x8x8 Tactic: 0x65e41d81f093b482
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x65e41d81f093b482 Time: 0.0173872
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8_alignc8 Tactic: 0x3a8712b17741b582
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x3a8712b17741b582 Time: 0.00485394
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize128x64x8_stage3_warpsize2x2x1_g1_ffma_aligna4_alignc4 Tactic: 0x1da91d865428f237
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x1da91d865428f237 Time: 0.012464
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize128x32x8_stage3_warpsize2x2x1_g1_ffma_aligna4_alignc4 Tactic: 0xa6448a1e79f1ca6f
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xa6448a1e79f1ca6f Time: 0.00880242
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x128x16_stage4_warpsize2x2x1_g1_tensor16x8x8_t1r3s3 Tactic: 0x999e005e3b016ea6
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x999e005e3b016ea6 Time: 0.0171078
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8 Tactic: 0xb33296dda7141c64
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xb33296dda7141c64 Time: 0.00486903
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x256x8_stage3_warpsize1x4x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0x3f0c846d6379bc98
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x3f0c846d6379bc98 Time: 0.021504
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize128x64x8_stage3_warpsize2x2x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0xf48db81f02eca9ee
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xf48db81f02eca9ee Time: 0.011264
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna8_alignc8 Tactic: 0x7bff86d5f2eadc76
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x7bff86d5f2eadc76 Time: 0.00521502
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x32_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc4 Tactic: 0xcf8ea142095f02d2
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xcf8ea142095f02d2 Time: 0.00594816
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc8 Tactic: 0x22cadc265a3b2e32
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x22cadc265a3b2e32 Time: 0.00588983
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_relu_exp_large_nhwc_tn_v1 Tactic: 0xca7eeb8d9143d738
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xca7eeb8d9143d738 Time: 0.0153175
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna8_alignc4 Tactic: 0xab0496509b88ebe0
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xab0496509b88ebe0 Time: 0.00486202
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x128x8_stage3_warpsize1x4x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0xd15dd11d64344e83
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xd15dd11d64344e83 Time: 0.0111388
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x128_ldg4_relu_exp_large_nhwc_tn_v1 Tactic: 0x634e99502974e4da
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x634e99502974e4da Time: 0.0147749
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x32_stage1_warpsize4x1x1_g1_tensor16x8x8 Tactic: 0xae48d3ccfe1edfcd
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xae48d3ccfe1edfcd Time: 0.00443969
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x128x16_stage4_warpsize2x2x1_g1_tensor16x8x8 Tactic: 0xb443c221fcb1565b
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xb443c221fcb1565b Time: 0.0172541
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_alignc4 Tactic: 0xfed494d61b2087ba
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xfed494d61b2087ba Time: 0.00506546
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x32_stage1_warpsize4x1x1_g1_tensor16x8x8_alignc4 Tactic: 0x1a373db9a2bc4028
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x1a373db9a2bc4028 Time: 0.00447714
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna8 Tactic: 0xe9e5475c77d60638
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xe9e5475c77d60638 Time: 0.00484434
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_alignc8 Tactic: 0x72a5d05b1bb165ef
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x72a5d05b1bb165ef Time: 0.00505647
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x32_stage1_warpsize4x1x1_g1_tensor16x8x8_alignc8 Tactic: 0x96467934a22da27d
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x96467934a22da27d Time: 0.00443082
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8 Tactic: 0x10383a0781d24dde
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x10383a0781d24dde Time: 0.00408725
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8_alignc8 Tactic: 0x4037b478ce77e422
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x4037b478ce77e422 Time: 0.00426165
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x32_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna8 Tactic: 0x3f948a101b8c4067
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x3f948a101b8c4067 Time: 0.00506766
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8 Tactic: 0x9cb304e2edbc1221
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x9cb304e2edbc1221 Time: 0.00506183
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc4 Tactic: 0xf231cca3335919a4
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xf231cca3335919a4 Time: 0.00588361
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna8 Tactic: 0x9355e195cee05798
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x9355e195cee05798 Time: 0.00535128
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc8 Tactic: 0x7e40882e33c8fbf1
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x7e40882e33c8fbf1 Time: 0.00587849
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: ampere_scudnn_128x32_sliced1x4_ldg4_relu_exp_medium_nhwc_tn_v1 Tactic: 0x3e191488237fab8f
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x3e191488237fab8f Time: 0.0166136
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8_alignc4 Tactic: 0xb6f6563c77d057d7
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0xb6f6563c77d057d7 Time: 0.00491292
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4 Tactic: 0x570667f2a28165a0
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x570667f2a28165a0 Time: 0.00572508
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x32_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc8 Tactic: 0x43ffe5cf09cee087
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x43ffe5cf09cee087 Time: 0.00589202
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x32_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna8_alignc8 Tactic: 0x4640eb34c8ecc700
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x4640eb34c8ecc700 Time: 0.00551138
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize256x64x8_stage3_warpsize2x2x1_g1_ffma_aligna4_alignc4 Tactic: 0x8014228ec08b4d49
+[05/25/2023-09:11:55] [V] [TRT] Tactic: 0x8014228ec08b4d49 Time: 0.0229035
+[05/25/2023-09:11:55] [V] [TRT] Fastest Tactic: 0xcc46f0f5cee60677 Time: 0.00407251
+[05/25/2023-09:11:55] [V] [TRT] >>>>>>>>>>>>>>> Chose Runner Type: CaskConvolution Tactic: 0xcc46f0f5cee60677
+[05/25/2023-09:11:55] [V] [TRT] Formats and tactics selection completed in 0.747163 seconds.
+[05/25/2023-09:11:55] [V] [TRT] After reformat layers: 1 layers
+[05/25/2023-09:11:55] [V] [TRT] Total number of blocks in pre-optimized block assignment: 1
+[05/25/2023-09:11:55] [I] [TRT] Total Activation Memory: 2147483648
+[05/25/2023-09:11:55] [I] [TRT] Detected 1 inputs and 1 output network tensors.
+[05/25/2023-09:11:55] [V] [TRT] /conv1/Conv + /act1/Relu Set Tactic Name: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_t1r3s3_aligna4_alignc4 Tactic: 0x8ad32616b1424be4
+[05/25/2023-09:11:55] [V] [TRT] Layer: /conv1/Conv + /act1/Relu Host Persistent: 3264 Device Persistent: 0 Scratch Memory: 0
+[05/25/2023-09:11:55] [V] [TRT] Skipped printing memory information for 0 layers with 0 memory size i.e. Host Persistent + Device Persistent + Scratch Memory == 0.
+[05/25/2023-09:11:55] [I] [TRT] Total Host Persistent Memory: 3264
+[05/25/2023-09:11:55] [I] [TRT] Total Device Persistent Memory: 0
+[05/25/2023-09:11:55] [I] [TRT] Total Scratch Memory: 0
+[05/25/2023-09:11:55] [I] [TRT] [MemUsageStats] Peak memory usage of TRT CPU/GPU memory allocators: CPU 0 MiB, GPU 4 MiB
+[05/25/2023-09:11:55] [V] [TRT] Total number of blocks in optimized block assignment: 0
+[05/25/2023-09:11:55] [I] [TRT] Total Activation Memory: 0
+[05/25/2023-09:11:55] [V] [TRT] Finalize: /conv1/Conv + /act1/Relu Set kernel index: 0
+[05/25/2023-09:11:55] [V] [TRT] Total number of generated kernels selected for the engine: 1
+[05/25/2023-09:11:55] [V] [TRT] Kernel: 0 CASK_STATIC
+[05/25/2023-09:11:55] [V] [TRT] Disabling unused tactic source: CUDNN
+[05/25/2023-09:11:55] [V] [TRT] Disabling unused tactic source: CUBLAS, CUBLAS_LT
+[05/25/2023-09:11:55] [V] [TRT] Disabling unused tactic source: JIT_CONVOLUTIONS
+[05/25/2023-09:11:55] [V] [TRT] Engine generation completed in 1.19475 seconds.
+[05/25/2023-09:11:55] [V] [TRT] Deleting timing cache: 7 entries, served 0 hits since creation.
+[05/25/2023-09:11:55] [V] [TRT] Engine Layer Information:
+Layer(CaskConvolution): /conv1/Conv + /act1/Relu, Tactic: 0x8ad32616b1424be4, input0 (Float[1,3,5,5]) -> output0 (Float[1,16,3,3])
+[05/25/2023-09:11:55] [I] [TRT] [MemUsageChange] TensorRT-managed allocation in building engine: CPU +0, GPU +4, now: CPU 0, GPU 4 (MiB)
+[05/25/2023-09:11:55] [I] Engine built in 2.67519 sec.
+[05/25/2023-09:11:55] [I] [TRT] Loaded engine size: 0 MiB
+[05/25/2023-09:11:55] [V] [TRT] Deserialization required 1185 microseconds.
+[05/25/2023-09:11:55] [I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 0 (MiB)
+[05/25/2023-09:11:55] [I] Engine deserialized in 0.001346 sec.
+[05/25/2023-09:11:55] [V] [TRT] Total per-runner device persistent memory is 0
+[05/25/2023-09:11:55] [V] [TRT] Total per-runner host persistent memory is 3264
+[05/25/2023-09:11:55] [V] [TRT] Allocated activation device memory of size 0
+[05/25/2023-09:11:55] [I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 0 (MiB)
+[05/25/2023-09:11:55] [I] Setting persistentCacheLimit to 0 bytes.
+[05/25/2023-09:11:55] [V] Using enqueueV3.
+[05/25/2023-09:11:55] [I] Using random values for input input0
+[05/25/2023-09:11:55] [I] Created input binding for input0 with dimensions 1x3x5x5
+[05/25/2023-09:11:55] [I] Using random values for output output0
+[05/25/2023-09:11:55] [I] Created output binding for output0 with dimensions 1x16x3x3
+[05/25/2023-09:11:55] [I] Layer Information:
+[05/25/2023-09:11:55] [I] Layers:
+Name: /conv1/Conv + /act1/Relu, LayerType: CaskConvolution, Inputs: [ { Name: input0, Location: Device, Dimensions: [1,3,5,5], Format/Datatype: Row major linear FP32 }], Outputs: [ { Name: output0, Location: Device, Dimensions: [1,16,3,3], Format/Datatype: Row major linear FP32 }], ParameterType: Convolution, Kernel: [3,3], PaddingMode: kEXPLICIT_ROUND_DOWN, PrePadding: [0,0], PostPadding: [0,0], Stride: [1,1], Dilation: [1,1], OutMaps: 16, Groups: 1, Weights: {"Type": "Float", "Count": 432}, Bias: {"Type": "Float", "Count": 16}, HasSparseWeights: 0, HasDynamicFilter: 0, HasDynamicBias: 0, HasResidual: 0, ConvXAsActInputIdx: -1, BiasAsActInputIdx: -1, ResAsActInputIdx: -1, Activation: RELU, HasBias: 1, HasReLU: 1, TacticName: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nchwkcrs_nchw_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_t1r3s3_aligna4_alignc4, TacticValue: 0x8ad32616b1424be4
+
+Bindings:
+input0
+output0
+[05/25/2023-09:11:55] [I] Starting inference
+[05/25/2023-09:11:58] [I] The e2e network timing is not reported since it is inaccurate due to the extra synchronizations when the profiler is enabled.
+[05/25/2023-09:11:58] [I] To show e2e network timing report, add --separateProfileRun to profile layer timing in a separate run or remove --dumpProfile to disable the profiler.
+[05/25/2023-09:11:58] [I] Output Tensors:
+[05/25/2023-09:11:58] [I] output0: (1x16x3x3)
+[05/25/2023-09:11:58] [I] 0 0.343867 0.280038 0.0781097 0 0 0 0 0 0 0.110626 0 0 0.637493 0 0.0296804 0.334468 0.698684 0 0.448564 0.299442 0 0 0.0672816 0 0 0 0.30421 0 0.043878 0.202975 0.0404697 0.30599 0.28688 0 0.178498 0 0.629952 0 0 0 0 0 0 0.0764626 0.400119 0.285139 0 0.637244 0.324907 0.159904 0.837545 0.0964172 0.0233223 0.467176 0.437942 0.166259 0.60988 0.358742 0.278209 0.549103 0.444567 0 0 0 0.340987 0 0.312419 0 0 0 0 0.0397214 0.717644 0.0738691 0.743456 0.137653 0 0.322724 0.112182 0.252112 0.403131 0.0599683 0 0.623682 0.320019 0 0.293927 0.324439 0 0.273287 0.379115 0.0863021 0 0.306576 0.462827 0 0 0 0.227187 0 0 0 0 0.802398 0.066532 0 0 0.208368 0 0.382973 0 0.472195 0.371348 0.234157 0.189498 0.148056 0 0 0.0102278 0 0.342782 0.220347 0 0.0602595 0 0 0.263348 0 0.193213 0.507425 0.305224 0.192337 0 0 0.597453 0.0619505 0 0 0 0 0 0.327169 0.0872833
+[05/25/2023-09:11:58] [I] 
+[05/25/2023-09:11:58] [I] === Profile (128427 iterations ) ===
+[05/25/2023-09:11:58] [I]                     Layer   Time (ms)   Avg. Time (ms)   Median Time (ms)   Time %
+[05/25/2023-09:11:58] [I]  /conv1/Conv + /act1/Relu      755.62           0.0059             0.0061    100.0
+[05/25/2023-09:11:58] [I]                     Total      755.62           0.0059             0.0061    100.0
+[05/25/2023-09:11:58] [I] 
+&&&& PASSED TensorRT.trtexec [TensorRT v8501] # trtexec --onnx=sample.onnx --memPoolSize=workspace:2048 --saveEngine=sample.engine --verbose --profilingVerbosity=detailed --dumpOutput --dumpProfile --dumpLayerInfo --exportOutput=log/sample/build/build_output.log --exportProfile=log/sample/build/build_profile.log --exportLayerInfo=log/sample/build/build_layer_info.log --warmUp=200 --iterations=50
