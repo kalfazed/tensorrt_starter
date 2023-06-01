@@ -1,4 +1,5 @@
 #include "cuda_runtime_api.h"
+#include "utils.hpp"
 
 /* 
     使用Tiling优化的matmul的函数实现
@@ -31,27 +32,32 @@ void MatmulTileOnDevice(float *M_host, float *N_host, float* P_host, int width, 
     /* 分配M, N在GPU上的空间*/
     float *M_device;
     float *N_device;
-    cudaMalloc((void**)&M_device, size);
-    cudaMalloc((void**)&N_device, size);
+    CUDA_CHECK(cudaMalloc(&M_device, size));
+    CUDA_CHECK(cudaMalloc(&N_device, size));
 
     /* 分配M, N拷贝到GPU上*/
-    cudaMemcpy(M_device, M_host, size, cudaMemcpyHostToDevice);
-    cudaMemcpy(N_device, N_host, size, cudaMemcpyHostToDevice);
+    CUDA_CHECK(cudaMemcpy(M_device, M_host, size, cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(N_device, N_host, size, cudaMemcpyHostToDevice));
 
     /* 分配P在GPU上的空间*/
     float *P_device;
-    cudaMalloc((void**)&P_device, size);
+    CUDA_CHECK(cudaMalloc((void**)&P_device, size));
 
     /* 调用kernel来进行matmul计算, 在这个例子中我们用的方案是：使用一个grid，一个grid里有width*width个线程 */
-    dim3 dimGrid(width / tile_width, width / tile_width);
     dim3 dimBlock(tile_width, tile_width);
+    dim3 dimGrid(width / tile_width, width / tile_width);
     MatmulTileKernel <<<dimGrid, dimBlock>>> (M_device, N_device, P_device, size);
 
     /* 将结果从device拷贝回host*/
-    cudaMemcpy(P_host, P_device, size, cudaMemcpyDeviceToHost);
+    CUDA_CHECK(cudaMemcpy(P_host, P_device, size, cudaMemcpyDeviceToHost));
+    CUDA_CHECK(cudaDeviceSynchronize());
+
+    /* 注意要在synchronization结束之后排查kernel的错误 */
+    LAST_KERNEL_CHECK(); 
 
     /* Free */
     cudaFree(P_device);
     cudaFree(N_device);
     cudaFree(M_device);
 }
+

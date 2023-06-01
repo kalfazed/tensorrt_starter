@@ -27,6 +27,10 @@ private:
     std::chrono::time_point<std::chrono::high_resolution_clock> mStop;
 };
 
+/* 
+ * 注意：这个实现是不能够非常精准的获取kernel函数的执行时间 
+ * 要如果想要精准的获取kernel实现需要通过cuda event来进行测量，这个在后面的案例中会讲
+ */
 template <typename span>
 void Timer::duration(std::string msg){
     std::string str;
