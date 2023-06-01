@@ -1,8 +1,7 @@
 #include <chrono>
-#include <cstdio>
 #include <ratio>
 #include <string>
-#include <iostream>
+#include "cuda_runtime.h"
 
 
 class Timer {
@@ -13,32 +12,37 @@ public:
     using ns = std::ratio<1, 1000000000>;
 
 public:
-    Timer(){};
+    Timer();
+    ~Timer();
 
 public:
-    void start() {mStart = std::chrono::high_resolution_clock::now();}
-    void stop()  {mStop  = std::chrono::high_resolution_clock::now();}
+    void start_cpu();
+    void start_gpu();
+    void stop_cpu();
+    void stop_gpu();
 
     template <typename span>
-    void duration(std::string msg);
+    void duration_cpu(std::string msg);
+
+    void duration_gpu(std::string msg);
 
 private:
-    std::chrono::time_point<std::chrono::high_resolution_clock> mStart;
-    std::chrono::time_point<std::chrono::high_resolution_clock> mStop;
+    std::chrono::time_point<std::chrono::high_resolution_clock> _cStart;
+    std::chrono::time_point<std::chrono::high_resolution_clock> _cStop;
+    cudaEvent_t _gStart;
+    cudaEvent_t _gStop;
+    float _timeElasped;
 };
 
 template <typename span>
-void Timer::duration(std::string msg){
+void Timer::duration_cpu(std::string msg){
     std::string str;
-    char fMsg[100];
-    std::sprintf(fMsg, "%-40s", msg.c_str());
 
-    if(std::is_same<span, s>::value) { str = " s"; }
-    else if(std::is_same<span, ms>::value) { str = " ms"; }
-    else if(std::is_same<span, us>::value) { str = " us"; }
-    else if(std::is_same<span, ns>::value) { str = " ns"; }
+    if(std::is_same<span, s>::value) { str = "s"; }
+    else if(std::is_same<span, ms>::value) { str = "ms"; }
+    else if(std::is_same<span, us>::value) { str = "us"; }
+    else if(std::is_same<span, ns>::value) { str = "ns"; }
 
-    std::chrono::duration<double, span> time = mStop - mStart;
-    std::cout << fMsg << " uses " << time.count() << str << std::endl;
+    std::chrono::duration<double, span> time = _cStop - _cStart;
+    LOG("%-40s uses %.6lf %s", msg.c_str(), time.count(), str.c_str());
 }
-

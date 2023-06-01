@@ -6,9 +6,10 @@
 /* 
     使用shared memory把计算一个tile所需要的数据分块存储到访问速度快的memory中
 */
-__global__ void MatmulSharedStaticKernel(float *M_device, float *N_device, float *P_device, int width){
-    __shared__ float M_deviceShared[BLOCKSIZE][BLOCKSIZE];
-    __shared__ float N_deviceShared[BLOCKSIZE][BLOCKSIZE];
+__global__ void MatmulSharedStaticConflictPadKernel(float *M_device, float *N_device, float *P_device, int width){
+    /* 添加一个padding，可以防止bank conflict发生，结合图理解一下*/
+    __shared__ float M_deviceShared[BLOCKSIZE][BLOCKSIZE + 1];
+    __shared__ float N_deviceShared[BLOCKSIZE][BLOCKSIZE + 1];
     /* 
         对于x和y, 根据blockID, tile大小和threadID进行索引
     */
@@ -21,35 +22,23 @@ __global__ void MatmulSharedStaticKernel(float *M_device, float *N_device, float
     int tx = threadIdx.x;
     /* 对于每一个P的元素，我们只需要循环遍历width / tile_width 次就okay了，这里有点绕，画图理解一下*/
     for (int m = 0; m < width / BLOCKSIZE; m ++) {
-        M_deviceShared[ty][tx] = M_device[y * width + (m * BLOCKSIZE + tx)];
-        N_deviceShared[ty][tx] = N_device[(m * BLOCKSIZE + ty)* width + x];
+        /* 这里为了实现bank conflict, 把tx与tx的顺序颠倒，同时索引也改变了*/
+        M_deviceShared[tx][ty] = M_device[x * width + (m * BLOCKSIZE + ty)];
+        N_deviceShared[tx][ty] = M_device[(m * BLOCKSIZE + tx)* width + y];
+
         __syncthreads();
 
         for (int k = 0; k < BLOCKSIZE; k ++) {
-            P_element += M_deviceShared[ty][k] * N_deviceShared[k][tx];
+            P_element += M_deviceShared[tx][k] * N_deviceShared[k][ty];
         }
         __syncthreads();
-        // if (tx == 0 && ty == 0 && blockIdx.x == 0 && blockIdx.y == 0) {
-        //     printf("M: ");
-        //     for (int i = 0; i < BLOCKSIZE; i++){
-        //         for (int j = 0; j < BLOCKSIZE; j++) {
-        //             printf("%f, ", M_deviceShared[i][j]);
-        //         }
-        //     }
-        //     printf("\nN: ");
-        //     for (int i = 0; i < BLOCKSIZE; i++){
-        //         for (int j = 0; j < BLOCKSIZE; j++) {
-        //             printf("%f, ", N_deviceShared[i][j]);
-        //         }
-        //     }
-        //     printf("\n");
-        // }
     }
 
-    P_device[y * width + x] = P_element;
+    /* 列优先 */
+    P_device[x * width + y] = P_element;
 }
 
-__global__ void MatmulSharedDynamicKernel(float *M_device, float *N_device, float *P_device, int width, int blockSize){
+__global__ void MatmulSharedDynamicConflictPadKernel(float *M_device, float *N_device, float *P_device, int width, int blockSize){
     /* 
         声明动态共享变量的时候需要加extern，同时需要是一维的 
         注意这里有个坑, 不能够像这样定义： 
@@ -60,7 +49,7 @@ __global__ void MatmulSharedDynamicKernel(float *M_device, float *N_device, floa
     */
 
     extern __shared__ float deviceShared[];
-    int stride = blockSize * blockSize;
+    int stride = (blockSize + 1) * blockSize;
     /* 
         对于x和y, 根据blockID, tile大小和threadID进行索引
     */
@@ -73,27 +62,30 @@ __global__ void MatmulSharedDynamicKernel(float *M_device, float *N_device, floa
     int tx = threadIdx.x;
     /* 对于每一个P的元素，我们只需要循环遍历width / tile_width 次就okay了 */
     for (int m = 0; m < width / blockSize; m ++) {
-        deviceShared[ty * blockSize + tx] = M_device[y * width + (m * blockSize + tx)];
-        deviceShared[stride + (ty * blockSize + tx)] = N_device[(m * blockSize + ty)* width + x];
+        /* 这里为了实现bank conflict, 把tx与tx的顺序颠倒，同时索引也改变了*/
+        deviceShared[tx * (blockSize + 1) + ty]             = M_device[x * width + (m * blockSize + ty)];
+        deviceShared[stride + (tx * (blockSize + 1) + ty)]  = N_device[(m * blockSize + tx) * width + y];
+
         __syncthreads();
 
         for (int k = 0; k < blockSize; k ++) {
-            P_element += deviceShared[ty * blockSize + k] * deviceShared[stride + (k * blockSize + tx)];
+            P_element += deviceShared[tx * (blockSize + 1) + k] * deviceShared[stride + (k * (blockSize + 1 ) + ty)];
         }
         __syncthreads();
     }
 
-    P_device[y * width + x] = P_element;
+    /* 列优先 */
+    P_device[x * width + y] = P_element;
 }
 
 /*
     使用Tiling技术
     一个tile处理的就是block, 将一个矩阵分为多个小的tile，这些tile之间的执行独立，并且可以并行
 */
-void MatmulSharedOnDevice(float *M_host, float *N_host, float* P_host, int width, int blockSize, bool staticMem){
+void MatmulSharedConflictPadOnDevice(float *M_host, float *N_host, float* P_host, int width, int blockSize, bool staticMem){
     /* 设置矩阵大小 */
     int size = width * width * sizeof(float);
-    long int sMemSize = blockSize * blockSize * sizeof(float) * 2;
+    long int sMemSize = (blockSize + 1) * blockSize * sizeof(float) * 2;
 
     /* 分配M, N在GPU上的空间*/
     float *M_device;
@@ -113,9 +105,9 @@ void MatmulSharedOnDevice(float *M_host, float *N_host, float* P_host, int width
     dim3 dimBlock(blockSize, blockSize);
     dim3 dimGrid(width / blockSize, width / blockSize);
     if (staticMem) {
-        MatmulSharedStaticKernel <<<dimGrid, dimBlock>>> (M_device, N_device, P_device, width);
+        MatmulSharedStaticConflictPadKernel <<<dimGrid, dimBlock>>> (M_device, N_device, P_device, width);
     } else {
-        MatmulSharedDynamicKernel <<<dimGrid, dimBlock, sMemSize, nullptr>>> (M_device, N_device, P_device, width, blockSize);
+        MatmulSharedDynamicConflictPadKernel <<<dimGrid, dimBlock, sMemSize, nullptr>>> (M_device, N_device, P_device, width, blockSize);
     }
 
     /* 将结果从device拷贝回host*/
