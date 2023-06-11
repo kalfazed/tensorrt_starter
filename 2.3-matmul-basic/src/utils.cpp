@@ -23,15 +23,20 @@ void printMat(float* data, int size) {
 
 void compareMat(float* h_data, float* d_data, int size) {
     double precision = 1.0E-4;
+    bool error = false;
     /* 
      * 这里注意，浮点数运算时CPU和GPU之间的计算结果是有误差的
      * 一般来说误差保持在1.0E-4之内是可以接受的
     */
     for (int i = 0; i < size; i ++) {
         if (abs(h_data[i] - d_data[i]) > precision) {
-            printf("Matmul result is different\n");
+            error = true;
             printf("cpu: %.8lf, gpu: %.8lf\n", h_data[i], d_data[i]);
             break;
         }
     }
+    if (error) 
+      printf("Matmul result is different\n");
+    else
+      printf("Matmul result is same, precision is 1.0E-4\n");
 }

@@ -7,6 +7,7 @@ include $(CONFIG_LOCAL)
 BUILD_PATH    :=	build
 SRC_PATH      :=	src
 INC_PATH      :=  include
+TAR_PATH      :=  results
 CUDA_DIR      :=	/usr/local/cuda-$(CUDA_VER)
 
 CXX_SRC       +=	$(wildcard $(SRC_PATH)/*.cpp)
@@ -53,6 +54,7 @@ CXXFLAGS      +=	-w
 endif
 
 all:
+	@mkdir -p $(TAR_PATH)
 	$(MAKE) $(APP)
 
 update: $(APP)
@@ -71,8 +73,8 @@ show:
 
 clean:
 	rm -rf $(APP)
-	rm -rf build
-	rm -rf results
+	rm -rf $(BUILD_PATH)
+	rm -rf $(TAR_PATH)
 
 ifneq ($(MAKECMDGOALS), clean)
 -include $(APP_MKS)
@@ -83,19 +85,19 @@ $(BUILD_PATH)/%.cpp.o: $(SRC_PATH)/%.cpp
 	@echo Compile CXX $@
 	@mkdir -p $(BUILD_PATH)
 	@$(CC) -o $@ -c $< $(CXXFLAGS) $(INCS)
-$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)%.cpp
+$(BUILD_PATH)/%.cpp.mk: $(SRC_PATH)/%.cpp
 	@echo Compile Dependence CXX $@
 	@mkdir -p $(BUILD_PATH)
-	@$(CC) -M $< -MF $@ -MT $(@:.cpp.mk=.cpp.o) $(CXXFLAGS)
+	@$(CC) -M $< -MF $@ -MT $(@:.cpp.mk=.cpp.o) $(CXXFLAGS) $(INCS)
 
 # Compile CUDA
 $(BUILD_PATH)/%.cu.o: $(SRC_PATH)/%.cu
 	@echo Compile CUDA $@
 	@mkdir -p $(BUILD_PATH)
 	@$(CUCC) -o $@ -c $< $(CUDAFLAGS) $(INCS)
-$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)%.cu
+$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)/%.cu
 	@echo Compile Dependence CUDA $@
 	@mkdir -p $(BUILD_PATH)
-	@$(CUCC) -M $< -MF $@ -MT $(@:.cu.mk=.cu.o) $(CUDAFLAGS)
+	@$(CUCC) -M $< -MF $@ -MT $(@:.cu.mk=.cu.o) $(CUDAFLAGS) $(INCS)
 
 .PHONY: all update show clean 

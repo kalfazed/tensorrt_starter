@@ -1,10 +1,9 @@
 #include <cuda_runtime.h>
+#include <utils.hpp>
 #include <stdio.h>
 
 __global__ void print_idx_kernel(){
-  printf("block idx: (%3d, %3d, %3d), thread idx: (%3d, %3d, %3d)\n",
-         blockIdx.z, blockIdx.y, blockIdx.x,
-         threadIdx.z, threadIdx.y, threadIdx.x);
+  printf("block idx: (%3d, %3d, %3d), thread idx: (%3d, %3d, %3d)\n", blockIdx.z, blockIdx.y, blockIdx.x, threadIdx.z, threadIdx.y, threadIdx.x);
 }
 
 __global__ void print_dim_kernel(){
@@ -42,17 +41,21 @@ __global__ void print_thread_idx_kernel(){
 
 void print_idx_device(dim3 grid, dim3 block){
   print_idx_kernel<<<grid, block>>>();
+  CUDA_CHECK(cudaDeviceSynchronize());
 }
 
 void print_dim_device(dim3 grid, dim3 block){
   print_dim_kernel<<<grid, block>>>();
+  CUDA_CHECK(cudaDeviceSynchronize());
 }
 
 void print_thread_idx_per_block_device(dim3 grid, dim3 block){
   print_thread_idx_per_block_kernel<<<grid, block>>>();
+  CUDA_CHECK(cudaDeviceSynchronize());
 }
 
 void print_thread_idx_device(dim3 grid, dim3 block){
   print_thread_idx_kernel<<<grid, block>>>();
+  CUDA_CHECK(cudaDeviceSynchronize());
 }
 

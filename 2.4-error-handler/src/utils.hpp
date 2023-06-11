@@ -33,5 +33,4 @@ void initMatrix(float* data, int size, int low, int high, int seed);
 void printMat(float* data, int size);
 void compareMat(float* h_data, float* d_data, int size);
 
-#endif //__LOGER__HPP__
-//
+#endif //__LOGER__HPP__//

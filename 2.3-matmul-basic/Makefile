@@ -29,7 +29,6 @@ INCS          :=	-I $(CUDA_DIR)/include \
 									-I $(SRC_PATH) 
 
 LIBS          :=  -L "$(CUDA_DIR)/lib64" \
-								  -lcudart -lcublas -lcudnn
 
 ifeq ($(DEBUG),1)
 CUDAFLAGS     +=	-g -O0
@@ -77,19 +76,19 @@ $(BUILD_PATH)/%.cpp.o: $(SRC_PATH)/%.cpp
 	@echo Compile CXX $@
 	@mkdir -p $(BUILD_PATH)
 	@$(CC) -o $@ -c $< $(CXXFLAGS) $(INCS)
-$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)%.cpp
+$(BUILD_PATH)/%.cpp.mk: $(SRC_PATH)/%.cpp
 	@echo Compile Dependence CXX $@
 	@mkdir -p $(BUILD_PATH)
-	@$(CC) -M $< -MF $@ -MT $(@:.cpp.mk=.cpp.o) $(CXXFLAGS)
+	@$(CC) -M $< -MF $@ -MT $(@:.cpp.mk=.cpp.o) $(CXXFLAGS) $(INCS)
 
 # Compile CUDA
 $(BUILD_PATH)/%.cu.o: $(SRC_PATH)/%.cu
 	@echo Compile CUDA $@
 	@mkdir -p $(BUILD_PATH)
 	@$(CUCC) -o $@ -c $< $(CUDAFLAGS) $(INCS)
-$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)%.cu
+$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)/%.cu
 	@echo Compile Dependence CUDA $@
 	@mkdir -p $(BUILD_PATH)
-	@$(CUCC) -M $< -MF $@ -MT $(@:.cu.mk=.cu.o) $(CUDAFLAGS)
+	@$(CUCC) -M $< -MF $@ -MT $(@:.cu.mk=.cu.o) $(CUDAFLAGS) $(INCS)
 
 .PHONY: all update show clean 

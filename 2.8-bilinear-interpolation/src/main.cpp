@@ -16,7 +16,7 @@ int main(){
     string output_path = "";
 
     cv::Mat input = cv::imread(file_path);
-    int tar_h = 1000;
+    int tar_h = 500;
     int tar_w = 500;
     int tactis;
 
@@ -54,21 +54,25 @@ int main(){
     tactis = 0;
     resizedInput_gpu = preprocess_gpu(input, tar_h, tar_w, timer, tactis);
     output_path = output_prefix + getPrefix(file_path) + "_resized_nearest_gpu.png";
+    cv::cvtColor(resizedInput_cpu, resizedInput_cpu, cv::COLOR_RGB2BGR);
     cv::imwrite(output_path, resizedInput_gpu);
 
     tactis = 1;
     resizedInput_gpu = preprocess_gpu(input, tar_h, tar_w, timer, tactis);
     output_path = output_prefix + getPrefix(file_path) + "_resized_bilinear_gpu.png";
+    cv::cvtColor(resizedInput_cpu, resizedInput_cpu, cv::COLOR_RGB2BGR);
     cv::imwrite(output_path, resizedInput_gpu);
 
     tactis = 2;
     resizedInput_gpu = preprocess_gpu(input, tar_h, tar_w, timer, tactis);
     output_path = output_prefix + getPrefix(file_path) + "_resized_bilinear_letterbox_gpu.png";
+    cv::cvtColor(resizedInput_cpu, resizedInput_cpu, cv::COLOR_RGB2BGR);
     cv::imwrite(output_path, resizedInput_gpu);
 
     tactis = 3;
     resizedInput_gpu = preprocess_gpu(input, tar_h, tar_w, timer, tactis);
     output_path = output_prefix + getPrefix(file_path) + "_resized_bilinear_letterbox_center_gpu.png";
+    cv::cvtColor(resizedInput_cpu, resizedInput_cpu, cv::COLOR_RGB2BGR);
     cv::imwrite(output_path, resizedInput_gpu);
     return 0;
 }

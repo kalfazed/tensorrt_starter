@@ -67,7 +67,13 @@ cv::Mat preprocess_gpu(
     CUDA_CHECK(cudaDeviceSynchronize());
 
     timer.stop_gpu();
-    timer.duration_gpu("Resize(bilinear) in gpu takes:");
+    switch (tactis) {
+        case 0: timer.duration_gpu("Resize(nearest) in gpu takes:"); break;
+        case 1: timer.duration_gpu("Resize(bilinear) in gpu takes:"); break;
+        case 2: timer.duration_gpu("Resize(bilinear-letterbox) in gpu takes:"); break;
+        case 3: timer.duration_gpu("Resize(bilinear-letterbox-center) in gpu takes:"); break;
+        default: break;
+    }
 
     // 将结果返回给host上
     CUDA_CHECK(cudaMemcpy(h_tar.data, d_tar, tar_size, cudaMemcpyDeviceToHost));

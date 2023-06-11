@@ -11,10 +11,6 @@ ifeq ($(CUDA_VER),)
 $(error "CUDA_VER variable is not set in Makefile.config")
 endif
 
-ifeq ($(PLATFORM),)
-$(error "PLATFORM variable is not set in Makefile.config")
-endif
-
 
 BUILD_PATH		:=	build
 SRC_PATH		:=	src

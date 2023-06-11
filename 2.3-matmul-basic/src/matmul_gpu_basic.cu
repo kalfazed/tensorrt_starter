@@ -23,10 +23,9 @@ __global__ void MatmulKernel(float *M_device, float *N_device, float *P_device, 
 }
 
 /*
-    这个实现的问题点：只有一个block
-    因为只有一个block，并且又因为SM中的sp数量是有限的，所以不能够全部放下。想要全部放下的话需要缩小矩阵的大小
-    有很多次读写，但具体的执行很少(两次读和一次写，一次计算)
-    解决办法：使用tile
+    CUDA中使用block对矩阵中某一片区域进行集中计算。这个类似于loop中的tile
+    感兴趣的同学可以试着改一下blockSize，也就是tileSize，看看速度会发生什么样子的变化
+    当blockSize达到一个数量的时候，这个程序会出错。下一个案例中我们会分析
 */
 void MatmulOnDevice(float *M_host, float *N_host, float* P_host, int width, int blockSize){
     /* 设置矩阵大小 */
@@ -46,7 +45,7 @@ void MatmulOnDevice(float *M_host, float *N_host, float* P_host, int width, int 
     float *P_device;
     cudaMalloc(&P_device, size);
 
-    /* 调用kernel来进行matmul计算, 在这个例子中我们用的方案是：使用一个grid，一个grid里有width*width个线程 */
+    /* 调用kernel来进行matmul计算, 在这个例子中我们用的方案是：将一个矩阵切分成多个blockSize * blockSize的大小 */
     dim3 dimBlock(blockSize, blockSize);
     dim3 dimGrid(width / blockSize, width / blockSize);
     MatmulKernel <<<dimGrid, dimBlock>>> (M_device, N_device, P_device, width);

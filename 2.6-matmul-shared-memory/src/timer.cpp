@@ -18,8 +18,6 @@ Timer::Timer(){
 Timer::~Timer(){
     cudaFree(_gStart);
     cudaFree(_gStop);
-    cudaEventDestroy(_gStart);
-    cudaEventDestroy(_gStop);
 }
 
 void Timer::start_gpu() {

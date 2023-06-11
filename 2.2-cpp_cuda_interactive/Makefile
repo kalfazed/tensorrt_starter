@@ -29,7 +29,6 @@ INCS          :=	-I $(CUDA_DIR)/include \
 									-I $(SRC_PATH) 
 
 LIBS          :=  -L "$(CUDA_DIR)/lib64" \
-								  -lcudart -lcublas -lcudnn
 
 ifeq ($(DEBUG),1)
 CUDAFLAGS     +=	-g -O0
@@ -68,28 +67,16 @@ clean:
 	rm -rf $(APP)
 	rm -rf build
 
-ifneq ($(MAKECMDGOALS), clean)
--include $(APP_MKS)
-endif
-
 # Compile CXX
 $(BUILD_PATH)/%.cpp.o: $(SRC_PATH)/%.cpp
 	@echo Compile CXX $@
 	@mkdir -p $(BUILD_PATH)
 	@$(CC) -o $@ -c $< $(CXXFLAGS) $(INCS)
-$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)%.cpp
-	@echo Compile Dependence CXX $@
-	@mkdir -p $(BUILD_PATH)
-	@$(CC) -M $< -MF $@ -MT $(@:.cpp.mk=.cpp.o) $(CXXFLAGS)
 
 # Compile CUDA
 $(BUILD_PATH)/%.cu.o: $(SRC_PATH)/%.cu
 	@echo Compile CUDA $@
 	@mkdir -p $(BUILD_PATH)
 	@$(CUCC) -o $@ -c $< $(CUDAFLAGS) $(INCS)
-$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)%.cu
-	@echo Compile Dependence CUDA $@
-	@mkdir -p $(BUILD_PATH)
-	@$(CUCC) -M $< -MF $@ -MT $(@:.cu.mk=.cu.o) $(CUDAFLAGS)
 
 .PHONY: all update show clean 

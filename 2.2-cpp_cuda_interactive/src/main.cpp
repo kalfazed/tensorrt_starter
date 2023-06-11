@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <cuda_runtime.h>
 #include "print_index.hpp"
-#include "utils.hpp"
 
 void print_one_dim(int inputSize, int blockSize){
     int gridSize = inputSize / blockSize;
@@ -13,8 +12,6 @@ void print_one_dim(int inputSize, int blockSize){
     // print_dim_device(block, grid);
     // print_thread_idx_per_block_device(block, grid);
     print_thread_idx_device(block, grid);
-
-    CUDACHECK(cudaDeviceSynchronize());
 }
 
 void print_two_dim(int inputSize, int blockSize){
@@ -27,8 +24,6 @@ void print_two_dim(int inputSize, int blockSize){
     // print_dim_device(block, grid);
     // print_thread_idx_per_block_device(block, grid);
     print_thread_idx_device(block, grid);
-
-    CUDACHECK(cudaDeviceSynchronize());
 }
 
 
@@ -41,7 +36,7 @@ int main(){
     // blockSize = 4;
     // print_one_dim(inputSize, blockSize);
         
-    /* one-dimention test */
+    /* two-dimention test */
     inputSize = 8;
     blockSize = 4;
     print_two_dim(inputSize, blockSize);

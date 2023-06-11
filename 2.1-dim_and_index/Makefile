@@ -58,18 +58,10 @@ clean:
 	rm -rf $(APP)
 	rm -rf build
 
-ifneq ($(MAKECMDGOALS), clean)
--include $(APP_MKS)
-endif
-
 # Compile CUDA
 $(BUILD_PATH)/%.cu.o: $(SRC_PATH)/%.cu
 	@echo Compile CUDA $@
 	@mkdir -p $(BUILD_PATH)
 	@$(CUCC) -o $@ -c $< $(CUDAFLAGS) $(INCS)
-$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)%.cu
-	@echo Compile Dependence CUDA $@
-	@mkdir -p $(BUILD_PATH)
-	@$(CUCC) -M $< -MF $@ -MT $(@:.cu.mk=.cu.o) $(CUDAFLAGS)
 
 .PHONY: all deps install clean clean_models clean_detections reinstall

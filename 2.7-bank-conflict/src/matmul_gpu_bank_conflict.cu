@@ -12,8 +12,8 @@ __global__ void MatmulSharedStaticConflictKernel(float *M_device, float *N_devic
     /* 
         对于x和y, 根据blockID, tile大小和threadID进行索引
     */
-    int x = blockIdx.x * BLOCKSIZE + threadIdx.x;
-    int y = blockIdx.y * BLOCKSIZE + threadIdx.y;
+    int x = blockIdx.x * blockDim.x + threadIdx.x;
+    int y = blockIdx.y * blockDim.y + threadIdx.y;
 
     float P_element = 0.0;
 
