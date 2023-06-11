@@ -1,9 +1,11 @@
-CONFIG 			:=	./config/Makefile.config
+CONFIG 			:=	../config/Makefile.config
+CONFIG_LOCAL 			:=	./config/Makefile.config
 
 ifeq ($(wildcard $(CONFIG)),)
 $(error $(CONFIG) missing.)
 endif
 include $(CONFIG)
+include $(CONFIG_LOCAL)
 
 ifeq ($(CUDA_VER),)
 $(error "CUDA_VER variable is not set in Makefile.config")
@@ -94,6 +96,8 @@ install: $(APP)
 clean:
 	rm -rf $(APP)
 	rm -rf build
+
+reset:
 	rm -rf models/*.engine
 
 reinstall: $(APP)

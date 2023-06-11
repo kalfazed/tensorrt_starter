@@ -67,10 +67,10 @@ void print_two_dim(){
   dim3 block(blockDim, blockDim);
   dim3 grid(gridDim, gridDim);
 
-  // print_idx_kernel<<<grid, block>>>();
+  print_idx_kernel<<<grid, block>>>();
   // print_dim_kernel<<<grid, block>>>();
   // print_thread_idx_per_block_kernel<<<grid, block>>>();
-  print_thread_idx_kernel<<<grid, block>>>();
+  // print_thread_idx_kernel<<<grid, block>>>();
 
   cudaDeviceSynchronize();
 }

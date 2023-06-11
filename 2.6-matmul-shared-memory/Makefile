@@ -1,18 +1,8 @@
-CONFIG 			:=	./config/Makefile.config
+CONFIG         :=  ../config/Makefile.config
+CONFIG_LOCAL   :=  ./config/Makefile.config
 
-ifeq ($(wildcard $(CONFIG)),)
-$(error $(CONFIG) missing.)
-endif
 include $(CONFIG)
-
-ifeq ($(CUDA_VER),)
-$(error "CUDA_VER variable is not set in Makefile.config")
-endif
-
-ifeq ($(PLATFORM),)
-$(error "PLATFORM variable is not set in Makefile.config")
-endif
-
+include $(CONFIG_LOCAL)
 
 BUILD_PATH    :=	build
 SRC_PATH      :=	src
@@ -32,7 +22,7 @@ APP_DEPS      +=	$(wildcard $(SRC_PATH)/*.h)
 
 
 CUCC          :=	$(CUDA_DIR)/bin/nvcc
-CXXFLAGS      :=  -std=c++11 -fopenmp -pthread -fPIC
+CXXFLAGS      :=  -std=c++11 -pthread -fPIC
 CUDAFLAGS     :=	--shared -Xcompiler -fPIC 
 
 INCS          :=	-I $(CUDA_DIR)/include \

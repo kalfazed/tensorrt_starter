@@ -1,9 +1,11 @@
-CONFIG 			:=	./config/Makefile.config
+CONFIG 			:=	../config/Makefile.config
+CONFIG_LOCAL 			:=	./config/Makefile.config
 
 ifeq ($(wildcard $(CONFIG)),)
 $(error $(CONFIG) missing.)
 endif
 include $(CONFIG)
+include $(CONFIG_LOCAL)
 
 ifeq ($(CUDA_VER),)
 $(error "CUDA_VER variable is not set in Makefile.config")
@@ -54,9 +56,9 @@ LIBS			:=	-L "$(TENSORRT_INSTALL_DIR)/lib" \
 					-lyaml-cpp -lstdc++fs -ldl -std=gnu++11 -lnvparsers \
 
 ifeq ($(DEBUG),1)
-CXXFLAGS		:=	-g -O0 -std=c++11 -lstdc++fs -w -DOPENCV -fopenmp -lxml2 -lnvonnxparser
+CXXFLAGS		:=	-g -O0 -std=c++11 -lstdc++fs -w -DOPENCV -lxml2 -lnvonnxparser
 else
-CXXFLAGS		:=	-O3 -std=c++11 -lstdc++fs -w -DOPENCV -fopenmp -lxml2 -lnvonnxparser
+CXXFLAGS		:=	-O3 -std=c++11 -lstdc++fs -w -DOPENCV -lxml2 -lnvonnxparser
 endif
 
 ifeq ($(SHOW_WARNING),1)
@@ -94,7 +96,7 @@ install: $(APP)
 clean:
 	rm -rf $(APP)
 	rm -rf build
-	rm -rf models/*.engine
+	rm -rf compile_commands.json
 
 reinstall: $(APP)
 	@echo "Re installing $(APP)"

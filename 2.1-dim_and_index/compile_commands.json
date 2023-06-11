@@ -18,8 +18,8 @@
       "build/print_index.cu.o",
       "src/print_index.cu"
     ],
-    "directory": "/home/kalfazed/Code/tensorrt/tensorrt_practice/2.0-cuda/2.1-dim_and_index",
-    "file": "/home/kalfazed/Code/tensorrt/tensorrt_practice/2.0-cuda/2.1-dim_and_index/src/print_index.cu",
-    "output": "/home/kalfazed/Code/tensorrt/tensorrt_practice/2.0-cuda/2.1-dim_and_index/build/print_index.cu.o"
+    "directory": "/home/kalfazed/Code/tensorrt/tensorrt_practice/2.1-dim_and_index",
+    "file": "/home/kalfazed/Code/tensorrt/tensorrt_practice/2.1-dim_and_index/src/print_index.cu",
+    "output": "/home/kalfazed/Code/tensorrt/tensorrt_practice/2.1-dim_and_index/build/print_index.cu.o"
   }
 ]

@@ -40,7 +40,8 @@ void compareMat(float* h_data, float* d_data, int size) {
 
 std::string getPrefix(std::string file_path) {
     std::string prefix;
-    int pos = file_path.rfind('.');
-    prefix = file_path.substr(0, pos);
+    int pos1 = file_path.find('/');
+    int pos2 = file_path.rfind('.');
+    prefix = file_path.substr(pos1, pos2 - pos1);
     return prefix;
 }

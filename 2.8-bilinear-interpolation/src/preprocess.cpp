@@ -30,7 +30,7 @@ cv::Mat preprocess_cpu(cv::Mat &src, const int &tar_h, const int &tar_w, Timer t
     
 
     timer.stop_cpu();
-    timer.duration_cpu<Timer::ms>("Resize (bilinear) in cpu takes:");
+    timer.duration_cpu<Timer::ms>("Resize(bilinear) in cpu takes:");
 
     return tar;
 }

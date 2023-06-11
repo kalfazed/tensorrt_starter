@@ -1,34 +1,21 @@
-CONFIG 			:=	./config/Makefile.config
+CONFIG            :=  ../config/Makefile.config
+CONFIG_LOCAL      :=  ./config/Makefile.config
 
-ifeq ($(wildcard $(CONFIG)),)
-$(error $(CONFIG) missing.)
-endif
 include $(CONFIG)
-
-ifeq ($(CUDA_VER),)
-$(error "CUDA_VER variable is not set in Makefile.config")
-endif
-
-ifeq ($(PLATFORM),)
-$(error "PLATFORM variable is not set in Makefile.config")
-endif
+include $(CONFIG_LOCAL)
 
 
 BUILD_PATH    :=	build
 SRC_PATH      :=	src
 CUDA_DIR      :=	/usr/local/cuda-$(CUDA_VER)
 
-CXX_SRC       +=	$(wildcard $(SRC_PATH)/*.cpp)
 KERNELS_SRC   :=	$(wildcard $(SRC_PATH)/*.cu)
 
-APP_OBJS      :=	$(patsubst $(SRC_PATH)%, $(BUILD_PATH)%, $(CXX_SRC:.cpp=.cpp.o))
 APP_OBJS      +=	$(patsubst $(SRC_PATH)%, $(BUILD_PATH)%, $(KERNELS_SRC:.cu=.cu.o))  
 
 APP_MKS       :=	$(APP_OBJS:.o=.mk)
 
-APP_DEPS      :=	$(CXX_SRC)
 APP_DEPS      +=	$(KERNELS_SRC)
-APP_DEPS      +=	$(wildcard $(SRC_PATH)/*.h)
 
 
 
@@ -40,7 +27,6 @@ INCS          :=	-I $(CUDA_DIR)/include \
 									-I $(SRC_PATH) 
 
 LIBS          := -L "$(CUDA_DIR)/lib64" \
-								 -lcudart -lcublas -lcudnn
 
 ifeq ($(DEBUG),1)
 CUDAFLAGS     +=	-g -O0

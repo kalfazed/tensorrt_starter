@@ -32,7 +32,14 @@
 *.app
 
 # Others
+.cache/
 archive/
+build/
+results/
+compile_commands.json
+trt-cuda
+trt-infer
+.clangd
 *.onnx
 *.engine
 *.o

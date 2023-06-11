@@ -1,22 +1,12 @@
-CONFIG 			:=	./config/Makefile.config
+CONFIG         :=  ../config/Makefile.config
+CONFIG_LOCAL   :=  ./config/Makefile.config
 
-ifeq ($(wildcard $(CONFIG)),)
-$(error $(CONFIG) missing.)
-endif
 include $(CONFIG)
-
-ifeq ($(CUDA_VER),)
-$(error "CUDA_VER variable is not set in Makefile.config")
-endif
-
-ifeq ($(PLATFORM),)
-$(error "PLATFORM variable is not set in Makefile.config")
-endif
-
+include $(CONFIG_LOCAL)
 
 BUILD_PATH    :=	build
 SRC_PATH      :=	src
-HEAD_PATH     :=	include
+INC_PATH      :=  include
 CUDA_DIR      :=	/usr/local/cuda-$(CUDA_VER)
 
 CXX_SRC       +=	$(wildcard $(SRC_PATH)/*.cpp)
@@ -37,12 +27,14 @@ CXXFLAGS      :=  -std=c++11 -pthread -fPIC
 CUDAFLAGS     :=	--shared -Xcompiler -fPIC 
 
 INCS          :=	-I $(CUDA_DIR)/include \
-									-I $(HEAD_PATH) \
-									-I $(OPENCV_INSTALL_DIR)
+									-I $(SRC_PATH) \
+									-I $(INC_PATH) \
+									-I $(OPENCV_INSTALL_DIR) \
 
 LIBS          :=  -L "$(CUDA_DIR)/lib64" \
 								  -lcudart -lcublas -lcudnn \
 									`pkg-config --libs opencv`
+
 
 ifeq ($(DEBUG),1)
 CUDAFLAGS     +=	-g -O0
@@ -80,7 +72,7 @@ show:
 clean:
 	rm -rf $(APP)
 	rm -rf build
-	rm -rf compile_commands.json
+	rm -rf results
 
 ifneq ($(MAKECMDGOALS), clean)
 -include $(APP_MKS)

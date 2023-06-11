@@ -29,21 +29,6 @@ __global__ void MatmulSharedStaticKernel(float *M_device, float *N_device, float
             P_element += M_deviceShared[ty][k] * N_deviceShared[k][tx];
         }
         __syncthreads();
-        // if (tx == 0 && ty == 0 && blockIdx.x == 0 && blockIdx.y == 0) {
-        //     printf("M: ");
-        //     for (int i = 0; i < BLOCKSIZE; i++){
-        //         for (int j = 0; j < BLOCKSIZE; j++) {
-        //             printf("%f, ", M_deviceShared[i][j]);
-        //         }
-        //     }
-        //     printf("\nN: ");
-        //     for (int i = 0; i < BLOCKSIZE; i++){
-        //         for (int j = 0; j < BLOCKSIZE; j++) {
-        //             printf("%f, ", N_deviceShared[i][j]);
-        //         }
-        //     }
-        //     printf("\n");
-        // }
     }
 
     P_device[y * width + x] = P_element;

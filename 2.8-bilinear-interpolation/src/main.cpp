@@ -10,9 +10,9 @@ using namespace std;
 
 int main(){
     Timer timer;
-    char str[100];
 
     string file_path = "data/fox.png";
+    string output_prefix = "results/";
     string output_path = "";
 
     cv::Mat input = cv::imread(file_path);
@@ -23,7 +23,6 @@ int main(){
     cv::Mat resizedInput_cpu;
     cv::Mat resizedInput_gpu;
     
-
     /* 
      * bilinear interpolation resize的CPU/GPU速度比较
      * 由于CPU端做完预处理之后，进入如果有DNN也需要将数据传送到device上，
@@ -47,29 +46,29 @@ int main(){
      * 3: 双线性差值缩放 + 填充(letter box) + 平移居中
      * */
     
-
     resizedInput_cpu = preprocess_cpu(input, tar_h, tar_w, timer, tactis);
-    output_path = getPrefix(file_path) + "_resized_bilinear_cpu.png";
+    output_path = output_prefix + getPrefix(file_path) + "_resized_bilinear_cpu.png";
+    cv::cvtColor(resizedInput_cpu, resizedInput_cpu, cv::COLOR_RGB2BGR);
     cv::imwrite(output_path, resizedInput_cpu);
 
     tactis = 0;
     resizedInput_gpu = preprocess_gpu(input, tar_h, tar_w, timer, tactis);
-    output_path = getPrefix(file_path) + "_resized_nearest_gpu.png";
+    output_path = output_prefix + getPrefix(file_path) + "_resized_nearest_gpu.png";
     cv::imwrite(output_path, resizedInput_gpu);
 
     tactis = 1;
     resizedInput_gpu = preprocess_gpu(input, tar_h, tar_w, timer, tactis);
-    output_path = getPrefix(file_path) + "_resized_bilinear_gpu.png";
+    output_path = output_prefix + getPrefix(file_path) + "_resized_bilinear_gpu.png";
     cv::imwrite(output_path, resizedInput_gpu);
 
     tactis = 2;
     resizedInput_gpu = preprocess_gpu(input, tar_h, tar_w, timer, tactis);
-    output_path = getPrefix(file_path) + "_resized_bilinear_letterbox_gpu.png";
+    output_path = output_prefix + getPrefix(file_path) + "_resized_bilinear_letterbox_gpu.png";
     cv::imwrite(output_path, resizedInput_gpu);
 
     tactis = 3;
     resizedInput_gpu = preprocess_gpu(input, tar_h, tar_w, timer, tactis);
-    output_path = getPrefix(file_path) + "_resized_bilinear_letterbox_center_gpu.png";
+    output_path = output_prefix + getPrefix(file_path) + "_resized_bilinear_letterbox_center_gpu.png";
     cv::imwrite(output_path, resizedInput_gpu);
     return 0;
 }
