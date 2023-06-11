@@ -20,7 +20,7 @@ APP_DEPS      +=	$(KERNELS_SRC)
 
 
 CUCC          :=	$(CUDA_DIR)/bin/nvcc
-CUDAFLAGS     :=	-O3 -arch=compute_86 --shared -Xcompiler -fPIC \
+CUDAFLAGS     :=	-O3 --shared -Xcompiler -fPIC \
 									-I $(CUDA_DIR)/include \
 
 INCS          :=	-I $(CUDA_DIR)/include \

@@ -4,7 +4,6 @@
       "/usr/local/cuda-11.7/bin/nvcc",
       "-c",
       "-O3",
-      "-arch=compute_86",
       "--shared",
       "-Xcompiler",
       "-fPIC",
