@@ -119,8 +119,8 @@ bool Model::build(){
         }
         auto output  = layer->getOutput(0);
 
-        n += sprintf(layer_info + n, "layer_info:  ");
-        n += sprintf(layer_info + n, "%-40s:", layer->getName());
+        // n += sprintf(layer_info + n, "layer_info:  ");
+        n += sprintf(layer_info + n, "%-60s:", layer->getName());
         n += sprintf(layer_info + n, "%-25s", printTensorShape(input).c_str());
         n += sprintf(layer_info + n, " -> ");
         n += sprintf(layer_info + n, "%-25s", printTensorShape(output).c_str());

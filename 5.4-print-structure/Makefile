@@ -11,10 +11,6 @@ ifeq ($(CUDA_VER),)
 $(error "CUDA_VER variable is not set in Makefile.config")
 endif
 
-ifeq ($(PLATFORM),)
-$(error "PLATFORM variable is not set in Makefile.config")
-endif
-
 
 BUILD_PATH		:=	build
 SRC_PATH		:=	src
@@ -125,7 +121,7 @@ $(BUILD_PATH)/%.cu.o: $(SRC_PATH)/%.cu
 	@echo Compile CUDA $@
 	@mkdir -p $(BUILD_PATH)
 	@$(CUCC) -o $@ -c $< $(CUDAFLAGS) $(INCS)
-$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)%.cu
+$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)/%.cu
 	@echo Compile Dependence CUDA $@
 	@mkdir -p $(BUILD_PATH)
 	@$(CUCC) -M $< -MF $@ -MT $(@:.cu.mk=.cu.o) $(CUDAFLAGS)

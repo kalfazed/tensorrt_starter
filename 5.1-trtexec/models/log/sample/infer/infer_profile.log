@@ -1,4 +1,0 @@
-[
-  { "count" : 122823 }
-, { "name" : "/conv1/Conv + /act1/Relu", "timeMs" : 722.819, "averageMs" : 0.00588505, "medianMs" : 0.006144, "percentage" : 100 }
-]

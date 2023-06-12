@@ -1,0 +1,5 @@
+{"Layers": ["/conv1/Conv + /act1/Relu"
+],
+"Bindings": ["input0"
+,"output0"
+]}

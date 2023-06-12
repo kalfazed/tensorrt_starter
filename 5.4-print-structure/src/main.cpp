@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-    Model model("models/vgg16.onnx");
+    Model model("models/resnet50.onnx");
 
     if(!model.build()){
         cout << "fail in building model" << endl;
