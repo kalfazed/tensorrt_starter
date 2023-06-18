@@ -5,8 +5,7 @@
             "name": "CUDA C++: Launch",
             "type": "cuda-gdb",
             "request": "launch",
-            "program": "${workspaceFolder}/trt-cuda",
-            "preLaunchTask": "make"
+            "program": "${workspaceFolder}/trt-cuda"
         },
         {
             "name": "CUDA C++: Attach",

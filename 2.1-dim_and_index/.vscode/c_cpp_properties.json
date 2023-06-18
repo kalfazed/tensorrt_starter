@@ -1,12 +1,12 @@
 {
     "configurations": [
         {
-            "name": "CXX",
+            "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/src/**",
-                "/usr/local/cuda/include/**",
-                "/usr/local/include/opencv4/**",
-                "/home/kalfazed/packages/TensorRT-8.5.1.7/include/**"
+                "${workspaceFolder}/**",
+                "/usr/local/cuda/include/",
+                "/usr/local/include/opencv4/",
+                "/home/kalfazed/packages/TensorRT-8.5.1.7/include/"
             ],
             "defines": [],
             "compilerPath": "/usr/local/cuda/bin/nvcc",

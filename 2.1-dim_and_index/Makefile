@@ -1,40 +1,37 @@
-CONFIG            :=  ../config/Makefile.config
-CONFIG_LOCAL      :=  ./config/Makefile.config
+CONFIG        :=  ../config/Makefile.config
+CONFIG_LOCAL  :=  ./config/Makefile.config
 
 include $(CONFIG)
 include $(CONFIG_LOCAL)
 
+BUILD_PATH    :=  build
+SRC_PATH      :=  src
+CUDA_DIR      :=  /usr/local/cuda-$(CUDA_VER)
 
-BUILD_PATH    :=	build
-SRC_PATH      :=	src
-CUDA_DIR      :=	/usr/local/cuda-$(CUDA_VER)
+KERNELS_SRC   :=  $(wildcard $(SRC_PATH)/*.cu)
 
-KERNELS_SRC   :=	$(wildcard $(SRC_PATH)/*.cu)
+APP_OBJS      +=  $(patsubst $(SRC_PATH)%, $(BUILD_PATH)%, $(KERNELS_SRC:.cu=.cu.o))  
 
-APP_OBJS      +=	$(patsubst $(SRC_PATH)%, $(BUILD_PATH)%, $(KERNELS_SRC:.cu=.cu.o))  
+APP_DEPS      +=  $(KERNELS_SRC)
 
-APP_MKS       :=	$(APP_OBJS:.o=.mk)
+CUCC          :=  $(CUDA_DIR)/bin/nvcc
+CUDAFLAGS     :=  --shared -Xcompiler -fPIC 
 
-APP_DEPS      +=	$(KERNELS_SRC)
+INCS          :=  -I $(CUDA_DIR)/include \
+                  -I $(SRC_PATH) 
 
-
-
-CUCC          :=	$(CUDA_DIR)/bin/nvcc
-CUDAFLAGS     :=	-O3 --shared -Xcompiler -fPIC \
-									-I $(CUDA_DIR)/include \
-
-INCS          :=	-I $(CUDA_DIR)/include \
-									-I $(SRC_PATH) 
-
-LIBS          := -L "$(CUDA_DIR)/lib64" \
+LIBS          :=  -L "$(CUDA_DIR)/lib64" \
 
 ifeq ($(DEBUG),1)
-CUDAFLAGS     +=	-g -O0
+CUDAFLAGS     +=  -g -O0
 else
+CUDAFLAGS     +=  -O3
 endif
 
 ifeq ($(SHOW_WARNING),1)
-CUDAFLAGS     +=	-Wall -Wunused-function -Wunused-variable -Wfatal-errors
+CUDAFLAGS     +=  -Wall -Wunused-function -Wunused-variable -Wfatal-errors
+else
+CUDAFLAGS     +=  -w
 endif
 
 all:
@@ -64,4 +61,4 @@ $(BUILD_PATH)/%.cu.o: $(SRC_PATH)/%.cu
 	@mkdir -p $(BUILD_PATH)
 	@$(CUCC) -o $@ -c $< $(CUDAFLAGS) $(INCS)
 
-.PHONY: all deps install clean clean_models clean_detections reinstall
+.PHONY: all update show clean 

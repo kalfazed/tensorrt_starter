@@ -1,50 +1,50 @@
-CONFIG         :=  ../config/Makefile.config
-CONFIG_LOCAL   :=  ./config/Makefile.config
+CONFIG        :=  ../config/Makefile.config
+CONFIG_LOCAL  :=  ./config/Makefile.config
 
 include $(CONFIG)
 include $(CONFIG_LOCAL)
 
-BUILD_PATH    :=	build
-SRC_PATH      :=	src
-CUDA_DIR      :=	/usr/local/cuda-$(CUDA_VER)
+BUILD_PATH    :=  build
+SRC_PATH      :=  src
+CUDA_DIR      :=  /usr/local/cuda-$(CUDA_VER)
 
-CXX_SRC       +=	$(wildcard $(SRC_PATH)/*.cpp)
-KERNELS_SRC   :=	$(wildcard $(SRC_PATH)/*.cu)
+CXX_SRC       +=  $(wildcard $(SRC_PATH)/*.cpp)
+KERNELS_SRC   :=  $(wildcard $(SRC_PATH)/*.cu)
 
-APP_OBJS      :=	$(patsubst $(SRC_PATH)%, $(BUILD_PATH)%, $(CXX_SRC:.cpp=.cpp.o))
-APP_OBJS      +=	$(patsubst $(SRC_PATH)%, $(BUILD_PATH)%, $(KERNELS_SRC:.cu=.cu.o))  
+APP_OBJS      :=  $(patsubst $(SRC_PATH)%, $(BUILD_PATH)%, $(CXX_SRC:.cpp=.cpp.o))
+APP_OBJS      +=  $(patsubst $(SRC_PATH)%, $(BUILD_PATH)%, $(KERNELS_SRC:.cu=.cu.o))  
 
-APP_MKS       :=	$(APP_OBJS:.o=.mk)
+APP_MKS       :=  $(APP_OBJS:.o=.mk)
 
-APP_DEPS      :=	$(CXX_SRC)
-APP_DEPS      +=	$(KERNELS_SRC)
-APP_DEPS      +=	$(wildcard $(SRC_PATH)/*.h)
+APP_DEPS      :=  $(CXX_SRC)
+APP_DEPS      +=  $(KERNELS_SRC)
+APP_DEPS      +=  $(wildcard $(SRC_PATH)/*.h)
 
 
-CUCC          :=	$(CUDA_DIR)/bin/nvcc
+CUCC          :=  $(CUDA_DIR)/bin/nvcc
 CXXFLAGS      :=  -std=c++11 -pthread -fPIC
-CUDAFLAGS     :=	--shared -Xcompiler -fPIC 
+CUDAFLAGS     :=  --shared -Xcompiler -fPIC 
 
-INCS          :=	-I $(CUDA_DIR)/include \
-									-I $(SRC_PATH) 
+INCS          :=  -I $(CUDA_DIR)/include \
+                  -I $(SRC_PATH) 
 
 LIBS          :=  -L "$(CUDA_DIR)/lib64" \
-								  -lcudart -lcublas -lcudnn
+                  -lcudart -lcublas -lcudnn
 
 ifeq ($(DEBUG),1)
-CUDAFLAGS     +=	-g -O0
-CXXFLAGS      +=	-g -O0
+CUDAFLAGS     +=  -g -O0
+CXXFLAGS      +=  -g -O0
 else
-CUDAFLAGS     +=	-O3
-CXXFLAGS      +=	-O3
+CUDAFLAGS     +=  -O3
+CXXFLAGS      +=  -O3
 endif
 
 ifeq ($(SHOW_WARNING),1)
-CUDAFLAGS     +=	-Wall -Wunused-function -Wunused-variable -Wfatal-errors
-CXXFLAGS      +=	-Wall -Wunused-function -Wunused-variable -Wfatal-errors
+CUDAFLAGS     +=  -Wall -Wunused-function -Wunused-variable -Wfatal-errors
+CXXFLAGS      +=  -Wall -Wunused-function -Wunused-variable -Wfatal-errors
 else
-CUDAFLAGS     +=	-w
-CXXFLAGS      +=	-w
+CUDAFLAGS     +=  -w
+CXXFLAGS      +=  -w
 endif
 
 all:

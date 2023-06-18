@@ -2,9 +2,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "make",
             "type": "shell",
-            "command": "make update -j6"
-        },
+            "command": "make -j64"
+        }
     ]
 }

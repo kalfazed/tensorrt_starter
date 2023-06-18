@@ -1,8 +1,8 @@
-FROM nvcr.io/nvidia/tensorrt:21.12-py3
+# For more detail, check NGC
+FROM nvcr.io/nvidia/tensorrt:21.12-py3   
 
 ENV TZ=Asia/Tokyo
-ARG user=trt
-ARG passwd=111
+ARG user=kalfazed
 
 # Set timezone in case of interation during installation
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -20,7 +20,7 @@ RUN apt install -y --no-install-recommends \
   python3-numpy libtbb2 libtbb-dev libdc1394-22-dev 
 RUN apt-get -y clean && rm -rf /var/lib/apt/lists/*
 
-# Build opencv4.5.5
+#Build opencv4.5.5
 RUN mkdir /root/opencv_build
 WORKDIR /root/opencv_build/
 RUN git clone https://github.com/opencv/opencv.git && git clone https://github.com/opencv/opencv_contrib.git && \
@@ -48,20 +48,35 @@ RUN rm -rf opencv_build
 # install packages that are used for trt inferences
 RUN apt-get update && apt install -y --no-install-recommends \
   sudo libgflags-dev libboost-dev libxml2-dev \
-  libyaml-cpp-dev sqlite3 libsqlite3-dev libboost-all-dev
+  libyaml-cpp-dev sqlite3 libsqlite3-dev libboost-all-dev \
+  fish lsb-release peco feh fim openssh-server tmux curl
 RUN apt-get -y clean && rm -rf /var/lib/apt/lists/*
 
+# install netron to show model structure
+RUN pip install netron
+
+# set up fish shell and exa
+RUN curl -Lo exa.zip "https://github.com/ogham/exa/releases/latest/download/exa-linux-x86_64-v0.10.1.zip" && \
+  sudo unzip -q exa.zip bin/exa -d /usr/local && rm exa.zip
+
+
 # set userinfo
-RUN useradd -rm -c ${user} -d /home/${user} -s /bin/bash -g 100 -G sudo,4,24,27,30,46,100 -u 8793 ${user}
+RUN useradd -rm -c ${user} -u 1000 -d /home/${user} -s /bin/bash -G sudo ${user}
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-# RUN echo "trt:111" | chpasswd
 RUN echo "$user   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 RUN apt-get update
 
+# copy dotfiles
+COPY my_dot_files/tmux/* /home/${user}/
+COPY my_dot_files/fish/ /home/${user}/.config/fish
+
 # set working directory of trt webinar
 RUN mkdir -p /home/${user}/workspace/
 RUN chown -R ${user}:users /home/${user}
+
+# ssh setting
+RUN systemctl enable ssh
 
 # set default working directory and user
 WORKDIR /home/${user}
