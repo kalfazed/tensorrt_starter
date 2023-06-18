@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include "trt_model.hpp"
+#include "logger.hpp"
 
 /*
     我们希望做的，是使用worker作为接口进行推理在main中，我们只需要:
@@ -42,13 +43,17 @@
 
 */
 
+    
 class Worker {
 public:
-    Worker(std::shared_ptr<Model> model);
-    ~Worker();
+    Worker(std::string onnxPath, Model::task_type type, Logger::Level level, Model::Params params);
+    void trt_infer(std::string imagePath);
 public:
     std::shared_ptr<Model> m_classifier;
+    std::shared_ptr<Logger> m_logger;
+    std::shared_ptr<Model::Params> m_params;
     std::vector<float> m_scores;
 };
+
 
 #endif //__WORKER_HPP__

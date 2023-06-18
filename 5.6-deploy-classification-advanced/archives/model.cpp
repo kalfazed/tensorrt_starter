@@ -19,31 +19,13 @@
 
 using namespace std;
 
-class Logger : public nvinfer1::ILogger{
-public:
-    virtual void log (Severity severity, const char* msg) noexcept override{
-        string str;
-        switch (severity){
-            case Severity::kINTERNAL_ERROR: str = "[fatal]";
-            case Severity::kERROR:          str = "[error]";
-            case Severity::kWARNING:        str = "[warn]";
-            case Severity::kINFO:           str = "[info]";
-            case Severity::kVERBOSE:        str = "[verb]";
-        }
-
-        if (severity <= Severity::kINFO)
-            cout << str << ":" << string(msg) << endl;
-    }
-};
-
-
 Model::Model(string onnxPath){
-    this->mOnnxPath = onnxPath;
-    this->mEnginePath = getEnginePath(mOnnxPath);
+    this->m_onnxPath = onnxPath;
+    this->m_enginePath = getEnginePath(m_onnxPath);
 }
 
 bool Model::build(){
-    if (fileExists(mEnginePath)){
+    if (fileExists(m_enginePath)){
         LOG("trt engine has been generated! continue...");
         return true;
     }
@@ -56,7 +38,7 @@ bool Model::build(){
 
     config->setMaxWorkspaceSize(1<<28);
 
-    if (!parser->parseFromFile(mOnnxPath.c_str(), 1)){
+    if (!parser->parseFromFile(m_onnxPath.c_str(), 1)){
         return false;
     }
 
@@ -64,66 +46,21 @@ bool Model::build(){
     auto plan          = builder->buildSerializedNetwork(*network, *config);
     auto runtime       = make_unique<nvinfer1::IRuntime>(nvinfer1::createInferRuntime(logger));
 
-    auto f = fopen(mEnginePath.c_str(), "wb");
+    auto f = fopen(m_enginePath.c_str(), "wb");
     fwrite(plan->data(), 1, plan->size(), f);
     fclose(f);
 
-    mEngine            = shared_ptr<nvinfer1::ICudaEngine>(runtime->deserializeCudaEngine(plan->data(), plan->size()), InferDeleter());
-    mInputDims         = network->getInput(0)->getDimensions();
-    mOutputDims        = network->getOutput(0)->getDimensions();
+    m_engine            = shared_ptr<nvinfer1::ICudaEngine>(runtime->deserializeCudaEngine(plan->data(), plan->size()), InferDeleter());
+    m_inputDims         = network->getInput(0)->getDimensions();
+    m_outputDims        = network->getOutput(0)->getDimensions();
 
-    // print layer info
-    int inputCount = network->getNbInputs();
-    int outputCount = network->getNbOutputs();
-    string layer_info;
-
-    for (int i = 0; i < inputCount; i++) {
-        layer_info = "";
-        cout << "Input info: ";
-        auto input = network->getInput(i);
-        layer_info  += input->getName();
-        layer_info  += ": ";
-        layer_info  += printTensorShape(input);
-        cout << layer_info << endl;
-    }
-
-    for (int i = 0; i < outputCount; i++) {
-        layer_info = "";
-        cout << "Output info: ";
-        auto output = network->getOutput(i);
-        layer_info  += output->getName();
-        layer_info  += ": ";
-        layer_info  += printTensorShape(output);
-        cout << layer_info << endl;
-    }
-
-    int layerCount = network->getNbLayers();
-    printf("network has %d layers\n", layerCount);
-    for (int i = 0; i < layerCount; i++) {
-        char layer_info[1000];
-        auto layer   = network->getLayer(i);
-        auto input   = layer->getInput(0);
-        int n = 0;
-        if (input == nullptr){
-            continue;
-        }
-        auto output  = layer->getOutput(0);
-
-        n += sprintf(layer_info + n, "layer_info:  ");
-        n += sprintf(layer_info + n, "%-40s:", layer->getName());
-        n += sprintf(layer_info + n, "%-25s", printTensorShape(input).c_str());
-        n += sprintf(layer_info + n, " -> ");
-        n += sprintf(layer_info + n, "%-25s", printTensorShape(output).c_str());
-        n += sprintf(layer_info + n, "[%s]", getPrecision(layer->getPrecision()).c_str());
-        cout << layer_info << endl;
-    }
     return true;
 };
 
 
 bool Model::infer(string imagePath){
 
-    string planFilePath = this->mEnginePath;
+    string planFilePath = this->m_enginePath;
 
     if (!fileExists(planFilePath)) {
         LOG("engine does not exits! Program terminated");

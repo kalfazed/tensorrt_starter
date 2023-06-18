@@ -6,6 +6,7 @@
 #include "NvInfer.h"
 
 #include <memory>
+#include <string>
 
 
 class Model{
@@ -14,11 +15,11 @@ public:
     bool build();
     bool infer(std::string imagePath);
 private:
-    std::string mOnnxPath;
-    std::string mEnginePath;
-    nvinfer1::Dims mInputDims;
-    nvinfer1::Dims mOutputDims;
-    std::shared_ptr<nvinfer1::ICudaEngine> mEngine;
+    std::string m_onnxPath;
+    std::string m_enginePath;
+    nvinfer1::Dims m_inputDims;
+    nvinfer1::Dims m_outputDims;
+    std::shared_ptr<nvinfer1::ICudaEngine> m_engine;
     bool constructNetwork();
     bool preprocess();
 };
