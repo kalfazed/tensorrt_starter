@@ -11,9 +11,9 @@ using namespace std;
 int main(){
     Timer timer;
 
-    string file_path = "data/fox.png";
+    string file_path     = "data/fox.png";
     string output_prefix = "results/";
-    string output_path = "";
+    string output_path   = "";
 
     cv::Mat input = cv::imread(file_path);
     int tar_h = 500;

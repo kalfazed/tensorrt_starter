@@ -5,6 +5,7 @@
 #include <vector>
 #include "trt_model.hpp"
 #include "logger.hpp"
+#include "trt_classifier.hpp"
 
 /*
     我们希望做的，是使用worker作为接口进行推理在main中，我们只需要:
@@ -43,17 +44,24 @@
 
 */
 
-    
+namespace thread{
+
 class Worker {
 public:
     Worker(std::string onnxPath, Model::task_type type, Logger::Level level, Model::Params params);
     void trt_infer(std::string imagePath);
+
 public:
-    std::shared_ptr<Model> m_classifier;
-    std::shared_ptr<Logger> m_logger;
-    std::shared_ptr<Model::Params> m_params;
-    std::vector<float> m_scores;
+    std::shared_ptr<Logger>          m_logger;
+    std::shared_ptr<Model::Params>   m_params;
+
+    std::shared_ptr<classifier::Classifier>  m_classifier; // 因为今后考虑扩充为multi-task，所以各个task都是worker的成员变量
+    std::vector<float>                       m_scores;     // 因为今后考虑会将各个multi-task间进行互动，所以worker需要保存各个task的结果
 };
 
+std::shared_ptr<Worker> create_worker(
+    std::string onnxPath, Model::task_type type, Logger::Level level, Model::Params params);
+
+}; //namespace thread
 
 #endif //__WORKER_HPP__

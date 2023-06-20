@@ -41,34 +41,49 @@ public:
         SEGMENTATION,
     };
 
+    enum device {
+        CPU,
+        GPU
+    };
+
     typedef struct Params {
         int width;
         int heigth;
         int channel;
         int num_classes;
-        Params(int w, int h, int c, int num) : width(w), heigth(h), channel(c), num_classes(num) {};
+        device dev;
+        Params(int w, int h, int c, int num, device dev) : width(w), heigth(h), channel(c), num_classes(num) , dev(dev){};
     };
 
 public:
-    Model(std::string onnx_path, task_type type, Logger::Level level, Params params);
+    Model(std::string onnx_path, Logger::Level level, Params params);
+    virtual ~Model() {};
+    void init_model();
     bool load_image(std::string image_path);
-    bool infer_classifier();
+    bool inference();
 
 public:
-    void init_model();
     bool build_engine();
     bool load_engine();
     void save_plan(nvinfer1::IHostMemory& plan);
-    void setup(nvinfer1::IRuntime& runtime, void const* data, std::size_t size);
-
-    bool preprocess();
-    bool infer_dnn();
-    bool postprocess();
-
     void print_network(nvinfer1::INetworkDefinition &network, bool optimized);
 
+    // 这里的dnn推理部分，只要设定好了m_bindings的话，不同的task的infer_dnn的实现都是一样的
+    bool enqueue_bindings();
 
-private:
+    // setup负责分配host/device的memory, bindings, 以及创建推理所需要的上下文。
+    // 由于不同task的input/output的tensor不一样，所以这里的setup需要在子类实现
+    virtual void setup(nvinfer1::IRuntime& runtime, void const* data, std::size_t size) = 0;
+
+    // 不同的task的前处理/后处理是不一样的，所以具体的实现放在子类
+    virtual bool preprocess_cpu()      = 0;
+    virtual bool preprocess_gpu()      = 0;
+    virtual bool postprocess_cpu()     = 0;
+    virtual bool postprocess_gpu()     = 0;
+
+
+
+public:
     
     std::string m_imagePath;
     std::string m_onnxPath;
@@ -76,6 +91,7 @@ private:
 
     Logger* m_logger;
     Params* m_params;
+
     int m_workspaceSize;
     float* m_bindings[2];
     float* m_inputMemory[2];

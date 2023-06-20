@@ -6,6 +6,7 @@ include $(CONFIG_LOCAL)
 
 BUILD_PATH    :=  build
 SRC_PATH      :=  src
+INC_PATH      :=  include
 CUDA_DIR      :=  /usr/local/cuda-$(CUDA_VER)
 
 CXX_SRC       +=  $(wildcard $(SRC_PATH)/*.cpp)
@@ -26,10 +27,13 @@ CXXFLAGS      :=  -std=c++11 -pthread -fPIC
 CUDAFLAGS     :=  --shared -Xcompiler -fPIC 
 
 INCS          :=  -I $(CUDA_DIR)/include \
-                  -I $(SRC_PATH) 
+                  -I $(SRC_PATH) \
+									-I $(OPENCV_INSTALL_DIR) \
+									-I $(INC_PATH)
 
 LIBS          :=  -L "$(CUDA_DIR)/lib64" \
-                  -lcudart -lcublas -lcudnn
+                  -lcudart -lcublas -lcudnn \
+									`pkg-config --libs opencv`
 
 ifeq ($(DEBUG),1)
 CUDAFLAGS     +=  -g -O0
