@@ -5,7 +5,7 @@
 #include <string>
 #include "utils.hpp"
 #include "NvInfer.h"
-#include "logger.hpp"
+#include "trt_logger.hpp"
 
 
 using namespace std;

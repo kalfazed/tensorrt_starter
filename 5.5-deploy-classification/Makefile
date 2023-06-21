@@ -1,80 +1,69 @@
-CONFIG 			:=	../config/Makefile.config
-CONFIG_LOCAL 			:=	./config/Makefile.config
+CONFIG        :=  ../config/Makefile.config
+CONFIG_LOCAL  :=  ./config/Makefile.config
 
-ifeq ($(wildcard $(CONFIG)),)
-$(error $(CONFIG) missing.)
-endif
 include $(CONFIG)
 include $(CONFIG_LOCAL)
 
-ifeq ($(CUDA_VER),)
-$(error "CUDA_VER variable is not set in Makefile.config")
-endif
+BUILD_PATH    :=  build
+SRC_PATH      :=  src
+INC_PATH      :=  include
+CUDA_DIR      :=  /usr/local/cuda-$(CUDA_VER)
+
+CXX_SRC       +=  $(wildcard $(SRC_PATH)/*.cpp)
+KERNELS_SRC   :=  $(wildcard $(SRC_PATH)/*.cu)
+
+APP_OBJS      :=  $(patsubst $(SRC_PATH)%, $(BUILD_PATH)%, $(CXX_SRC:.cpp=.cpp.o))
+APP_OBJS      +=  $(patsubst $(SRC_PATH)%, $(BUILD_PATH)%, $(KERNELS_SRC:.cu=.cu.o))  
+
+APP_MKS       :=  $(APP_OBJS:.o=.mk)
+
+APP_DEPS      :=  $(CXX_SRC)
+APP_DEPS      +=  $(KERNELS_SRC)
+APP_DEPS      +=  $(wildcard $(SRC_PATH)/*.h)
 
 
-BUILD_PATH		:=	build
-SRC_PATH		:=	src
-INCLUDE_PATH		:=	include
-CUDA_DIR		:=	/usr/local/cuda-$(CUDA_VER)
+CUCC          :=  $(CUDA_DIR)/bin/nvcc
+CXXFLAGS      :=  -std=c++11 -pthread -fPIC
+CUDAFLAGS     :=  --shared -Xcompiler -fPIC 
 
-CXX_SRC			+=	$(wildcard $(SRC_PATH)/*.cpp)
-KERNELS_SRC		:=	$(wildcard $(SRC_PATH)/*.cu)
+INCS          :=  -I $(CUDA_DIR)/include \
+                  -I $(SRC_PATH) \
+									-I $(OPENCV_INSTALL_DIR) \
+									-I $(TENSORRT_INSTALL_DIR)/include \
+									-I $(INC_PATH)
 
-APP_OBJS		:=	$(patsubst $(SRC_PATH)%, $(BUILD_PATH)%, $(CXX_SRC:.cpp=.cpp.o))
-APP_OBJS		+=	$(patsubst $(SRC_PATH)%, $(BUILD_PATH)%, $(KERNELS_SRC:.cu=.cu.o))  
+LIBS          :=  -L "$(CUDA_DIR)/lib64" \
+									-L "$(TENSORRT_INSTALL_DIR)/lib" \
+                  -lcudart -lcublas -lcudnn \
+									-lnvinfer -lnvonnxparser\
+									-lstdc++fs \
+									`pkg-config --libs opencv`
 
-APP_MKS			:=	$(APP_OBJS:.o=.mk)
-
-APP_DEPS		:=	$(CXX_SRC)
-APP_DEPS		+=	$(KERNELS_SRC)
-APP_DEPS		+=	$(wildcard $(SRC_PATH)/*.h)
-
-
-
-CUCC			:=	$(CUDA_DIR)/bin/nvcc
-CUDAFLAGS		:=	-O3 -arch=compute_86 --shared -Xcompiler -fPIC \
-					-I $(CUDA_DIR)/include \
-
-INCS			:=	-I $(CUDA_DIR)/include \
-					-I $(TENSORRT_INSTALL_DIR)/include \
-					-I $(OPENCV_INSTALL_DIR) \
-					-I /usr/include/libxml2/ \
-					-I $(SRC_PATH) \
-					-I $(INCLUDE_PATH) \
-
-LIBS			:=	-L "$(TENSORRT_INSTALL_DIR)/lib" \
-					-L "$(CUDA_DIR)/lib64" \
-					-Wl,-rpath="$(TENSORRT_INSTALL_DIR)/lib" \
-					-Wl,-rpath="$(CUDA_DIR)/lib64" \
-					-lnvinfer -lnvinfer_plugin \
-					-lcudart -lcublas -lcudnn\
-					-lgflags -lpthread \
-					`pkg-config --libs opencv` \
-					-lboost_system -lboost_program_options -lboost_filesystem \
-					-lyaml-cpp -lstdc++fs -ldl -std=gnu++11 -lnvparsers \
 
 ifeq ($(DEBUG),1)
-CXXFLAGS		:=	-g -O0 -std=c++11 -lstdc++fs -w -DOPENCV -lxml2 -lnvonnxparser
+CUDAFLAGS     +=  -g -O0
+CXXFLAGS      +=  -g -O0
 else
-CXXFLAGS		:=	-O3 -std=c++11 -lstdc++fs -w -DOPENCV -lxml2 -lnvonnxparser
+CUDAFLAGS     +=  -O3
+CXXFLAGS      +=  -O3
 endif
 
 ifeq ($(SHOW_WARNING),1)
-CXXFLAGS		+=	-Wall -Wunused-function -Wunused-variable -Wfatal-errors
+CUDAFLAGS     +=  -Wall -Wunused-function -Wunused-variable -Wfatal-errors
+CXXFLAGS      +=  -Wall -Wunused-function -Wunused-variable -Wfatal-errors
+else
+CUDAFLAGS     +=  -w
+CXXFLAGS      +=  -w
 endif
 
-ifeq ($(APP),trt-infer)
-CXXFLAGS		+=	-D MAIN_
-endif
-
-all: dirs deps
+all: 
 	$(MAKE) $(APP)
 
 update: $(APP)
 	@echo finished updating $<
 
 $(APP): $(APP_DEPS) $(APP_OBJS)
-	@$(CXX) $(APP_OBJS) -o $@ $(LIBS) $(CXXFLAGS) $(INCS)
+	@$(CXX) $(APP_OBJS) -o $@ $(LIBS) $(INCS)
 	@echo finished building $@. Have fun!!
 
 show: 
@@ -84,25 +73,9 @@ show:
 	@echo $(APP_OBJS)
 	@echo $(APP_MKS)
 
-dirs:	
-	@if [ ! -d "build" ]; then mkdir -p build; fi
-
-install: $(APP)
-	@echo Installing $(APP)
-	cp -rv $(APP) /usr/bin/
-
 clean:
 	rm -rf $(APP)
 	rm -rf build
-
-reset:
-	rm -rf models/*.engine
-
-reinstall: $(APP)
-	@echo "Re installing $(APP)"
-	$(MAKE) clean
-	$(MAKE) all
-	$(MAKE) install
 
 ifneq ($(MAKECMDGOALS), clean)
 -include $(APP_MKS)
@@ -123,9 +96,9 @@ $(BUILD_PATH)/%.cu.o: $(SRC_PATH)/%.cu
 	@echo Compile CUDA $@
 	@mkdir -p $(BUILD_PATH)
 	@$(CUCC) -o $@ -c $< $(CUDAFLAGS) $(INCS)
-$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)/%.cu
+$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)%.cu
 	@echo Compile Dependence CUDA $@
 	@mkdir -p $(BUILD_PATH)
 	@$(CUCC) -M $< -MF $@ -MT $(@:.cu.mk=.cu.o) $(CUDAFLAGS)
 
-.PHONY: all deps install clean clean_models clean_detections reinstall
+.PHONY: all update show clean 

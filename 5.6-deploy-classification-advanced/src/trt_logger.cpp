@@ -1,17 +1,19 @@
-#include "logger.hpp"
+#include "trt_logger.hpp"
 #include "NvInfer.h"
 
 using namespace std;
 
-Logger::Level Logger::m_level = Level::INFO;
+namespace logger {
 
-Logger::Logger(Logger::Level level) {
+Level Logger::m_level = Level::INFO;
+
+Logger::Logger(Level level) {
     m_level = level;
-    m_severity = get_severity(Logger::Level::WARN);
+    m_severity = get_severity(Level::WARN);
     // m_severity = get_severity(level);
 }
 
-Logger::Severity Logger::get_severity(Logger::Level level) {
+Logger::Severity Logger::get_severity(Level level) {
     switch (level) {
         case Level::FATAL: return Severity::kINTERNAL_ERROR;
         case Level::ERROR: return Severity::kERROR;
@@ -22,7 +24,7 @@ Logger::Severity Logger::get_severity(Logger::Level level) {
     }
 }
 
-Logger::Level Logger::get_level(Severity severity) {
+Level Logger::get_level(Severity severity) {
     string str;
     switch (severity) {
         case Severity::kINTERNAL_ERROR: return Level::FATAL;
@@ -63,3 +65,9 @@ void Logger::__log_info(Level level, const char* format, ...) {
         exit(1);
     }
 }
+
+shared_ptr<Logger> create_logger(Level level) {
+    return make_shared<Logger>(level);
+}
+
+} // namespace logger

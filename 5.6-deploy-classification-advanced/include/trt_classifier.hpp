@@ -5,16 +5,21 @@
 #include <vector>
 #include <string>
 #include "NvInfer.h"
-#include "logger.hpp"
+#include "trt_logger.hpp"
 #include "trt_model.hpp"
+
+namespace model{
 
 namespace classifier {
 class Classifier : public Model{
 
 public:
-    Classifier(std::string onnx_path, Logger::Level level, Params params) : Model(onnx_path, level, params) {};
+    // 这个构造函数实际上调用的是父类的Model的构造函数
+    Classifier(std::string onnx_path, logger::Level level, Params params) : 
+        Model(onnx_path, level, params) {};
 
 public:
+    // 这里classifer自己实现了一套前处理/后处理，以及内存分配的初始化
     virtual void setup(nvinfer1::IRuntime& runtime, void const* data, std::size_t size) override;
     virtual bool preprocess_cpu() override;
     virtual bool preprocess_gpu() override;
@@ -25,12 +30,15 @@ private:
     float m_confidence;
     std::string m_label;
     int m_inputSize; 
+    int m_imgArea;
     int m_outputSize;
 };
 
+// 外部调用的接口
 std::shared_ptr<Classifier> make_classifier(
-    std::string onnx_path, Logger::Level level, Model::Params params);
+    std::string onnx_path, logger::Level level, Params params);
 
-}; //namespace classifier
+}; // namespace classifier
+}; // namespace model
 
 #endif //__TRT_CLASSIFIER_HPP__

@@ -5,7 +5,8 @@
 #include <vector>
 #include <string>
 #include "NvInfer.h"
-#include "logger.hpp"
+#include "trt_logger.hpp"
+#include "trt_preprocess.hpp"
 
 #define WORKSPACESIZE 1<<28
 /*
@@ -31,32 +32,41 @@
     //其余的地方需要根据不同的task进行不同的优化设计
 */
 
+namespace model{
+
+enum task_type {
+    CLASSIFICATION,
+    DETECTION,
+    SEGMENTATION,
+};
+
+enum device {
+    CPU,
+    GPU
+};
+
+// 我们希望每一个model都有一个自己的image_info
+struct image_info {
+    int h;
+    int w;
+    int c;
+    image_info(int height, int width, int channel) : h(height), w(width), c(channel) {}
+};
+
+// 对Params设定一些默认值
+struct Params {
+    device            dev      = GPU;
+    int               num_cls  = 1000;
+    process::tactics  tac      = process::tactics::GPU_BILINEAR;
+    image_info        img      = {224, 224, 3};
+    task_type         task     = CLASSIFICATION;
+    int               ws_size  = WORKSPACESIZE;
+};
 
 class Model {
 
 public:
-    enum task_type {
-        CLASSIFICATION,
-        DETECTION,
-        SEGMENTATION,
-    };
-
-    enum device {
-        CPU,
-        GPU
-    };
-
-    typedef struct Params {
-        int width;
-        int heigth;
-        int channel;
-        int num_classes;
-        device dev;
-        Params(int w, int h, int c, int num, device dev) : width(w), heigth(h), channel(c), num_classes(num) , dev(dev){};
-    };
-
-public:
-    Model(std::string onnx_path, Logger::Level level, Params params);
+    Model(std::string onnx_path, logger::Level level, Params params);
     virtual ~Model() {};
     void init_model();
     bool load_image(std::string image_path);
@@ -71,6 +81,7 @@ public:
     // 这里的dnn推理部分，只要设定好了m_bindings的话，不同的task的infer_dnn的实现都是一样的
     bool enqueue_bindings();
 
+    // 以下都是子类自己实现的内容
     // setup负责分配host/device的memory, bindings, 以及创建推理所需要的上下文。
     // 由于不同task的input/output的tensor不一样，所以这里的setup需要在子类实现
     virtual void setup(nvinfer1::IRuntime& runtime, void const* data, std::size_t size) = 0;
@@ -81,15 +92,12 @@ public:
     virtual bool postprocess_cpu()     = 0;
     virtual bool postprocess_gpu()     = 0;
 
-
-
 public:
     
     std::string m_imagePath;
     std::string m_onnxPath;
     std::string m_enginePath;
 
-    Logger* m_logger;
     Params* m_params;
 
     int m_workspaceSize;
@@ -100,9 +108,13 @@ public:
     nvinfer1::Dims m_inputDims;
     nvinfer1::Dims m_outputDims;
     cudaStream_t m_stream;
+
+    std::shared_ptr<logger::Logger> m_logger;
     std::shared_ptr<nvinfer1::ICudaEngine> m_engine;
     std::shared_ptr<nvinfer1::IExecutionContext> m_context;
     std::unique_ptr<nvinfer1::INetworkDefinition> m_network;
 };
+
+}; // namespace model
 
 #endif //__TRT_MODEL_HPP__

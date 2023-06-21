@@ -1,6 +1,6 @@
 #include "trt_model.hpp"
 #include "utils.hpp" 
-#include "logger.hpp"
+#include "trt_logger.hpp"
 
 #include "NvInfer.h"
 #include "NvOnnxParser.h"
@@ -8,11 +8,13 @@
 
 using namespace std;
 
-Model::Model(string onnx_path, Logger::Level level, Params params) {
+namespace model{
+
+Model::Model(string onnx_path, logger::Level level, Params params) {
     m_onnxPath      = onnx_path;
     m_enginePath    = getEnginePath(onnx_path);
     m_workspaceSize = WORKSPACESIZE;
-    m_logger        = new Logger(level);
+    m_logger        = make_shared<logger::Logger>(level);
     m_params        = new Params(params);
 }
 
@@ -69,8 +71,6 @@ bool Model::build_engine() {
 
     return true;
 }
-
-
 
 bool Model::load_engine() {
     // 同样的，我们也希望在load一个engine的时候就把一系列初始化全部做完，其中包括
@@ -171,3 +171,5 @@ void Model::print_network(nvinfer1::INetworkDefinition &network, bool optimized)
     }
 }
 
+
+} // namespace model
