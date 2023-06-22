@@ -2,14 +2,15 @@
 #include <memory>
 
 #include "model.hpp"
+#include "utils.hpp"
 
 using namespace std;
 
 int main(int argc, char const *argv[])
 {
-    Model model;
+    Model model("models/sample.onnx");
     if(!model.build()){
-        cout << "fail in building model" << endl;
+        LOGE("ERROR: fail in building model");
         return 0;
     }
     return 0;

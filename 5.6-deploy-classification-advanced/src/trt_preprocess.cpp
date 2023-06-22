@@ -55,8 +55,6 @@ void preprocess_resize_gpu(
     float*   d_std  = nullptr;
     uint8_t* d_src  = nullptr;
 
-    // cv::Mat h_tar(cv::Size(tar_w, tar_h), CV_8UC3);
-
     int height   = h_src.rows;
     int width    = h_src.cols;
     int chan     = 3;

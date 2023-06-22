@@ -16,15 +16,14 @@ public:
     virtual void log (Severity severity, const char* msg) noexcept override{
         string str;
         switch (severity){
-            case Severity::kINTERNAL_ERROR: str = "[fatal]";
-            case Severity::kERROR:          str = "[error]";
-            case Severity::kWARNING:        str = "[warn]";
-            case Severity::kINFO:           str = "[info]";
-            case Severity::kVERBOSE:        str = "[verb]";
+            case Severity::kINTERNAL_ERROR: str = RED    "[fatal]" CLEAR;
+            case Severity::kERROR:          str = RED    "[error]" CLEAR;
+            case Severity::kWARNING:        str = BLUE   "[warn]"  CLEAR;
+            case Severity::kINFO:           str = YELLOW "[info]"  CLEAR;
+            case Severity::kVERBOSE:        str = PURPLE "[verb]"  CLEAR;
         }
-
         if (severity <= Severity::kINFO)
-            cout << str << ":" << string(msg) << endl;
+            cout << str << string(msg) << endl;
     }
 };
 
@@ -40,10 +39,17 @@ struct InferDeleter
 template <typename T>
 using make_unique = std::unique_ptr<T, InferDeleter>;
 
+Model::Model(string onnxPath){
+    mOnnxPath   = onnxPath;
+    mEnginePath = getEnginePath(mOnnxPath);
+}
+
 bool Model::build(){
-    if (fileExists("models/sample_cpp.engine")){
-        cout << "trt engine has been generated!" << endl;
+    if (fileExists(mEnginePath)){
+        LOG("%s has been generated!", mEnginePath.c_str());
         return true;
+    } else {
+        LOG("%s not found. Building engine...", mEnginePath.c_str());
     }
     Logger logger;
     auto builder       = make_unique<nvinfer1::IBuilder>(nvinfer1::createInferBuilder(logger));
@@ -53,7 +59,8 @@ bool Model::build(){
 
     config->setMaxWorkspaceSize(1<<28);
 
-    if (!parser->parseFromFile("models/sample.onnx", 1)){
+    if (!parser->parseFromFile(mOnnxPath.c_str(), 1)){
+        LOGE("ERROR: failed to %s", mOnnxPath.c_str());
         return false;
     }
 
@@ -61,7 +68,7 @@ bool Model::build(){
     auto plan          = builder->buildSerializedNetwork(*network, *config);
     auto runtime       = make_unique<nvinfer1::IRuntime>(nvinfer1::createInferRuntime(logger));
 
-    auto f = fopen("models/sample_cpp.engine", "wb");
+    auto f = fopen(mEnginePath.c_str(), "wb");
     fwrite(plan->data(), 1, plan->size(), f);
     fclose(f);
 
@@ -81,13 +88,13 @@ bool Model::infer(){
     */
 
     /* 1. 读取model => 创建runtime, engine, context */
-    string planFilePath = "models/sample_cpp.engine";
-    if (!fileExists(planFilePath)) {
+    if (!fileExists(mEnginePath)) {
+        LOGE("ERROR: %s not found", mEnginePath.c_str());
         return false;
     }
 
     vector<unsigned char> modelData;
-    modelData = loadFile(planFilePath);
+    modelData = loadFile(mEnginePath);
     
     Logger logger;
     auto runtime     = make_unique<nvinfer1::IRuntime>(nvinfer1::createInferRuntime(logger));
@@ -97,8 +104,8 @@ bool Model::infer(){
     auto input_dims   = context->getBindingDimensions(0);
     auto output_dims  = context->getBindingDimensions(1);
 
-    cout << "input dim shape is:  " << printDims(input_dims) << endl;
-    cout << "output dim shape is: " << printDims(output_dims) << endl;
+    LOG("input dim shape is:  %s", printDims(input_dims).c_str());
+    LOG("output dim shape is: %s", printDims(output_dims).c_str());
 
     /* 2. host->device的数据传递 */
     cudaStream_t stream;
@@ -129,8 +136,8 @@ bool Model::infer(){
     cudaMemcpyAsync(output_host, output_device, sizeof(output_host), cudaMemcpyKind::cudaMemcpyDeviceToHost, stream);
     cudaStreamSynchronize(stream);
     
-    cout << "input data is: " << printTensor(input_host, input_size) << endl;
-    cout << "output data is:" << printTensor(output_host, output_size) << endl;
-    cout << "finished inference" << endl;
+    LOG("input data is:  %s", printTensor(input_host, input_size).c_str());
+    LOG("output data is: %s", printTensor(output_host, output_size).c_str());
+    LOG("finished inference");
     return true;
 }

@@ -16,15 +16,12 @@ public:
     virtual void log (Severity severity, const char* msg) noexcept override{
         string str;
         switch (severity){
-            case Severity::kINTERNAL_ERROR: str = "[fatal]";
-            case Severity::kERROR:          str = "[error]";
-            case Severity::kWARNING:        str = "[warn]";
-            case Severity::kINFO:           str = "[info]";
-            case Severity::kVERBOSE:        str = "[verb]";
+            case Severity::kINTERNAL_ERROR: str = RED    "[fatal]" CLEAR;
+            case Severity::kERROR:          str = RED    "[error]" CLEAR;
+            case Severity::kWARNING:        str = BLUE   "[warn]"  CLEAR;
+            case Severity::kINFO:           str = YELLOW "[info]"  CLEAR;
+            case Severity::kVERBOSE:        str = PURPLE "[verb]"  CLEAR;
         }
-
-        if (severity <= Severity::kINFO)
-            cout << str << ":" << string(msg) << endl;
     }
 };
 
@@ -41,15 +38,17 @@ template <typename T>
 using make_unique = std::unique_ptr<T, InferDeleter>;
 
 Model::Model(string onnxPath){
-    this->mOnnxPath = onnxPath;
-    this->mEnginePath = getEnginePath(mOnnxPath);
+    mOnnxPath = onnxPath;
+    mEnginePath = getEnginePath(mOnnxPath);
 }
 
 bool Model::build(){
     if (fileExists(mEnginePath)){
-        cout << "trt engine has been generated!" << endl;
+        LOG("%s has been generated!", mEnginePath.c_str());
+        return true;
+    } else {
+        LOG("%s not found. Building engine...", mEnginePath.c_str());
     }
-
     Logger logger;
     auto builder       = make_unique<nvinfer1::IBuilder>(nvinfer1::createInferBuilder(logger));
     auto network       = make_unique<nvinfer1::INetworkDefinition>(builder->createNetworkV2(1));
@@ -59,6 +58,7 @@ bool Model::build(){
     config->setMaxWorkspaceSize(1<<28);
 
     if (!parser->parseFromFile(mOnnxPath.c_str(), 1)){
+        LOGE("ERROR: failed to %s", mOnnxPath.c_str());
         return false;
     }
 
@@ -74,51 +74,11 @@ bool Model::build(){
     mInputDims         = network->getInput(0)->getDimensions();
     mOutputDims        = network->getOutput(0)->getDimensions();
 
-    // print layer info
-    int inputCount = network->getNbInputs();
-    int outputCount = network->getNbOutputs();
-    string layer_info;
-
-    for (int i = 0; i < inputCount; i++) {
-        layer_info = "";
-        cout << "Input info: ";
-        auto input = network->getInput(i);
-        layer_info  += input->getName();
-        layer_info  += ": ";
-        layer_info  += printTensorShape(input);
-        cout << layer_info << endl;
-    }
-
-    for (int i = 0; i < outputCount; i++) {
-        layer_info = "";
-        cout << "Output info: ";
-        auto output = network->getOutput(i);
-        layer_info  += output->getName();
-        layer_info  += ": ";
-        layer_info  += printTensorShape(output);
-        cout << layer_info << endl;
-    }
-
-    int layerCount = network->getNbLayers();
-    printf("network has %d layers\n", layerCount);
-    for (int i = 0; i < layerCount; i++) {
-        char layer_info[1000];
-        auto layer   = network->getLayer(i);
-        auto input   = layer->getInput(0);
-        int n = 0;
-        if (input == nullptr){
-            continue;
-        }
-        auto output  = layer->getOutput(0);
-
-        n += sprintf(layer_info + n, "layer_info:  ");
-        n += sprintf(layer_info + n, "%-40s:", layer->getName());
-        n += sprintf(layer_info + n, "%-25s", printTensorShape(input).c_str());
-        n += sprintf(layer_info + n, " -> ");
-        n += sprintf(layer_info + n, "%-25s", printTensorShape(output).c_str());
-        n += sprintf(layer_info + n, "[%s]", getPrecision(layer->getPrecision()).c_str());
-        cout << layer_info << endl;
-    }
+    // 把优化前和优化后的各个层的信息打印出来
+    LOG("Before TensorRT optimization");
+    print_network(*network, false);
+    LOG("After TensorRT optimization");
+    print_network(*network, true);
     return true;
 };
 
@@ -132,13 +92,13 @@ bool Model::infer(){
     */
 
     /* 1. 读取model => 创建runtime, engine, context */
-    string planFilePath = "models/sample_cpp.engine";
-    if (!fileExists(planFilePath)) {
+    if (!fileExists(mEnginePath)) {
+        LOGE("ERROR: %s not found", mEnginePath.c_str());
         return false;
     }
 
     vector<unsigned char> modelData;
-    modelData = loadFile(planFilePath);
+    modelData = loadFile(mEnginePath);
     
     Logger logger;
     auto runtime     = make_unique<nvinfer1::IRuntime>(nvinfer1::createInferRuntime(logger));
@@ -148,8 +108,8 @@ bool Model::infer(){
     auto input_dims   = context->getBindingDimensions(0);
     auto output_dims  = context->getBindingDimensions(1);
 
-    cout << "input dim shape is:  " << printDims(input_dims) << endl;
-    cout << "output dim shape is: " << printDims(output_dims) << endl;
+    LOG("input dim shape is:  %s", printDims(input_dims).c_str());
+    LOG("output dim shape is: %s", printDims(output_dims).c_str());
 
     /* 2. host->device的数据传递 */
     cudaStream_t stream;
@@ -180,8 +140,53 @@ bool Model::infer(){
     cudaMemcpyAsync(output_host, output_device, sizeof(output_host), cudaMemcpyKind::cudaMemcpyDeviceToHost, stream);
     cudaStreamSynchronize(stream);
     
-    cout << "input data is: " << printTensor(input_host, input_size) << endl;
-    cout << "output data is:" << printTensor(output_host, output_size) << endl;
-    cout << "finished inference" << endl;
+    LOG("input data is:  %s", printTensor(input_host, input_size).c_str());
+    LOG("output data is: %s", printTensor(output_host, output_size).c_str());
+    LOG("finished inference");
     return true;
+}
+
+void Model::print_network(nvinfer1::INetworkDefinition &network, bool optimized) {
+
+    int inputCount = network.getNbInputs();
+    int outputCount = network.getNbOutputs();
+    string layer_info;
+
+    for (int i = 0; i < inputCount; i++) {
+        auto input = network.getInput(i);
+        LOG("Input info: %s:%s", input->getName(), printTensorShape(input).c_str());
+    }
+
+    for (int i = 0; i < outputCount; i++) {
+        auto output = network.getOutput(i);
+        LOG("Output info: %s:%s", output->getName(), printTensorShape(output).c_str());
+    }
+    
+    int layerCount = optimized ? mEngine->getNbLayers() : network.getNbLayers();
+    LOG("network has %d layers", layerCount);
+
+    if (!optimized) {
+        for (int i = 0; i < layerCount; i++) {
+            char layer_info[1000];
+            auto layer   = network.getLayer(i);
+            auto input   = layer->getInput(0);
+            int n = 0;
+            if (input == nullptr){
+                continue;
+            }
+            auto output  = layer->getOutput(0);
+
+            LOG("layer_info: %-40s:%-25s->%-25s[%s]", 
+                layer->getName(),
+                printTensorShape(input).c_str(),
+                printTensorShape(output).c_str(),
+                getPrecision(layer->getPrecision()).c_str());
+        }
+
+    } else {
+        auto inspector = make_unique<nvinfer1::IEngineInspector>(mEngine->createEngineInspector());
+        for (int i = 0; i < layerCount; i++) {
+            LOG("layer_info: %s", inspector->getLayerInformation(i, nvinfer1::LayerInformationFormat::kONELINE));
+        }
+    }
 }

@@ -12,7 +12,6 @@ using namespace std;
 bool fileExists(const string fileName) {
     if (!experimental::filesystem::exists(
             experimental::filesystem::path(fileName))){
-        cout << "File " << fileName << " doesn't exists" << endl;
         return false;
     }else{
         return true;
@@ -91,3 +90,12 @@ string printTensor(float* tensor, int size){
     result = buff;
     return result;
 }
+
+string getEnginePath(string onnxPath){
+    int pos = onnxPath.rfind(".");
+    string enginePath;
+    enginePath = onnxPath.substr(0, pos);
+    enginePath += ".engine";
+    return enginePath;
+}
+

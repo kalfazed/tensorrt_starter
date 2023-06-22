@@ -91,3 +91,12 @@ string printTensor(float* tensor, int size){
     result = buff;
     return result;
 }
+
+string getEnginePath(string onnxPath){
+    int pos = onnxPath.rfind(".");
+    string enginePath;
+    enginePath = onnxPath.substr(0, pos);
+    enginePath += ".engine";
+    return enginePath;
+}
+

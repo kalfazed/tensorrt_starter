@@ -16,17 +16,17 @@ public:
     virtual void log (Severity severity, const char* msg) noexcept override{
         string str;
         switch (severity){
-            case Severity::kINTERNAL_ERROR: str = "[fatal]";
-            case Severity::kERROR:          str = "[error]";
-            case Severity::kWARNING:        str = "[warn]";
-            case Severity::kINFO:           str = "[info]";
-            case Severity::kVERBOSE:        str = "[verb]";
+            case Severity::kINTERNAL_ERROR: str = RED    "[fatal]" CLEAR;
+            case Severity::kERROR:          str = RED    "[error]" CLEAR;
+            case Severity::kWARNING:        str = BLUE   "[warn]"  CLEAR;
+            case Severity::kINFO:           str = YELLOW "[info]"  CLEAR;
+            case Severity::kVERBOSE:        str = PURPLE "[verb]"  CLEAR;
         }
-
         if (severity <= Severity::kINFO)
-            cout << str << ":" << string(msg) << endl;
+            cout << str << string(msg) << endl;
     }
 };
+
 
 struct InferDeleter
 {
@@ -40,10 +40,17 @@ struct InferDeleter
 template <typename T>
 using make_unique = std::unique_ptr<T, InferDeleter>;
 
+Model::Model(string onnxPath){
+    mOnnxPath   = onnxPath;
+    mEnginePath = getEnginePath(mOnnxPath);
+}
+
 bool Model::build(){
-    if (fileExists("models/sample_cpp.engine")){
-        cout << "trt engine has been generated!" << endl;
+    if (fileExists(mEnginePath)){
+        LOG("%s has been generated!", mEnginePath.c_str());
         return true;
+    } else {
+        LOG("%s not found. Building engine...", mEnginePath.c_str());
     }
     Logger logger;
     auto builder       = make_unique<nvinfer1::IBuilder>(nvinfer1::createInferBuilder(logger));
@@ -53,7 +60,8 @@ bool Model::build(){
 
     config->setMaxWorkspaceSize(1<<28);
 
-    if (!parser->parseFromFile("models/sample.onnx", 1)){
+    if (!parser->parseFromFile(mOnnxPath.c_str(), 1)){
+        LOGE("ERROR: failed to %s", mOnnxPath.c_str());
         return false;
     }
 
@@ -61,12 +69,14 @@ bool Model::build(){
     auto plan          = builder->buildSerializedNetwork(*network, *config);
     auto runtime       = make_unique<nvinfer1::IRuntime>(nvinfer1::createInferRuntime(logger));
 
-    auto f = fopen("models/sample_cpp.engine", "wb");
+    auto f = fopen(mEnginePath.c_str(), "wb");
     fwrite(plan->data(), 1, plan->size(), f);
     fclose(f);
 
     mEngine            = shared_ptr<nvinfer1::ICudaEngine>(runtime->deserializeCudaEngine(plan->data(), plan->size()), InferDeleter());
     mInputDims         = network->getInput(0)->getDimensions();
     mOutputDims        = network->getOutput(0)->getDimensions();
+    LOGV("Input dim is %s", printDims(mInputDims).c_str());
+    LOGV("Output dim is %s", printDims(mOutputDims).c_str());
     return true;
 };
