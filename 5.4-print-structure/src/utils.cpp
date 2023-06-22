@@ -12,7 +12,6 @@ using namespace std;
 bool fileExists(const string fileName) {
     if (!experimental::filesystem::exists(
             experimental::filesystem::path(fileName))){
-        cout << "File " << fileName << " doesn't exists" << endl;
         return false;
     }else{
         return true;

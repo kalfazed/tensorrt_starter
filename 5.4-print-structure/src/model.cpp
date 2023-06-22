@@ -1,3 +1,4 @@
+#include <cstring>
 #include <memory>
 #include <iostream>
 #include <string>
@@ -77,6 +78,7 @@ bool Model::build(){
     // 把优化前和优化后的各个层的信息打印出来
     LOG("Before TensorRT optimization");
     print_network(*network, false);
+    LOG("");
     LOG("After TensorRT optimization");
     print_network(*network, true);
     return true;
@@ -186,7 +188,9 @@ void Model::print_network(nvinfer1::INetworkDefinition &network, bool optimized)
     } else {
         auto inspector = make_unique<nvinfer1::IEngineInspector>(mEngine->createEngineInspector());
         for (int i = 0; i < layerCount; i++) {
-            LOG("layer_info: %s", inspector->getLayerInformation(i, nvinfer1::LayerInformationFormat::kONELINE));
+            string info = inspector->getLayerInformation(i, nvinfer1::LayerInformationFormat::kONELINE);
+            info = info.substr(0, info.size() - 1);
+            LOG("layer_info: %s", info.c_str());
         }
     }
 }
