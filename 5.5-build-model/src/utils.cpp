@@ -77,7 +77,7 @@ string printDims(const nvinfer1::Dims dims){
 
 string printTensor(float* tensor, int size){
     int n = 0;
-    char buff[100];
+    char buff[10000];
     string result;
     n += snprintf(buff + n, sizeof(buff) - n, "[ ");
     for (int i = 0; i < size; i++){
@@ -112,6 +112,13 @@ string getEnginePath(string onnxPath){
     enginePath = onnxPath.substr(0, pos);
     enginePath += ".engine";
     return enginePath;
+}
+
+string getFileType(string filePath){
+    int pos = filePath.rfind(".");
+    string suffix;
+    suffix = filePath.substr(pos, filePath.length());
+    return suffix;
 }
 
 string getPrecision(nvinfer1::DataType type) {

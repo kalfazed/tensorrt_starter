@@ -15,7 +15,8 @@ APP_OBJS      +=  $(patsubst $(SRC_PATH)%, $(BUILD_PATH)%, $(KERNELS_SRC:.cu=.cu
 APP_DEPS      +=  $(KERNELS_SRC)
 
 CUCC          :=  $(CUDA_DIR)/bin/nvcc
-CUDAFLAGS     :=  --shared -Xcompiler -fPIC 
+
+CUDAFLAGS     :=  -Xcompiler -fPIC 
 
 INCS          :=  -I $(CUDA_DIR)/include \
                   -I $(SRC_PATH) 
@@ -23,7 +24,7 @@ INCS          :=  -I $(CUDA_DIR)/include \
 LIBS          :=  -L "$(CUDA_DIR)/lib64" \
 
 ifeq ($(DEBUG),1)
-CUDAFLAGS     +=  -g -O0
+CUDAFLAGS     +=  -g -G -O0
 else
 CUDAFLAGS     +=  -O3
 endif
@@ -49,7 +50,6 @@ show:
 	@echo $(APP_DEPS)
 	@echo $(INCS)
 	@echo $(APP_OBJS)
-	@echo $(APP_MKS)
 
 clean:
 	rm -rf $(APP)

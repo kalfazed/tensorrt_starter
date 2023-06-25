@@ -6,6 +6,7 @@
 #include "NvInfer.h"
 
 #include <string>
+#include <map>
 #include <memory>
 
 
@@ -17,13 +18,18 @@ public:
     bool infer();
 
 private:
+    bool build_from_onnx();
+    bool build_from_weights();
     bool constructNetwork();
     bool preprocess();
     void print_network(nvinfer1::INetworkDefinition &network, bool optimized);
+    std::map<std::string, nvinfer1::Weights> loadWeights();
 
 private:
-    std::string mOnnxPath;
-    std::string mEnginePath;
+    std::string mWtsPath = "";
+    std::string mOnnxPath = "";
+    std::string mEnginePath = "";
+    std::map<std::string, nvinfer1::Weights> mWts;
     nvinfer1::Dims mInputDims;
     nvinfer1::Dims mOutputDims;
     std::shared_ptr<nvinfer1::ICudaEngine> mEngine;

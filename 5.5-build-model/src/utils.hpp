@@ -5,6 +5,8 @@
 #include "NvInfer.h"
 #include <stdarg.h>
 #include <vector>
+#include <map>
+#include <iostream>
 
 #define CUDA_CHECK(call)             __cudaCheck(call, __FILE__, __LINE__)
 #define LAST_KERNEL_CHECK(call)      __kernelCheck(__FILE__, __LINE__)
@@ -62,10 +64,10 @@ static void __log_info(Level level, const char* format, ...) {
     fprintf(stdout, "%s\n", msg);
     va_end(args);
 
-    if (level == Level::ERROR) {
-        free(msg);
-        exit(1);
-    }
+    // if (level == Level::ERROR) {
+    //     free(msg);
+    //     exit(1);
+    // }
 }
 
 bool fileExists(const std::string fileName);
@@ -76,5 +78,6 @@ std::string printDims(const nvinfer1::Dims dims);
 std::string printTensor(float* tensor, int size);
 std::string printTensorShape(nvinfer1::ITensor* tensor);
 std::string getPrecision(nvinfer1::DataType type);
+std::string getFileType(std::string filePath);
 
 #endif //__UTILS_HPP__

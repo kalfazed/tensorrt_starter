@@ -4,7 +4,7 @@
 #include <cuda_runtime.h>
 #include <system_error>
 
-#define CUDA_CHECK(call) {                                                  \
+#define CUDA_CHECK(call) {                                                 \
     cudaError_t error = call;                                              \
     if (error != cudaSuccess) {                                            \
         printf("ERROR: %s:%d, ", __FILE__, __LINE__);                      \

@@ -1,8 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.onnx
-import onnxsim
-import onnx
+import struct
 
 class Model(torch.nn.Module):
     def __init__(self):
@@ -29,33 +28,29 @@ def setup_seed(seed):
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
 
-def export_norm_onnx(input, model):
-    file = "../models/sample_linear.onnx"
-    torch.onnx.export(
-        model         = model, 
-        args          = (input,),
-        f             = file,
-        input_names   = ["input0"],
-        output_names  = ["output0"],
-        opset_version = 15)
-    print("Finished normal onnx export")
+# 为了能够让TensorRT读取PyTorch导出的权重，我们可以把权重按照指定的格式导出:
+# count
+# [name][len][weights value in hex mode]
+# [name][len][weights value in hex mode]
+# ...
 
-    # check the exported onnx model
-    model_onnx = onnx.load(file)
-    onnx.checker.check_model(model_onnx)
-
-    # use onnx-simplifier to simplify the onnx
-    print(f"Simplifying with onnx-simplifier {onnxsim.__version__}...")
-    model_onnx, check = onnxsim.simplify(model_onnx)
-    assert check, "assert check failed"
-    onnx.save(model_onnx, file)
-
-
-def eval(input, model):
-    output = model(input)
-    print("------from infer------")
-    print(input)
-    print(output)
+def export_weight(model):
+    f = open("../models/sample_linear.weights", 'w')
+    f.write("{}\n".format(len(model.state_dict().keys())))
+    
+    # 我们将权重里的float数据，按照hex16进制的形式进行保存，也就是所谓的编码
+    # 可以使用python中的struct.pack
+    for k,v in model.state_dict().items():
+        print('exporting ... {}: {}'.format(k, v.shape))
+        
+        # 将权重转为一维
+        vr = v.reshape(-1).cpu().numpy()
+        f.write("{} {}".format(k, len(vr)))
+        for vv in vr:
+            f.write(" ")
+            f.write(struct.pack(">f", float(vv)).hex())
+        f.write("\n")
+        print("weight is {}".format(vr))
 
 
 if __name__ == "__main__":
@@ -68,5 +63,4 @@ if __name__ == "__main__":
                            [0.0193, 0.2616, 0.7713, 0.3785, 0.9980]]])
     model = Model()
 
-    export_norm_onnx(input, model)
-    eval(input, model)
+    export_weight(model);
