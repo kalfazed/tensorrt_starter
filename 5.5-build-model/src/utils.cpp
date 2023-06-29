@@ -91,6 +91,64 @@ string printTensor(float* tensor, int size){
     return result;
 }
 
+string printTensor(float* tensor, int size, int stride){
+    int n = 0;
+    char buff[10000];
+    string result;
+    n += snprintf(buff + n, sizeof(buff) - n, "[ \n");
+
+    for (int i = 0; i < size / stride; i ++) {
+        for (int j = 0; j < stride; j ++){
+            n += snprintf(buff + n, sizeof(buff) - n, "%8.4lf", tensor[j + i * stride]);
+            if (j != stride - 1){
+                n += snprintf(buff + n, sizeof(buff) - n, ", ");
+            } else {
+                n += snprintf(buff + n, sizeof(buff) - n, "\n");
+            }
+        }
+
+    }
+    n += snprintf(buff + n, sizeof(buff) - n, " ]");
+    result = buff;
+    return result;
+}
+
+string printTensor(float* tensor, int size, int strideH, int strideW){
+    int n = 0;
+    char buff[10000];
+    string result;
+    n += snprintf(buff + n, sizeof(buff) - n, "[ \n");
+
+    int area = strideW * strideH;
+
+    for (int i = 0; i < size; i += area) {
+        for (int j = 0; j < area; j += strideW) {
+            for (int k = 0; k < strideW; k++) {
+                n += snprintf(buff + n, sizeof(buff) - n, "%8.4lf", tensor[i + j + k]);
+                if (k != strideW - 1){
+                    n += snprintf(buff + n, sizeof(buff) - n, ", ");
+                } else {
+                    n += snprintf(buff + n, sizeof(buff) - n, "\n");
+                }
+            }
+        }
+        n += snprintf(buff + n, sizeof(buff) - n, "\n");
+    }
+
+    n += snprintf(buff + n, sizeof(buff) - n, " ]");
+    result = buff;
+    return result;
+}
+
+string printTensor(float* tensor, int size, nvinfer1::Dims dim) {
+    if (dim.nbDims == 2) {
+        return printTensor(tensor, size, dim.d[1]);
+    } else if (dim.nbDims == 3) {
+        return printTensor(tensor, size, dim.d[1], dim.d[2]);
+    } else if (dim.nbDims == 4) {
+        return printTensor(tensor, size, dim.d[2], dim.d[3]);
+    }
+}
 
 string printTensorShape(nvinfer1::ITensor* tensor){
     string str;

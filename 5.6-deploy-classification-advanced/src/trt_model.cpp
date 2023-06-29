@@ -18,10 +18,11 @@ Model::Model(string onnx_path, logger::Level level, Params params) {
     m_params        = new Params(params);
 }
 
-bool Model::load_image(string image_path) {
-    if (!fileExists(image_path)) 
+void Model::load_image(string image_path) {
+    if (!fileExists(image_path))
         LOGE("%s not found", image_path.c_str());
-    m_imagePath = image_path;
+    else
+        m_imagePath = image_path;
 }
 
 void Model::init_model() {
@@ -101,7 +102,7 @@ void Model::save_plan(nvinfer1::IHostMemory& plan) {
     fclose(f);
 }
 
-bool Model::inference() {
+void Model::inference() {
     if (m_params->dev == CPU) {
         preprocess_cpu();
     } else {

@@ -69,8 +69,8 @@ public:
     Model(std::string onnx_path, logger::Level level, Params params);
     virtual ~Model() {};
     void init_model();
-    bool load_image(std::string image_path);
-    bool inference();
+    void load_image(std::string image_path);
+    void inference();
 
 public:
     bool build_engine();

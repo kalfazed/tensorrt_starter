@@ -11,9 +11,20 @@
 #include "NvOnnxParser.h"
 #include "utils.hpp"
 #include "cuda_runtime.h"
+#include "math.h"
+
+float input_5x5[] = {
+    0.7576, 0.2793, 0.4031, 0.7347, 0.0293,
+    0.7999, 0.3971, 0.7544, 0.5695, 0.4388,
+    0.6387, 0.5247, 0.6826, 0.3051, 0.4635,
+    0.4550, 0.5725, 0.4980, 0.9371, 0.6556,
+    0.3138, 0.1980, 0.4162, 0.2843, 0.3398};
+
+float input_1x5[] = {
+    0.7576, 0.2793, 0.4031, 0.7347, 0.0293};
+
 
 using namespace std;
-
 class Logger : public nvinfer1::ILogger{
 public:
     virtual void log (Severity severity, const char* msg) noexcept override{
@@ -50,47 +61,6 @@ Model::Model(string path){
 
     mEnginePath = getEnginePath(path);
 }
-
-using namespace nvinfer1;
-std::map<std::string, Weights> loadWeights2(const std::string file)
-{
-    std::cout << "Loading weights: " << file << std::endl;
-    std::map<std::string, Weights> weightMap;
-
-    // Open weights file
-    std::ifstream input(file);
-    assert(input.is_open() && "Unable to load weight file.");
-
-    // Read number of weight blobs
-    int32_t count;
-    input >> count;
-    assert(count > 0 && "Invalid weight map file.");
-
-    while (count--)
-    {
-        Weights wt{DataType::kFLOAT, nullptr, 0};
-        uint32_t size;
-
-        // Read name and type of blob
-        std::string name;
-        input >> name >> std::dec >> size;
-        wt.type = DataType::kFLOAT;
-
-        // Load blob
-        uint32_t* val = reinterpret_cast<uint32_t*>(malloc(sizeof(val) * size));
-        for (uint32_t x = 0, y = size; x < y; ++x)
-        {
-            input >> std::hex >> val[x];
-        }
-        wt.values = val;
-        
-        wt.count = size;
-        weightMap[name] = wt;
-    }
-
-    return weightMap;
-}
-
 
 // decode一个weights文件，并保存到map中
 // weights的格式是:
@@ -155,8 +125,7 @@ bool Model::build_from_weights(){
         LOG("%s not found. Building engine...", mEnginePath.c_str());
     }
 
-    // mWts = loadWeights();
-    mWts = loadWeights2(mWtsPath);
+    mWts = loadWeights();
 
     // 这里和之前的创建方式是一样的
     Logger logger;
@@ -164,17 +133,22 @@ bool Model::build_from_weights(){
     auto network       = make_unique<nvinfer1::INetworkDefinition>(builder->createNetworkV2(1));
     auto config        = make_unique<nvinfer1::IBuilderConfig>(builder->createBuilderConfig());
 
-    // 从network中直接创建input, linear, output
-    // auto input         = network->addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims2{1, 5});
-    auto data          = network->addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
-
-    // auto fc            = network->addFullyConnected(*input, 1, mWts["linear.weight"], {});
-    auto conv          = network->addConvolutionNd(*data, 1, nvinfer1::DimsHW{3, 3}, mWts["conv.weight"], mWts["conv.bias"]);
-    conv->setStride(DimsHW(1, 1));
-    // assert(fc);
-
-    conv->getOutput(0) ->setName("output0");
-    network->markOutput(*conv->getOutput(0));
+    // 根据不同的网络架构创建不同的TensorRT网络，这里使用几个简单的例子
+    if (mWtsPath == "models/sample_linear.weights") {
+        build_linear(*network, mWts);
+    } else if (mWtsPath == "models/sample_conv.weights") {
+        build_conv(*network, mWts);
+    } else if (mWtsPath == "models/sample_permute.weights") {
+        build_permute(*network, mWts);
+    } else if (mWtsPath == "models/sample_reshape.weights") {
+        build_reshape(*network, mWts);
+    } else if (mWtsPath == "models/sample_batchNorm.weights") {
+        build_batchNorm(*network, mWts);
+    } else if (mWtsPath == "models/sample_cbr.weights") {
+        build_cbr(*network, mWts);
+    } else {
+        return false;
+    }
 
     // 接下来的事情也是一样的
     config->setMaxWorkspaceSize(1<<28);
@@ -201,11 +175,10 @@ bool Model::build_from_weights(){
     print_network(*network, true);
 
     // 最后把map给free掉
-    // for (auto& mem : mWts)
-    // {
-    //     free((void*) (mem.second.values));
-    // }
-    // LOG("FINISH");
+    for (auto& mem : mWts) {
+        free((void*) (mem.second.values));
+    }
+    LOG("Finished building engine");
     return true;
 }
 
@@ -247,6 +220,8 @@ bool Model::build_from_onnx(){
     LOG("");
     LOG("After TensorRT optimization");
     print_network(*network, true);
+
+    LOG("Finished building engine");
     return true;
 };
 
@@ -279,41 +254,26 @@ bool Model::infer(){
     LOG("input dim shape is:  %s", printDims(input_dims).c_str());
     LOG("output dim shape is: %s", printDims(output_dims).c_str());
 
-    /* 2. host->device的数据传递 */
+    /* 2. 创建流 */
     cudaStream_t stream;
     cudaStreamCreate(&stream);
 
-    /* host memory上的数据*/
-    float input_host[] = {0.0193, 0.2616, 0.7713, 0.3785, 0.9980, 
-        0.0193, 0.2616, 0.7713, 0.3785, 0.9980,
-        0.0193, 0.2616, 0.7713, 0.3785, 0.9980,
-        0.0193, 0.2616, 0.7713, 0.3785, 0.9980,
-        0.0193, 0.2616, 0.7713, 0.3785, 0.9980};
-    float output_host[9];
+    /* 2. 初始化input，以及在host/device上分配空间 */
+    init_data();
 
-    /* device memory上的数据*/
-    float* input_device = nullptr;
-    float* weight_device = nullptr;
-    float* output_device = nullptr;
-
-    int input_size = 25;
-    int output_size = 9;
-
-    /* 分配空间, 并传送数据从host到device*/
-    cudaMalloc(&input_device, sizeof(input_host));
-    cudaMalloc(&output_device, sizeof(output_host));
-    cudaMemcpyAsync(input_device, input_host, sizeof(input_host), cudaMemcpyKind::cudaMemcpyHostToDevice, stream);
+    /* 2. host->device的数据传递*/
+    cudaMemcpyAsync(mInputDevice, mInputHost, mInputSize, cudaMemcpyKind::cudaMemcpyHostToDevice, stream);
 
     /* 3. 模型推理, 最后做同步处理 */
-    float* bindings[] = {input_device, output_device};
+    float* bindings[] = {mInputDevice, mOutputDevice};
     bool success = context->enqueueV2((void**)bindings, stream, nullptr);
 
     /* 4. device->host的数据传递 */
-    cudaMemcpyAsync(output_host, output_device, sizeof(output_host), cudaMemcpyKind::cudaMemcpyDeviceToHost, stream);
+    cudaMemcpyAsync(mOutputHost, mOutputDevice, mOutputSize, cudaMemcpyKind::cudaMemcpyDeviceToHost, stream);
     cudaStreamSynchronize(stream);
 
-    LOG("input data is:  %s", printTensor(input_host, input_size).c_str());
-    LOG("output data is: %s", printTensor(output_host, output_size).c_str());
+    LOG("input data is:  %s", printTensor(mInputHost, mInputSize / sizeof(float), input_dims).c_str());
+    LOG("output data is: %s", printTensor(mOutputHost, mOutputSize / sizeof(float), output_dims).c_str());
     LOG("finished inference");
     return true;
 }
@@ -364,3 +324,171 @@ void Model::print_network(nvinfer1::INetworkDefinition &network, bool optimized)
         }
     }
 }
+
+// 最基本的Fully Connected层的创建
+void Model::build_linear(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+    auto data          = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 1, 5});
+    auto fc            = network.addFullyConnected(*data, 1, mWts["linear.weight"], {});
+    fc->setName("linear1");
+
+    fc->getOutput(0) ->setName("output0");
+    network.markOutput(*fc->getOutput(0));
+}
+
+// 最基本的convolution层的创建
+void Model::build_conv(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+    auto data          = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
+    auto conv          = network.addConvolutionNd(*data, 3, nvinfer1::DimsHW{3, 3}, mWts["conv.weight"], mWts["conv.bias"]);
+    conv->setName("conv1");
+    conv->setStride(nvinfer1::DimsHW(1, 1));
+
+    conv->getOutput(0) ->setName("output0");
+    network.markOutput(*conv->getOutput(0));
+}
+
+// shuffle层的创建
+void Model::build_permute(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+    auto data          = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
+    auto conv          = network.addConvolutionNd(*data, 3, nvinfer1::DimsHW{3, 3}, mWts["conv.weight"], mWts["conv.bias"]);
+    conv->setName("conv1");
+    conv->setStride(nvinfer1::DimsHW(1, 1));
+    
+    auto permute       = network.addShuffle(*conv->getOutput(0));
+    permute->setFirstTranspose(nvinfer1::Permutation{0, 2, 3, 1}); // B, C, H, W -> B, H, W, C
+    permute->setName("permute1");
+
+    permute->getOutput(0)->setName("output0");
+    network.markOutput(*permute->getOutput(0));
+}
+
+// shuffle层中处理多次维度上的操作
+void Model::build_reshape(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+    auto data          = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
+
+    auto conv          = network.addConvolutionNd(*data, 3, nvinfer1::DimsHW{3, 3}, mWts["conv.weight"], mWts["conv.bias"]);
+    conv->setName("conv1");
+    conv->setStride(nvinfer1::DimsHW(1, 1));
+
+    auto reshape       = network.addShuffle(*conv->getOutput(0));
+    reshape->setReshapeDimensions(nvinfer1::Dims3{1, 3, -1});
+    reshape->setSecondTranspose(nvinfer1::Permutation{0, 2, 1});      
+    reshape->setName("reshape + permute1");
+    // 注意，因为reshape和transpose都是属于iShuffleLayer做的事情，所以需要指明是reshape在前，还是transpose在前
+    // 通过这里我们可以看到，在TRT中连续的对tensor的维度的操作其实是可以在TRT中用一个层来处理，属于一种layer fusion优化
+
+    reshape->getOutput(0)->setName("output0");
+    network.markOutput(*reshape->getOutput(0));
+}
+
+// 自定义的IScaleLayer来实现BatchNorm的创建
+void Model::build_batchNorm(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+    auto data          = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
+    auto conv          = network.addConvolutionNd(*data, 3, nvinfer1::DimsHW{3, 3}, mWts["conv.weight"], mWts["conv.bias"]);
+    conv->setName("conv1");
+    conv->setStride(nvinfer1::DimsHW(1, 1));
+
+    // 因为TensorRT内部没有BatchNorm的实现，但是我们只要知道BatchNorm的计算原理，就可以使用IScaleLayer来创建BN的计算
+    // IScaleLayer主要是用在quantization和dequantization，作为提前了解，我们试着使用IScaleLayer来搭建于一个BN的parser
+    // IScaleLayer可以实现: y = (x * scale + shift) ^ pow
+
+    float* gamma   = (float*)mWts["norm.weight"].values;
+    float* beta    = (float*)mWts["norm.bias"].values;
+    float* mean    = (float*)mWts["norm.running_mean"].values;
+    float* var     = (float*)mWts["norm.running_var"].values;
+    float  eps     = 1e-5;
+    
+    int    count   = mWts["norm.running_var"].count;
+
+    float* scales  = (float*)malloc(count * sizeof(float));
+    float* shifts  = (float*)malloc(count * sizeof(float));
+    float* pows    = (float*)malloc(count * sizeof(float));
+    
+    // 这里具体参考一下batch normalization的计算公式，网上有很多
+    for (int i = 0; i < count; i ++) {
+        scales[i] = gamma[i] / sqrt(var[i] + eps);
+        shifts[i] = beta[i] - (mean[i] * gamma[i] / sqrt(var[i] + eps));
+        pows[i]   = 1.0;
+    }
+
+    // 将计算得到的这些值写入到Weight中
+    auto scales_weights = nvinfer1::Weights{nvinfer1::DataType::kFLOAT, scales, count};
+    auto shifts_weights = nvinfer1::Weights{nvinfer1::DataType::kFLOAT, shifts, count};
+    auto pows_weights   = nvinfer1::Weights{nvinfer1::DataType::kFLOAT, pows, count};
+
+    // 创建IScaleLayer并将这些weights传进去，这里使用channel作为scale model
+    auto scale = network.addScale(*conv->getOutput(0), nvinfer1::ScaleMode::kCHANNEL, shifts_weights, scales_weights, pows_weights);
+    scale->setName("batchNorm1");
+
+    scale->getOutput(0) ->setName("output0");
+    network.markOutput(*scale->getOutput(0));
+}
+
+// 自定义的IScaleLayer来实现BatchNorm的创建
+void Model::build_cbr(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+    auto data          = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
+    auto conv          = network.addConvolutionNd(*data, 3, nvinfer1::DimsHW{3, 3}, mWts["conv.weight"], mWts["conv.bias"]);
+    conv->setName("conv1");
+    conv->setStride(nvinfer1::DimsHW(1, 1));
+
+    // 因为TensorRT内部没有BatchNorm的实现，但是我们只要知道BatchNorm的计算原理，就可以使用IScaleLayer来创建BN的计算
+    // IScaleLayer主要是用在quantization和dequantization，作为提前了解，我们试着使用IScaleLayer来搭建于一个BN的parser
+    // IScaleLayer可以实现: y = (x * scale + shift) ^ pow
+
+    float* gamma   = (float*)mWts["norm.weight"].values;
+    float* beta    = (float*)mWts["norm.bias"].values;
+    float* mean    = (float*)mWts["norm.running_mean"].values;
+    float* var     = (float*)mWts["norm.running_var"].values;
+    float  eps     = 1e-5;
+    
+    int    count   = mWts["norm.running_var"].count;
+
+    float* scales  = (float*)malloc(count * sizeof(float));
+    float* shifts  = (float*)malloc(count * sizeof(float));
+    float* pows    = (float*)malloc(count * sizeof(float));
+    
+    // 这里具体参考一下batch normalization的计算公式，网上有很多
+    for (int i = 0; i < count; i ++) {
+        scales[i] = gamma[i] / sqrt(var[i] + eps);
+        shifts[i] = beta[i] - (mean[i] * gamma[i] / sqrt(var[i] + eps));
+        pows[i]   = 1.0;
+    }
+
+    // 将计算得到的这些值写入到Weight中
+    auto scales_weights = nvinfer1::Weights{nvinfer1::DataType::kFLOAT, scales, count};
+    auto shifts_weights = nvinfer1::Weights{nvinfer1::DataType::kFLOAT, shifts, count};
+    auto pows_weights   = nvinfer1::Weights{nvinfer1::DataType::kFLOAT, pows, count};
+
+    // 创建IScaleLayer并将这些weights传进去，这里使用channel作为scale model
+    auto bn = network.addScale(*conv->getOutput(0), nvinfer1::ScaleMode::kCHANNEL, shifts_weights, scales_weights, pows_weights);
+    bn->setName("batchNorm1");
+
+    auto leaky = network.addActivation(*bn->getOutput(0), nvinfer1::ActivationType::kLEAKY_RELU);
+    leaky->setName("leaky1");
+
+    leaky->getOutput(0) ->setName("output0");
+    network.markOutput(*leaky->getOutput(0));
+}
+
+void Model::init_data(){
+    if (mWtsPath == "models/sample_linear.weights") {
+        mInputSize = 5 * sizeof(float);
+        mOutputSize = 1 * sizeof(float);
+    } else {
+        mInputSize = 25 * sizeof(float);
+        mOutputSize = 27 * sizeof(float);
+    }
+
+    cudaMallocHost(&mInputHost, mInputSize);
+    cudaMallocHost(&mOutputHost, mOutputSize);
+
+    if (mWtsPath == "models/sample_linear.weights") {
+        mInputHost = input_1x5;
+    } else {
+        mInputHost = input_5x5;
+    }
+
+    cudaMalloc(&mInputDevice, mInputSize);
+    cudaMalloc(&mOutputDevice, mOutputSize);
+    
+}
+

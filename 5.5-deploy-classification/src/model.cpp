@@ -65,6 +65,7 @@ bool Model::build(){
     auto parser        = make_unique<nvonnxparser::IParser>(nvonnxparser::createParser(*network, logger));
 
     config->setMaxWorkspaceSize(1<<28);
+    config->setFlag(nvinfer1::BuilderFlag::kFP16);
 
     if (!parser->parseFromFile(mOnnxPath.c_str(), 1)){
         return false;

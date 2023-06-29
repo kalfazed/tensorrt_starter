@@ -1,13 +1,14 @@
 import torch
 import torch.nn as nn
 import torch.onnx
+import onnxsim
+import onnx
 import struct
 
 class Model(torch.nn.Module):
     def __init__(self):
         super().__init__()
-        self.conv   = nn.Conv2d(1, 1, (3, 3))
-        # self.linear = nn.Linear(in_features=5, out_features=1, bias=False)
+        self.conv   = nn.Conv2d(1, 3, (3, 3))
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -19,8 +20,8 @@ class Model(torch.nn.Module):
                 nn.init.constant_(m.bias, 0)
     
     def forward(self, x):
-        x = self.conv(x)
-        # x = self.linear(x)
+        x = self.conv(x)           # B, C, H, W
+        x = x.permute(0, 2, 3, 1)  # B, H, W, C
         return x
 
 def setup_seed(seed):
@@ -35,7 +36,7 @@ def setup_seed(seed):
 # ...
 
 def export_weight(model):
-    f = open("../models/sample_linear.weights", 'w')
+    f = open("../models/sample_permute.weights", 'w')
     f.write("{}\n".format(len(model.state_dict().keys())))
     
     # 我们将权重里的float数据，按照hex16进制的形式进行保存，也就是所谓的编码
@@ -50,17 +51,51 @@ def export_weight(model):
             f.write(" ")
             f.write(struct.pack(">f", float(vv)).hex())
         f.write("\n")
-        print("weight is {}".format(vr))
 
+def export_norm_onnx(input, model):
+    file = "../models/sample_permute.onnx"
+    torch.onnx.export(
+        model         = model, 
+        args          = (input,),
+        f             = file,
+        input_names   = ["input0"],
+        output_names  = ["output0"],
+        opset_version = 15)
+    print("Finished normal onnx export")
+
+    # check the exported onnx model
+    model_onnx = onnx.load(file)
+    onnx.checker.check_model(model_onnx)
+
+    # use onnx-simplifier to simplify the onnx
+    print(f"Simplifying with onnx-simplifier {onnxsim.__version__}...")
+    model_onnx, check = onnxsim.simplify(model_onnx)
+    assert check, "assert check failed"
+    onnx.save(model_onnx, file)
+
+def eval(input, model):
+    output = model(input)
+    print("------from infer------")
+    print(input)
+    print(output)
 
 if __name__ == "__main__":
     setup_seed(1)
 
-    input = torch.tensor([[[0.0193, 0.2616, 0.7713, 0.3785, 0.9980],
-                           [0.0193, 0.2616, 0.7713, 0.3785, 0.9980],
-                           [0.0193, 0.2616, 0.7713, 0.3785, 0.9980],
-                           [0.0193, 0.2616, 0.7713, 0.3785, 0.9980],
-                           [0.0193, 0.2616, 0.7713, 0.3785, 0.9980]]])
+    input = torch.tensor([[[
+        [0.7576, 0.2793, 0.4031, 0.7347, 0.0293],
+        [0.7999, 0.3971, 0.7544, 0.5695, 0.4388],
+        [0.6387, 0.5247, 0.6826, 0.3051, 0.4635],
+        [0.4550, 0.5725, 0.4980, 0.9371, 0.6556],
+        [0.3138, 0.1980, 0.4162, 0.2843, 0.3398]]]])
+
     model = Model()
 
+    # 以bytes形式导出权重
     export_weight(model);
+
+    # 导出onnx
+    export_norm_onnx(input, model);
+
+    # 计算
+    eval(input, model)

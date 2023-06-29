@@ -1,14 +1,15 @@
 #include "trt_model.hpp"
 #include "trt_logger.hpp"
 #include "trt_worker.hpp"
+#include "utils.hpp"
 
 using namespace std;
 
 int main(int argc, char const *argv[])
 {
     /*这么实现目的在于让调用的整个过程精简化*/
-    auto onnxPath      = "models/resnet18.onnx";
-    auto test_img      = "data/tiny-cat.png";
+    string onnxPath      = "models/resnet18.onnx";
+    string test_img      = "data/tiny-cat.png";
 
     auto level         = logger::Level::INFO;
     auto params        = model::Params();

@@ -1,5 +1,6 @@
 #include "trt_logger.hpp"
 #include "NvInfer.h"
+#include <cstdlib>
 
 using namespace std;
 
@@ -62,7 +63,8 @@ void Logger::__log_info(Level level, const char* format, ...) {
         fprintf(stdout, "%s\n", msg);
 
     if (level <= Level::ERROR) {
-        exit(1);
+        fflush(stdout);
+        exit(0);
     }
 }
 
