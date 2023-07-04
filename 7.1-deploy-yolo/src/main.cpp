@@ -1,23 +1,28 @@
-#include <iostream>
-#include <memory>
-
-#include "model.hpp"
+#include "trt_model.hpp"
+#include "trt_logger.hpp"
+#include "trt_worker.hpp"
 #include "utils.hpp"
 
 using namespace std;
 
 int main(int argc, char const *argv[])
 {
-    Model model("models/resnet18.onnx");
-    string imagePath = "data/tiny-cat.png";
+    /*这么实现目的在于让调用的整个过程精简化*/
+    string onnxPath      = "models/onnx/yolov5s.onnx";
+    string test_img      = "data/car.jpg";
 
-    if(!model.build()){
-        LOG("fail in building model");
-        return 0;
-    }
-    if(!model.infer(imagePath)){
-        LOG("fail in infering model");
-        return 0;
-    }
+    auto level         = logger::Level::INFO;
+    auto params        = model::Params();
+
+    params.img         = {640, 640, 3};
+    params.task        = model::task_type::DETECTION;
+    params.dev         = model::device::GPU;
+
+    // 创建一个worker的实例, 在创建的时候就完成初始化
+    auto worker   = thread::create_worker(onnxPath, level, params);
+
+    // 根据worker中的task类型进行推理
+    worker->inference(test_img);
+
     return 0;
 }

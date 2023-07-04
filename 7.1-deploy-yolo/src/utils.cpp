@@ -5,6 +5,7 @@
 #include <string>
 #include "utils.hpp"
 #include "NvInfer.h"
+#include "trt_logger.hpp"
 
 
 using namespace std;
@@ -12,7 +13,6 @@ using namespace std;
 bool fileExists(const string fileName) {
     if (!experimental::filesystem::exists(
             experimental::filesystem::path(fileName))){
-        cout << "File " << fileName << " doesn't exists" << endl;
         return false;
     }else{
         return true;
@@ -113,6 +113,14 @@ string getEnginePath(string onnxPath){
     enginePath = onnxPath.substr(0, pos);
     enginePath += ".engine";
     return enginePath;
+}
+
+string getOutputPath(string src, string post_fix){
+    int pos = src.rfind(".");
+    string output_path;
+    output_path = src.substr(0, pos);
+    output_path += "_" + post_fix + ".png";
+    return output_path;
 }
 
 string getPrecision(nvinfer1::DataType type) {

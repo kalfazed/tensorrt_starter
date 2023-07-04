@@ -1,4 +1,5 @@
 #include "cuda_runtime.h"
+#include "cuda.h"
 #include "stdio.h"
 
 /* matmul的函数实现*/
@@ -34,6 +35,7 @@ void MatmulOnDevice(float *M_host, float *N_host, float* P_host, int width, int 
     /* 分配M, N在GPU上的空间*/
     float *M_device;
     float *N_device;
+
     cudaMalloc(&M_device, size);
     cudaMalloc(&N_device, size);
 

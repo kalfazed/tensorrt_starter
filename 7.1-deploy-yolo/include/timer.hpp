@@ -6,6 +6,7 @@
 #include <string>
 #include "cuda_runtime.h"
 #include "utils.hpp"
+#include "trt_logger.hpp"
 
 
 class Timer {

@@ -10,21 +10,20 @@ int seed;
 int main(){
     Timer timer;
     int width     = 1<<10; // 1,024
-    int low       = 0;
-    int high      = 1;
+    int min       = 0;
+    int max       = 1;
     int size      = width * width;
-    int blockSize = 16;
+    int blockSize = 1;
 
     float* h_matM = (float*)malloc(size * sizeof(float));
     float* h_matN = (float*)malloc(size * sizeof(float));
     float* h_matP = (float*)malloc(size * sizeof(float));
     float* d_matP = (float*)malloc(size * sizeof(float));
     
-    // seed = (unsigned)time(NULL);
     seed = 1;
-    initMatrix(h_matM, size, low, high, seed);
+    initMatrix(h_matM, size, min, max, seed);
     seed += 1;
-    initMatrix(h_matN, size, low, high, seed);
+    initMatrix(h_matN, size, min, max, seed);
     
     /* CPU */
     timer.start();
@@ -38,16 +37,27 @@ int main(){
     timer.stop();
     timer.duration<Timer::ms>("matmul in gpu(warmup)");
 
-    /* GPU general implementation */
+    /* GPU general implementation, bs = 16*/
+    blockSize = 16;
     timer.start();
     MatmulOnDevice(h_matM, h_matN, d_matP, width, blockSize);
     timer.stop();
-    timer.duration<Timer::ms>("matmul in gpu(general)");
+    timer.duration<Timer::ms>("matmul in gpu(bs = 16)");
 
+    /* GPU general implementation, bs = 1*/
+    blockSize = 1;
+    timer.start();
+    MatmulOnDevice(h_matM, h_matN, d_matP, width, blockSize);
+    timer.stop();
+    timer.duration<Timer::ms>("matmul in gpu(bs = 1)");
     compareMat(h_matP, d_matP, size);
 
-    // printMat(h_matP, size);
-    // printMat(d_matP, size);
-
+    /* GPU general implementation, bs = 32*/
+    blockSize = 32;
+    timer.start();
+    MatmulOnDevice(h_matM, h_matN, d_matP, width, blockSize);
+    timer.stop();
+    timer.duration<Timer::ms>("matmul in gpu(bs = 32)");
+    compareMat(h_matP, d_matP, size);
     return 0;
 }

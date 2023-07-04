@@ -3,10 +3,10 @@
 #include <random>
 
 
-void initMatrix(float* data, int size, int low, int high, int seed) {
+void initMatrix(float* data, int size, int min, int max, int seed) {
     srand(seed);
     for (int i = 0; i < size; i ++) {
-        data[i] = float(rand()) * float(high - low) / RAND_MAX;
+        data[i] = float(rand()) * float(max - min) / RAND_MAX;
     }
 }
 

@@ -49,5 +49,6 @@ std::string printDims(const nvinfer1::Dims dims);
 std::string printTensor(float* tensor, int size);
 std::string printTensorShape(nvinfer1::ITensor* tensor);
 std::string getPrecision(nvinfer1::DataType type);
+std::string getOutputPath(std::string src, std::string post_fix);
 
 #endif //__UTILS_HPP__

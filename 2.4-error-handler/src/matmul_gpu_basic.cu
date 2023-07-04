@@ -42,8 +42,7 @@ void MatmulOnDevice(float *M_host, float *N_host, float* P_host, int width, int 
     CUDA_CHECK(cudaMalloc(&M_device, size));
     CUDA_CHECK(cudaMalloc(&N_device, size));
 
-    /* 分配M, N拷贝到GPU上*/
-    CUDA_CHECK(cudaMemcpy(M_device, M_host, size, cudaMemcpyHostToDevice));
+    /* 分配M, N拷贝到GPU上*/ CUDA_CHECK(cudaMemcpy(M_device, M_host, size, cudaMemcpyHostToDevice));
     CUDA_CHECK(cudaMemcpy(N_device, N_host, size, cudaMemcpyHostToDevice));
 
     /* 分配P在GPU上的空间*/
@@ -59,7 +58,7 @@ void MatmulOnDevice(float *M_host, float *N_host, float* P_host, int width, int 
     CUDA_CHECK(cudaMemcpy(P_host, P_device, size, cudaMemcpyDeviceToHost));
     CUDA_CHECK(cudaDeviceSynchronize());
 
-    /* 注意要在synchronization结束之后排查kernel的错误 */
+    /* 注意要在synchronization结束之后排查kernel的错误, 否则错误排查只会检查参数配置*/
     LAST_KERNEL_CHECK(); 
 
     /* Free */
