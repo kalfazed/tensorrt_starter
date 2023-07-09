@@ -2,7 +2,7 @@
 FROM nvcr.io/nvidia/tensorrt:21.12-py3   
 
 ENV TZ=Asia/Tokyo
-ARG user=kalfazed
+ARG user=trt-starter
 
 # Set timezone in case of interation during installation
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone

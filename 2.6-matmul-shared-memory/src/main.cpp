@@ -40,7 +40,7 @@ int main(){
     timer.start_gpu();
     MatmulOnDevice(h_matM, h_matN, d_matP, width, blockSize);
     timer.stop_gpu();
-    std::sprintf(str, "matmul in gpu(general)<<<%d, %d>>>", width / blockSize, blockSize);
+    std::sprintf(str, "matmul in gpu(without shared memory)<<<%d, %d>>>", width / blockSize, blockSize);
     timer.duration_gpu(str);
     compareMat(h_matP, d_matP, size);
 
@@ -48,7 +48,7 @@ int main(){
     timer.start_gpu();
     MatmulSharedOnDevice(h_matM, h_matN, d_matP, width, blockSize, statMem);
     timer.stop_gpu();
-    std::sprintf(str, "matmul in gpu(shared memory(static))<<<%d, %d>>>", width / blockSize, blockSize);
+    std::sprintf(str, "matmul in gpu(with shared memory(static))<<<%d, %d>>>", width / blockSize, blockSize);
     timer.duration_gpu(str);
     compareMat(h_matP, d_matP, size);
 
@@ -57,7 +57,7 @@ int main(){
     timer.start_gpu();
     MatmulSharedOnDevice(h_matM, h_matN, d_matP, width, blockSize, statMem);
     timer.stop_gpu();
-    std::sprintf(str, "matmul in gpu(shared memory(dynamic))<<<%d, %d>>>", width / blockSize, blockSize);
+    std::sprintf(str, "matmul in gpu(with shared memory(dynamic))<<<%d, %d>>>", width / blockSize, blockSize);
     timer.duration_gpu(str);
     compareMat(h_matP, d_matP, size);
 
