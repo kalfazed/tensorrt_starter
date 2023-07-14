@@ -11,13 +11,13 @@ using namespace std;
 int main(){
     Timer timer;
 
-    string file_path     = "data/fox.png";
+    string file_path     = "data/deer.png";
     string output_prefix = "results/";
     string output_path   = "";
 
     cv::Mat input = cv::imread(file_path);
     int tar_h = 500;
-    int tar_w = 500;
+    int tar_w = 250;
     int tactis;
 
     cv::Mat resizedInput_cpu;

@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "CXX",
+            "includePath": [
+                "${workspaceFolder}/src/**",
+                "/usr/local/cuda/include/**",
+                "/usr/local/include/opencv4/**",
+                "/home/kalfazed/packages/TensorRT-8.5.1.7/include/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/local/cuda/bin/nvcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-x64",
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}

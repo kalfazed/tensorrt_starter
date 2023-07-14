@@ -23,6 +23,8 @@ __global__ void MatmulSharedStaticKernel(float *M_device, float *N_device, float
     for (int m = 0; m < width / BLOCKSIZE; m ++) {
         M_deviceShared[ty][tx] = M_device[y * width + (m * BLOCKSIZE + tx)];
         N_deviceShared[ty][tx] = N_device[(m * BLOCKSIZE + ty)* width + x];
+        // M_deviceShared[ty][tx] = 1.0;
+        // N_deviceShared[ty][tx] = 2.0;
         __syncthreads();
 
         for (int k = 0; k < BLOCKSIZE; k ++) {

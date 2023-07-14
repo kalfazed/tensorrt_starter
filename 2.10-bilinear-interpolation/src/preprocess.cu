@@ -47,8 +47,8 @@ __global__ void resize_bilinear_BGR2RGB_kernel(
     int y = blockIdx.y * blockDim.y + threadIdx.y;
 
     // bilinear interpolation -- 计算x,y映射到原图时最近的4个坐标
-    int src_y1 = round((float)y * scaled_h);
-    int src_x1 = round((float)x * scaled_w);
+    int src_y1 = floor((y + 0.5) * scaled_h - 0.5);
+    int src_x1 = floor((x + 0.5) * scaled_w - 0.5);
     int src_y2 = src_y1 + 1;
     int src_x2 = src_x1 + 1;
 
@@ -56,20 +56,20 @@ __global__ void resize_bilinear_BGR2RGB_kernel(
         // bilinear interpolation -- 对于越界的坐标不进行计算
     } else {
         // bilinear interpolation -- 计算原图上的坐标(浮点类型)在0~1之间的值
-        float th   = (float)y * scaled_h - src_y1;
-        float tw   = (float)x * scaled_w - src_x1;
+        float th   = ((y + 0.5) * scaled_h - 0.5) - src_y1;
+        float tw   = ((x + 0.5) * scaled_w - 0.5) - src_x1;
 
         // bilinear interpolation -- 计算面积(这里建议自己手画一张图来理解一下)
-        float a1_1 = (1.0 - tw) * (1.0 - th);
-        float a1_2 = (1.0 - tw) * th;
-        float a2_1 = tw * (1.0 - th);
-        float a2_2 = tw * th;
+        float a1_1 = (1.0 - tw) * (1.0 - th);  //右下
+        float a1_2 = tw * (1.0 - th);          //左下
+        float a2_1 = (1.0 - tw) * th;          //右上
+        float a2_2 = tw * th;                  //左上
 
         // bilinear interpolation -- 计算4个坐标所对应的索引
-        int srcIdx1_1 = (src_y1 * srcW + src_x1) * 3;
-        int srcIdx1_2 = (src_y1 * srcW + src_x2) * 3;
-        int srcIdx2_1 = (src_y2 * srcW + src_x1) * 3;
-        int srcIdx2_2 = (src_y2 * srcW + src_x2) * 3;
+        int srcIdx1_1 = (src_y1 * srcW + src_x1) * 3;  //左上
+        int srcIdx1_2 = (src_y1 * srcW + src_x2) * 3;  //右上
+        int srcIdx2_1 = (src_y2 * srcW + src_x1) * 3;  //左下
+        int srcIdx2_2 = (src_y2 * srcW + src_x2) * 3;  //右下
 
         // bilinear interpolation -- 计算resized之后的图的索引
         int tarIdx    = (y * tarW  + x) * 3;
@@ -107,8 +107,8 @@ __global__ void resize_bilinear_BGR2RGB_shift_kernel(
     int y = blockIdx.y * blockDim.y + threadIdx.y;
 
     // bilinear interpolation -- 计算x,y映射到原图时最近的4个坐标
-    int src_y1 = round((float)y * scaled_h);
-    int src_x1 = round((float)x * scaled_w);
+    int src_y1 = floor((y + 0.5) * scaled_h - 0.5);
+    int src_x1 = floor((x + 0.5) * scaled_w - 0.5);
     int src_y2 = src_y1 + 1;
     int src_x2 = src_x1 + 1;
 
@@ -116,20 +116,20 @@ __global__ void resize_bilinear_BGR2RGB_shift_kernel(
         // bilinear interpolation -- 对于越界的坐标不进行计算
     } else {
         // bilinear interpolation -- 计算原图上的坐标(浮点类型)在0~1之间的值
-        float th   = (float)y * scaled_h - src_y1;
-        float tw   = (float)x * scaled_w - src_x1;
+        float th   = ((y + 0.5) * scaled_h - 0.5) - src_y1;
+        float tw   = ((x + 0.5) * scaled_w - 0.5) - src_x1;
 
         // bilinear interpolation -- 计算面积(这里建议自己手画一张图来理解一下)
-        float a1_1 = (1.0 - tw) * (1.0 - th);
-        float a1_2 = (1.0 - tw) * th;
-        float a2_1 = tw * (1.0 - th);
-        float a2_2 = tw * th;
+        float a1_1 = (1.0 - tw) * (1.0 - th);  //右下
+        float a1_2 = tw * (1.0 - th);          //左下
+        float a2_1 = (1.0 - tw) * th;          //右上
+        float a2_2 = tw * th;                  //左上
 
         // bilinear interpolation -- 计算4个坐标所对应的索引
-        int srcIdx1_1 = (src_y1 * srcW + src_x1) * 3;
-        int srcIdx1_2 = (src_y1 * srcW + src_x2) * 3;
-        int srcIdx2_1 = (src_y2 * srcW + src_x1) * 3;
-        int srcIdx2_2 = (src_y2 * srcW + src_x2) * 3;
+        int srcIdx1_1 = (src_y1 * srcW + src_x1) * 3;  //左上
+        int srcIdx1_2 = (src_y1 * srcW + src_x2) * 3;  //右上
+        int srcIdx2_1 = (src_y2 * srcW + src_x1) * 3;  //左下
+        int srcIdx2_2 = (src_y2 * srcW + src_x2) * 3;  //右下
 
         // bilinear interpolation -- 计算原图在目标图中的x, y方向上的偏移量
         y = y - int(srcH / (scaled_h * 2)) + int(tarH / 2);

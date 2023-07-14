@@ -13,6 +13,7 @@ void MatmulSharedOnDevice(float *M_host, float *N_host, float* P_host, int width
 
 void MatmulSingleStream(float* M_input, float* N_input, float* P_output, int width, int blockSize, bool staticMem, int count);
 void MatmulMultiStream(float* M_input, float* N_input, float* P_output, int width, int blockSize, bool staticMem, int count);
+void MatmulMultiStream2(float* M_input, float* N_input, float* P_output, int width, int blockSize, bool staticMem, int count);
 
 extern void MatmulOnHost(float *M_host, float *N_host, float* P_host, int width);
 

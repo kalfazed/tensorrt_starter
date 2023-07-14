@@ -74,6 +74,7 @@ def setup_seed(seed):
     torch.backends.cudnn.deterministic = True
 
 # 为了能够让TensorRT读取PyTorch导出的权重，我们可以把权重按照指定的格式导出:
+# In order to export Pytorch weights and read by TensorRT, we can export as following format...
 # count
 # [name][len][weights value in hex mode]
 # [name][len][weights value in hex mode]

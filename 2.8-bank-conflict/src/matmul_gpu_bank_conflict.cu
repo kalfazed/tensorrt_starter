@@ -24,7 +24,6 @@ __global__ void MatmulSharedStaticConflictKernel(float *M_device, float *N_devic
         /* 这里为了实现bank conflict, 把tx与tx的顺序颠倒，同时索引也改变了*/
         M_deviceShared[tx][ty] = M_device[x * width + (m * BLOCKSIZE + ty)];
         N_deviceShared[tx][ty] = M_device[(m * BLOCKSIZE + tx)* width + y];
-
         __syncthreads();
 
         for (int k = 0; k < BLOCKSIZE; k ++) {

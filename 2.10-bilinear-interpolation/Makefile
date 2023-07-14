@@ -71,6 +71,7 @@ show:
 clean:
 	rm -rf $(APP)
 	rm -rf build
+	rm -rf results/*
 
 ifneq ($(MAKECMDGOALS), clean)
 -include $(APP_MKS)
