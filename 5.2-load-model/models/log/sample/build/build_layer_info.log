@@ -1,7 +1,0 @@
-{"Layers": ["reshape_before_/linear/MatMul"
-,"/linear/MatMul"
-,"reshape_after_/linear/MatMul"
-],
-"Bindings": ["input0"
-,"output0"
-]}

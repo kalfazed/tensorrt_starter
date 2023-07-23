@@ -40,6 +40,8 @@ compile_commands.json
 trt-cuda
 trt-infer
 .clangd
+*.tar
+*.pth
 *.onnx
 *.engine
 *.o

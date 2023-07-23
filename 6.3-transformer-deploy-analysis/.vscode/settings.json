@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "*.cpp": "cpp",
-        "*.cu": "cuda-cpp",
-    }
-}

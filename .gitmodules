@@ -1,0 +1,3 @@
+[submodule "chapter3-tensorrt-basics-and-onnx/3.6-export-onnx-from-oss/Swin-Transformer"]
+	path = chapter3-tensorrt-basics-and-onnx/3.6-export-onnx-from-oss/Swin-Transformer
+	url = https://github.com/microsoft/Swin-Transformer.git
