@@ -1,0 +1,25 @@
+24
+cv1.conv.weight 4 3d32a2ed 3ee0f0df bea39b81 bdf09510
+cv1.norm.weight 4 3f866666 3f866666 3f866666 3f866666
+cv1.norm.bias 4 3d4ccccd 3d4ccccd 3d4ccccd 3d4ccccd
+cv1.norm.running_mean 4 00000000 00000000 00000000 00000000
+cv1.norm.running_var 4 3f800000 3f800000 3f800000 3f800000
+cv1.norm.num_batches_tracked 1 00000000
+cv2.conv.weight 24 3e1021df 3d045e90 3ddd815a beac36d0 bfaa5a23 bf0c91d6 3fb735b9 bd7aa66c 3ea4187f 3f4ec0d5 3e34036d bfa0b0e1 bc93b9de bf393e1c bed7d792 bf36053f 3e9b261d 3f85996c bfa1ba94 3f91bfd3 befedc0a be062592 bf34567b bf167928
+cv2.norm.weight 4 3f866666 3f866666 3f866666 3f866666
+cv2.norm.bias 4 3d4ccccd 3d4ccccd 3d4ccccd 3d4ccccd
+cv2.norm.running_mean 4 00000000 00000000 00000000 00000000
+cv2.norm.running_var 4 3f800000 3f800000 3f800000 3f800000
+cv2.norm.num_batches_tracked 1 00000000
+m.0.cv1.conv.weight 36 3e9520be be3f3c37 3edb70c8 3e8b6794 3d8c277e 3dd04958 3e36d90c be132d86 3f5a4b63 bd9f4f4c bb9326ce 3f1ec630 bf28fea3 3f197aa5 3d0b01bb 3de81c5b 3e73275e bf179865 3df19252 3eccbbe7 3e217036 be124ac6 3e3c3383 bf040ad6 3e8146d1 be0ad74f bd2e65b0 3dbf657b 3f14fe5f 3f1e4a6b be711b7a 3f5a3467 3e83810e beb747d4 bd8990a4 be3f3c4e
+m.0.cv1.norm.weight 2 3f866666 3f866666
+m.0.cv1.norm.bias 2 3d4ccccd 3d4ccccd
+m.0.cv1.norm.running_mean 2 00000000 00000000
+m.0.cv1.norm.running_var 2 3f800000 3f800000
+m.0.cv1.norm.num_batches_tracked 1 00000000
+m.0.cv2.conv.weight 36 becca8dc bc817af9 bf2aeb22 be27bb34 3f11cd0c 3e870b60 3eae97fa 3ea7ec06 be720fa6 be33a00f bebc7547 be6ebeb3 3e3e752b be9a9aa2 be14af68 be4b7b67 bcc08d44 3decdf0c be5f1f66 3f050094 3b8a9ea4 bf1fde1c 3f1993fc 3dc0c677 3d92dd0c 3ea02a1b 3efa25bf be3df17a 3e42ca7a bd380918 3deaa4cf 3dfdd0da 3e00181c be46567e be43591c 3eac533b
+m.0.cv2.norm.weight 2 3f866666 3f866666
+m.0.cv2.norm.bias 2 3d4ccccd 3d4ccccd
+m.0.cv2.norm.running_mean 2 00000000 00000000
+m.0.cv2.norm.running_var 2 3f800000 3f800000
+m.0.cv2.norm.num_batches_tracked 1 00000000

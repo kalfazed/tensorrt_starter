@@ -1,11 +1,11 @@
-CONFIG        :=  ../config/Makefile.config
+CONFIG        :=  ../../config/Makefile.config
 CONFIG_LOCAL  :=  ./config/Makefile.config
 
 include $(CONFIG)
 include $(CONFIG_LOCAL)
 
 BUILD_PATH    :=  build
-SRC_PATH      :=  src
+SRC_PATH      :=  src/cpp
 INC_PATH      :=  include
 CUDA_DIR      :=  /usr/local/cuda-$(CUDA_VER)
 
@@ -41,7 +41,7 @@ LIBS          :=  -L "$(CUDA_DIR)/lib64" \
 
 
 ifeq ($(DEBUG),1)
-CUDAFLAGS     +=  -g -O0
+CUDAFLAGS     +=  -g -G
 CXXFLAGS      +=  -g -O0
 else
 CUDAFLAGS     +=  -O3
