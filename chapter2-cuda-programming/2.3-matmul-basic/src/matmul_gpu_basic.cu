@@ -8,8 +8,8 @@ __global__ void MatmulKernel(float *M_device, float *N_device, float *P_device, 
         我们设定每一个thread负责P中的一个坐标的matmul
         所以一共有width * width个thread并行处理P的计算
     */
-    int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.y + threadIdx.y;
+    int x = blockIdx.x * blockDim.x + threadIdx.x;
 
     float P_element = 0;
 

@@ -15,6 +15,9 @@ def asinh_symbolic(g, input, *, out=None):
 
 # 在这里，将asinh_symbolic这个符号函数，与PyTorch的asinh算子绑定。也就是所谓的“注册算子”
 # asinh是在名为aten的一个c++命名空间下进行实现的
+
+# 那么aten是什么呢？
+# aten是"a Tensor Library"的缩写，是一个实现张量运算的C++库
 register_custom_op_symbolic('aten::asinh', asinh_symbolic, 12)
 
 
