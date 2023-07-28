@@ -363,7 +363,8 @@ void Model::init_data(){
     } else if ( 
         mWtsPath == "models/weights/sample_resBlock.weights" 
         || mWtsPath == "models/weights/sample_convBNSiLU.weights"
-        || mOnnxPath == "models/onnx/sample_mySelu.onnx" ) 
+        || mOnnxPath == "models/onnx/sample_mySelu.onnx"
+        || mOnnxPath == "models/onnx/sample_myScalar.onnx" ) 
     {
         mInputSize = 25 * sizeof(float);
         mOutputSize = 75 * sizeof(float);

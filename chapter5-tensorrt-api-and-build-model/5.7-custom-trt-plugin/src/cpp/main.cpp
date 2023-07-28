@@ -8,7 +8,8 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-    Model model("models/onnx/sample_mySelu.onnx", Model::precision::FP32);
+    // Model model("models/onnx/sample_mySelu.onnx", Model::precision::FP32);
+    Model model("models/onnx/sample_myScalar.onnx", Model::precision::FP32);
     if(!model.build()){
         LOGE("fail in building model");
         return 0;
