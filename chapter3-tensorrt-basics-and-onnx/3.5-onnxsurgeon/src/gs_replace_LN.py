@@ -12,6 +12,16 @@ import torch.nn as nn
 def identity(self, inputs, outputs):
     return self.layer(op="Identity", inputs=inputs, outputs=outputs)
 
+@gs.Graph.register()
+def layerNorm(self, inputs, outputs, axis, epsilon):
+    attrs = {'axis': np.int64(axis), 'epsilon': np.float(epsilon)}
+    return self.layer(op="LayerNormalization", inputs=inputs, outputs=outputs, attrs=attrs)
+
+@gs.Graph.register()
+def layerNorm_default(self, inputs, outputs):
+    return self.layer(op="LayerNormalization", inputs=inputs, outputs=outputs)
+
+
 class Model(torch.nn.Module):
     def __init__(self):
         super().__init__()
@@ -94,6 +104,8 @@ def change_onnx_graph():
 
     # 通过注册的LayerNorm，重新把断开的联系链接起来
     graph.layerNorm(inputs, outputs, axis=-1, epsilon=epsilon[0].values)
+    # graph.identity(inputs, outputs)
+    # graph.layerNorm_default(inputs, outputs)
 
     # 删除所有额外的节点
     graph.cleanup()
