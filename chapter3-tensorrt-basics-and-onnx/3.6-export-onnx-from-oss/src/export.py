@@ -48,6 +48,8 @@ def parse_option():
     parser.add_argument('--eval', action='store_true', help='Perform evaluation only')
     parser.add_argument('--throughput', action='store_true', help='Test throughput only')
 
+    # distributed training
+    parser.add_argument("--local_rank", type=int, required=True, help='local rank for DistributedDataParallel')
 
     # for acceleration
     parser.add_argument('--fused_window_process', action='store_true',
@@ -70,7 +72,7 @@ def export_norm_onnx(model, file, input):
         f             = file,
         input_names   = ["input0"],
         output_names  = ["output0"],
-        opset_version = 17)
+        opset_version = 9)
 
     print("Finished normal onnx export")
 
@@ -91,8 +93,9 @@ def main(config):
     input       = torch.rand(1, 3, 224, 224)
 
     model.eval()
-    # export_norm_onnx(model, "../models/swin-tiny-after-simplify.onnx", input)
-    export_norm_onnx(model, "../models/swin-tiny-after-simplify-opset17.onnx", input)
+    export_norm_onnx(model, "../models/swin-tiny-after-simplify-opset9.rnnx", input)
+    # export_norm_onnx(model, "../models/swin-tiny-after-simplify-opset12.onnx", input)
+    # export_norm_onnx(model, "../models/swin-tiny-after-simplify-opset17.onnx", input)
 
 
 if __name__ == '__main__':

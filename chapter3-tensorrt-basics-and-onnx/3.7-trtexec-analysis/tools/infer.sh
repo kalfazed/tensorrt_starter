@@ -1,5 +1,6 @@
 #!/bin/bash
-# ./infer.sh ${input.engine} ${tag}
+# how to use:
+#   bash tools/infer.sh ${input.engine}
 
 IFS=. file=(${1})
 IFS=/ file=(${file})
@@ -9,7 +10,7 @@ PREFIX=${file[2]}
 
 if [[ ${2} != "" ]]
 then
-        PREFIX=${PREFIX}_${2}
+        PREFIX=${PREFIX}-${2}
 fi
 
 MODE="infer"
@@ -22,7 +23,6 @@ mkdir -p ${ENGINE_PATH}
 mkdir -p $LOG_PATH
 
 trtexec --loadEngine=${ENGINE_PATH}/${PREFIX}.engine \
-        --verbose \
         --dumpOutput \
         --dumpProfile \
         --dumpLayerInfo \

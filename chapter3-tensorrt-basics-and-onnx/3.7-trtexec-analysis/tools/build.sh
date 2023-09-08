@@ -1,5 +1,6 @@
 #!/bin/bash
-# ./build.sh ${input.onnx} ${tag}
+# how to use:
+#   bash tools/build.sh ${input.onnx} ${tag}
 
 IFS=. file=(${1})
 IFS=/ file=(${file})
@@ -9,7 +10,7 @@ PREFIX=${file[1]}
 
 if [[ ${2} != "" ]]
 then
-        PREFIX=${PREFIX}_${2}
+        PREFIX=${PREFIX}-${2}
 fi
 
 MODE="build"
@@ -33,4 +34,6 @@ trtexec --onnx=${1} \
         --exportLayerInfo=${LOG_PATH}/build_layer_info.log \
         --warmUp=200 \
         --iterations=50 \
+        --verbose \
+        --fp16 \
         > ${LOG_PATH}/build.log

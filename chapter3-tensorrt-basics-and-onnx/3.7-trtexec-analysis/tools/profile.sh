@@ -1,5 +1,6 @@
 #!/bin/bash
-# ./profile.sh ${input.engine} ${tag}
+# how to use:
+#   bash tools/profile.sh ${input.engine} 
 
 IFS=. file=(${1})
 IFS=/ file=(${file})
@@ -9,7 +10,7 @@ PREFIX=${file[2]}
 
 if [[ ${2} != "" ]]
 then
-        PREFIX=${PREFIX}_${2}
+        PREFIX=${PREFIX}-${2}
 fi
 
 MODE="profile"
@@ -25,5 +26,9 @@ nsys profile \
         --output=${LOG_PATH}/${PREFIX} \
         --force-overwrite true \
         trtexec --loadEngine=${ENGINE_PATH}/${PREFIX}.engine \
-                --warmUp=200 \
-                --iterations=50 \
+                --warmUp=0 \
+                --duration=0 \
+                --iterations=20 \
+                --noDataTransfers \
+    > ${LOG_PATH}/profile.log
+

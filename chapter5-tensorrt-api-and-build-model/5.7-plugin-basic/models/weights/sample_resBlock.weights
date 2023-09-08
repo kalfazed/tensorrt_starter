@@ -1,0 +1,17 @@
+16
+conv0.weight 27 bf4b38e4 be1e1d09 bea71a98 bc5370c8 bf0b8dea be08f3b7 3eee178b 3e5c86d2 3e4af5df 3c7e71b9 be45a45f bdf0cc15 bd9711ad bec88ba7 3eadc606 3eb18273 3dd9e9c5 3dd7d446 3f380b75 3dbe79b6 3e8437c9 bec0d989 3ef03fd1 bf24c377 be8185fe 3da3aa50 3ee76069
+conv0.bias 3 3e3986f6 bea6d5da 3e53997b
+conv1.weight 81 3e82c614 3ecc3e9a be1b1689 be4f95d5 bd615ce4 bd800408 39bdf8fb 3d20fae7 be21f133 be1f8045 3e8cb3ef bceb8dc4 bea463a0 bcca667f 3e1cf046 be23b06a 3e7996c6 3d3ab3bd 3e516b4c 3f2835c0 3e8e3794 bdf58603 bef1a774 be8eec6a 3edbf92d be9b8531 3e55f9c4 be23ee88 3f13a1e2 be171b69 bf2b58d8 be846a5b be9be472 3e534060 be0a2378 bd5b9d1b bc14eb49 3e4876fa 3e94532a be68507c bf0582dd bdbea53a be3813d7 3dafa083 3e9f2bdf 3daa498f be215539 3e1d48ba bebcb3d7 3d95c421 3cff69f8 bed8de3a be95e74f be73ea20 be03c5fe be51e13b bc82b3fd 3ea44267 3e2d66c3 3e5b9265 3ebeb4c1 be6d15cc 3e0edcc8 3db9ac5b bdb10525 3c1d33bf bdbb948f 3ec369c8 3e06ec66 be43efd9 be666aeb 3ce1a4b6 3d599aea be8dec85 be5fe5cf be451219 3e519d0e bbab4e3b 3e99bf82 3e159a1c 3e88a077
+conv1.bias 3 3e1333ca 3e3add16 be02c56c
+conv2.weight 81 be1dcb8d 393c77fb 3e4958f3 3d2a27fd 3d219987 bf235500 be00bd7f bdcd75c3 3eb2cb31 3eb0aa9c 3d5da831 3e17a2ca bdddbdbe bf0668c3 3e811645 3e7e935d 3e2d4840 bef834e0 be59f55c bec662fb 3ee0390a bc123484 bdf1343a bd002cce bef2d204 3e73dc83 bf3d6e91 bd776517 3dbead2b 3e9a9613 be13080c 3cbd381a 398c20c2 bec0f73d be8adc82 3e610184 3ea39460 be82f768 3dd73b7e 3e91f1ca bd4f778d be20a874 3e3f5e3f 3dea96d6 be8e5401 3e89c16a 3e598c3f bf19a0db 3ed19dde bec26548 3e5f2daf be387b75 3eaf10ba 3e0b58e3 3c333964 3e017fa6 bc0b593c bcd14bf5 be2c88d2 be3157b6 bdec6c84 bf0d3dd9 3eb55b3d be2f60ef be8d241b 3e3f2835 bdd1a834 bf27f6c8 beb20fa2 bc8c3668 beab838f be947b39 bdd768b2 3e0cef64 bd676d00 3e41503f 3de9d265 3f1cee70 bcb2ba1e bebbf699 be664962
+conv2.bias 3 be0a9f79 3db916ef 3dfd35df
+norm1.weight 3 3f866666 3f866666 3f866666
+norm1.bias 3 3d4ccccd 3d4ccccd 3d4ccccd
+norm1.running_mean 3 00000000 00000000 00000000
+norm1.running_var 3 3f800000 3f800000 3f800000
+norm1.num_batches_tracked 1 00000000
+norm2.weight 3 3f866666 3f866666 3f866666
+norm2.bias 3 3d4ccccd 3d4ccccd 3d4ccccd
+norm2.running_mean 3 00000000 00000000 00000000
+norm2.running_var 3 3f800000 3f800000 3f800000
+norm2.num_batches_tracked 1 00000000

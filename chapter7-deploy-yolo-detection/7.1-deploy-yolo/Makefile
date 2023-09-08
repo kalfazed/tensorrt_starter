@@ -1,4 +1,4 @@
-CONFIG        :=  ../config/Makefile.config
+CONFIG        :=  ../../config/Makefile.config
 CONFIG_LOCAL  :=  ./config/Makefile.config
 
 include $(CONFIG)
