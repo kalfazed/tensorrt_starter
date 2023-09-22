@@ -165,6 +165,14 @@ string printTensorShape(nvinfer1::ITensor* tensor){
     return str;
 }
 
+int getDimSize(nvinfer1::Dims dims) {
+    int size = 1;
+    for (int j = 0; j < dims.nbDims; j++) {
+        size *= dims.d[j];
+    }
+    return size;
+}
+
 string getEnginePath(string onnxPath, Model::precision prec){
     int name_l = onnxPath.rfind("/");
     int name_r = onnxPath.rfind(".");
@@ -203,7 +211,6 @@ string getPrecision(nvinfer1::DataType type) {
         case nvinfer1::DataType::kHALF:   return "FP16";
         case nvinfer1::DataType::kINT32:  return "INT32";
         case nvinfer1::DataType::kINT8:   return "INT8";
-        case nvinfer1::DataType::kUINT8:  return "UINT8";
         default:                          return "unknown";
     }
 }

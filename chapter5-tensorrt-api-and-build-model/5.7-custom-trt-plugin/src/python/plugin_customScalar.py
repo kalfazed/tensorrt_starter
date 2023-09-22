@@ -7,29 +7,29 @@ import onnxsim
 import os
 from collections import OrderedDict
 
-class MyScalarImpl(torch.autograd.Function):
+class CustomScalarImpl(torch.autograd.Function):
     @staticmethod
     def symbolic(g, x, r):
-        return g.op("custom::myscalar", x, scalar_f=r)
+        return g.op("custom::customScalar", x, scalar_f=r)
 
     @staticmethod
     def forward(ctx, x, r):
         return x + r
 
-class MyScalar(nn.Module):
+class CustomScalar(nn.Module):
     def __init__(self, r):
         super().__init__()
         self.scalar = r
 
     def forward(self, x):
-        return MyScalarImpl.apply(x, self.scalar)
+        return CustomScalarImpl.apply(x, self.scalar)
 
 
 class Model(torch.nn.Module):
     def __init__(self):
         super().__init__()
         self.conv   = nn.Conv2d(1, 3, (3, 3), padding=1)
-        self.act    = MyScalar(1)
+        self.act    = CustomScalar(1)
     
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -52,7 +52,7 @@ def setup_seed(seed):
 
 def export_norm_onnx(input, model):
     current_path = os.path.dirname(__file__)
-    file = current_path + "/../../models/onnx/sample_myScalar.onnx"
+    file = current_path + "/../../models/onnx/sample_customScalar.onnx"
     torch.onnx.export(
         model         = model, 
         args          = (input,),

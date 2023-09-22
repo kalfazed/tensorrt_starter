@@ -37,7 +37,7 @@ LIBS          :=  -L "$(CUDA_DIR)/lib64" \
                   -lcudart -lcublas -lcudnn \
 									-lnvinfer -lnvonnxparser\
 									-lstdc++fs \
-									`pkg-config --libs opencv`
+									`pkg-config --libs opencv4`
 
 
 ifeq ($(DEBUG),1)

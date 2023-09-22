@@ -97,6 +97,7 @@ bool Model::infer(){
         return false;
     }
 
+    /* 反序列化从文件中读取的数据以unsigned char的vector保存*/
     vector<unsigned char> modelData;
     modelData = loadFile(mEnginePath);
     

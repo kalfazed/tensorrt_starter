@@ -83,5 +83,6 @@ std::string printTensor(float* tensor, int size, nvinfer1::Dims dim);
 std::string printTensorShape(nvinfer1::ITensor* tensor);
 std::string getPrecision(nvinfer1::DataType type);
 std::string getFileType(std::string filePath);
+int getDimSize(nvinfer1::Dims);
 
 #endif //__UTILS_HPP__

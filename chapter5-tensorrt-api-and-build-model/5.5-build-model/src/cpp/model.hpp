@@ -17,10 +17,11 @@ public:
     bool infer();
 
 private:
-    void init_data();
+    void init_data(nvinfer1::Dims, nvinfer1::Dims);
     bool build_from_onnx();
     bool build_from_weights();
 
+    /* 新添加的小模型 */
     void build_linear(nvinfer1::INetworkDefinition& network, std::map<std::string, nvinfer1::Weights> mWts);
     void build_conv(nvinfer1::INetworkDefinition& network, std::map<std::string, nvinfer1::Weights> mWts);
     void build_permute(nvinfer1::INetworkDefinition& network, std::map<std::string, nvinfer1::Weights> mWts);

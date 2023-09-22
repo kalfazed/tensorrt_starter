@@ -40,20 +40,25 @@ bool fileRead(const string &path, vector<unsigned char> &data, size_t &size){
     return true;
 }
 
+/* 常规的使用iostream读取文件的方法，可复用*/
 vector<unsigned char> loadFile(const string &file){
-    ifstream in(file, ios::in | ios::binary);
-    if (!in.is_open())
-        return {};
+    vector<uint8_t> data;
 
+    /* 通过ifstream读取文件，并保存为unsigned char的vector*/
+    ifstream in(file, ios::in | ios::binary);
+    if (!in.is_open()) return {};
+
+    /* 设置数据流位置到末尾，并获取文件大小*/
     in.seekg(0, ios::end);
     size_t length = in.tellg();
+    if (length <= 0) return {};
 
-    vector<uint8_t> data;
-    if (length > 0){
-        in.seekg(0, ios::beg);
-        data.resize(length);
-        in.read((char*)&data[0], length);
-    }
+    /* 通过ifstream读取文件，并保存为unsigned char的vector*/
+    in.seekg(0, ios::beg);
+    data.resize(length);
+    in.read((char*)&data[0], length); 
+    /* 这里可能比较绕，&data[0]的类型是字符指针，指向data这个vector中的第一个元素 */
+
     in.close();
     return data;
 }

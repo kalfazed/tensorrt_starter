@@ -158,7 +158,6 @@ bool Model::build_from_weights(){
     auto plan          = builder->buildSerializedNetwork(*network, *config);
     auto runtime       = make_unique<nvinfer1::IRuntime>(nvinfer1::createInferRuntime(logger));
 
-    cout << "file size is " << plan->size() << endl;
     auto f = fopen(mEnginePath.c_str(), "wb");
     fwrite(plan->data(), 1, plan->size(), f);
     fclose(f);
@@ -259,7 +258,7 @@ bool Model::infer(){
     cudaStreamCreate(&stream);
 
     /* 2. 初始化input，以及在host/device上分配空间 */
-    init_data();
+    init_data(input_dims, output_dims);
 
     /* 2. host->device的数据传递*/
     cudaMemcpyAsync(mInputDevice, mInputHost, mInputSize, cudaMemcpyKind::cudaMemcpyHostToDevice, stream);
@@ -469,19 +468,14 @@ void Model::build_cbr(nvinfer1::INetworkDefinition& network, map<string, nvinfer
     network.markOutput(*leaky->getOutput(0));
 }
 
-void Model::init_data(){
-    if (mWtsPath == "models/weights/sample_linear.weights") {
-        mInputSize = 5 * sizeof(float);
-        mOutputSize = 1 * sizeof(float);
-    } else {
-        mInputSize = 25 * sizeof(float);
-        mOutputSize = 27 * sizeof(float);
-    }
+void Model::init_data(nvinfer1::Dims input_dims, nvinfer1::Dims output_dims){
+    mInputSize  = getDimSize(input_dims) * sizeof(float);
+    mOutputSize = getDimSize(output_dims) * sizeof(float);
 
     cudaMallocHost(&mInputHost, mInputSize);
     cudaMallocHost(&mOutputHost, mOutputSize);
 
-    if (mWtsPath == "models/weights/sample_linear.weights") {
+    if (mInputSize == 5) {
         mInputHost = input_1x5;
     } else {
         mInputHost = input_5x5;
