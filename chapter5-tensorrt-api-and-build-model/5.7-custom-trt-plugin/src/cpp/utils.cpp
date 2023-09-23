@@ -151,6 +151,14 @@ string printTensor(float* tensor, int size, nvinfer1::Dims dim) {
     }
 }
 
+int getDimSize(nvinfer1::Dims dims) {
+    int size = 1;
+    for (int j = 0; j < dims.nbDims; j++) {
+        size *= dims.d[j];
+    }
+    return size;
+}
+
 string printTensorShape(nvinfer1::ITensor* tensor){
     string str;
     str += "[";
@@ -203,7 +211,6 @@ string getPrecision(nvinfer1::DataType type) {
         case nvinfer1::DataType::kHALF:   return "FP16";
         case nvinfer1::DataType::kINT32:  return "INT32";
         case nvinfer1::DataType::kINT8:   return "INT8";
-        case nvinfer1::DataType::kUINT8:  return "UINT8";
         default:                          return "unknown";
     }
 }

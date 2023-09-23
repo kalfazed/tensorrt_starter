@@ -1,5 +1,5 @@
-#ifndef __MYSCARLAR_PLUGIN_HPP
-#define __MYSCARLAR_PLUGIN_HPP
+#ifndef __CUSTOM_SCARLAR_PLUGIN_HPP
+#define __CUSTOM_SCARLAR_PLUGIN_HPP
 
 #include "NvInferRuntime.h"
 #include "NvInferRuntimeCommon.h"
@@ -11,7 +11,7 @@ using namespace nvinfer1;
 
 namespace custom 
 {
-static const char* PLUGIN_NAME {"myscalar"};
+static const char* PLUGIN_NAME {"customScalar"};
 static const char* PLUGIN_VERSION {"1"};
 
 
@@ -21,7 +21,7 @@ static const char* PLUGIN_VERSION {"1"};
 *  - PluginCreator类是插件工厂类，用来根据需求创建插件。调用插件是从这里走的
 */
 
-class MyScalarPlugin : public IPluginV2DynamicExt {
+class CustomScalarPlugin : public IPluginV2DynamicExt {
 public:
     /*
      * 我们在编译的过程中会有大概有三次创建插件实例的过程
@@ -29,11 +29,11 @@ public:
      * 2. clone阶段: parse完了以后，TensorRT为了去优化这个插件会复制很多副本出来来进行很多优化测试。也可以在推理的时候供不同的context创建插件的时候使用
      * 3. deseriaze阶段: 将序列化好的Plugin进行反序列化的时候也需要创建插件的实例
     */
-    MyScalarPlugin() = delete; //默认构造函数，一般直接delete
-    MyScalarPlugin(const std::string &name, float scalar);  //parse, clone时候用的构造函数
-    MyScalarPlugin(const std::string &name, const void* buffer, size_t length); //反序列化的时候用的构造函数
+    CustomScalarPlugin() = delete; //默认构造函数，一般直接delete
+    CustomScalarPlugin(const std::string &name, float scalar);  //parse, clone时候用的构造函数
+    CustomScalarPlugin(const std::string &name, const void* buffer, size_t length); //反序列化的时候用的构造函数
 
-    ~MyScalarPlugin();
+    ~CustomScalarPlugin();
 
     /* 有关获取plugin信息的方法 */
     const char* getPluginType() const noexcept override;
@@ -68,10 +68,10 @@ private:
     } mParams; // 当这个插件op需要有参数的时候，把这些参数定义为成员变量，可以单独拿出来定义，也可以像这样定义成一个结构体
 };
 
-class MyScalarPluginCreator : public IPluginCreator {
+class CustomScalarPluginCreator : public IPluginCreator {
 public:
-    MyScalarPluginCreator();  //初始化mFC以及mAttrs
-    ~MyScalarPluginCreator();
+    CustomScalarPluginCreator();  //初始化mFC以及mAttrs
+    ~CustomScalarPluginCreator();
 
     const char*                     getPluginName() const noexcept override;
     const char*                     getPluginVersion() const noexcept override;
@@ -90,4 +90,4 @@ private:
 
 } // namespace custom
 
-#endif __MYSCARLAR_PLUGIN_HPP
+#endif __CUSTOM_SCARLAR_PLUGIN_HPP

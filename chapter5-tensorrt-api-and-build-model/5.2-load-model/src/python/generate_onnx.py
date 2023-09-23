@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.onnx
 import onnxsim
 import onnx
+import os
 
 class Model(torch.nn.Module):
     def __init__(self):
@@ -18,9 +19,11 @@ def setup_seed(seed):
     torch.cuda.manual_seed_all(seed)
 
 def export_norm_onnx():
+    current_path = os.path.dirname(__file__)
+    file = current_path + "/../../models/onnx/sample.onnx"
+
     input   = torch.rand(1, 10)
     model   = Model()
-    file    = "../models/sample.onnx"
     torch.onnx.export(
         model         = model, 
         args          = (input,),

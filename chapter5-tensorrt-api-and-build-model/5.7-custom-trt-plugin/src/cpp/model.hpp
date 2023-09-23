@@ -26,7 +26,7 @@ public:
     bool infer();
 
 private:
-    void init_data();
+    void init_data(nvinfer1::Dims input_dims, nvinfer1::Dims output_dims);
     bool build_from_onnx();
     bool build_from_weights();
 

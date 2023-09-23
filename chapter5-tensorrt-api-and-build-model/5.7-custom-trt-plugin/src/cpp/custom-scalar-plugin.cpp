@@ -1,9 +1,9 @@
-#include "myscalar-plugin.hpp"
+#include "custom-scalar-plugin.hpp"
 #include <map>
 #include <cstring>
 
-/* myScalar的核函数接口部分 */
-void myScalarImpl(const float* inputs, float* outputs, const float scalar, const int nElements, cudaStream_t stream);
+/* customScalar的核函数接口部分 */
+void customScalarImpl(const float* inputs, float* outputs, const float scalar, const int nElements, cudaStream_t stream);
 
 using namespace nvinfer1;
 
@@ -12,91 +12,91 @@ namespace custom
 /******************************************************************/
 /********************注册PluginCreator*****************************/
 /******************************************************************/
-REGISTER_TENSORRT_PLUGIN(MyScalarPluginCreator);
+REGISTER_TENSORRT_PLUGIN(CustomScalarPluginCreator);
 
 /******************************************************************/
 /*********************静态变量的申明*******************************/
 /******************************************************************/
-PluginFieldCollection   MyScalarPluginCreator::mFC {};
-std::vector<PluginField> MyScalarPluginCreator::mAttrs;
+PluginFieldCollection   CustomScalarPluginCreator::mFC {};
+std::vector<PluginField> CustomScalarPluginCreator::mAttrs;
 
 /******************************************************************/
-/*********************MyScalarPlugin实现部分***********************/
+/*********************CustomScalarPlugin实现部分***********************/
 /******************************************************************/
 
-MyScalarPlugin::MyScalarPlugin(const std::string &name, float scalar):
+CustomScalarPlugin::CustomScalarPlugin(const std::string &name, float scalar):
     mName(name)
 {
     mParams.scalar = scalar;
 }
 
-MyScalarPlugin::MyScalarPlugin(const std::string &name, const void* buffer, size_t length):
+CustomScalarPlugin::CustomScalarPlugin(const std::string &name, const void* buffer, size_t length):
     mName(name)
 {
     memcpy(&mParams, buffer, sizeof(mParams));
 }
 
-MyScalarPlugin::~MyScalarPlugin()
+CustomScalarPlugin::~CustomScalarPlugin()
 {
     /* 这里的析构函数不需要做任何事情，生命周期结束的时候会自动调用terminate和destroy */
     return;
 }
 
-const char* MyScalarPlugin::getPluginType() const noexcept
+const char* CustomScalarPlugin::getPluginType() const noexcept
 {
     /* 一般来说所有插件的实现差不多一致 */
     return PLUGIN_NAME;
 }
 
-const char* MyScalarPlugin::getPluginVersion() const noexcept
+const char* CustomScalarPlugin::getPluginVersion() const noexcept
 {
     /* 一般来说所有插件的实现差不多一致 */
     return PLUGIN_VERSION;
 }
 
-int32_t MyScalarPlugin::getNbOutputs() const noexcept
+int32_t CustomScalarPlugin::getNbOutputs() const noexcept
 {
     /* 一般来说所有插件的实现差不多一致 */
     return 1;
 }
 
-size_t MyScalarPlugin::getSerializationSize() const noexcept
+size_t CustomScalarPlugin::getSerializationSize() const noexcept
 {
     /* 如果把所有的参数给放在mParams中的话, 一般来说所有插件的实现差不多一致 */
     return sizeof(mParams);
 }
 
-const char* MyScalarPlugin::getPluginNamespace() const noexcept
+const char* CustomScalarPlugin::getPluginNamespace() const noexcept
 {
     /* 一般来说所有插件的实现差不多一致 */
     return mNamespace.c_str();
 }
 
-DataType MyScalarPlugin::getOutputDataType(int32_t index, DataType const* inputTypes, int32_t nbInputs) const noexcept
+DataType CustomScalarPlugin::getOutputDataType(int32_t index, DataType const* inputTypes, int32_t nbInputs) const noexcept
 {
     /* 一般来说所有插件的实现差不多一致 */
     return inputTypes[0];
 }
 
-DimsExprs MyScalarPlugin::getOutputDimensions(int32_t outputIndex, const DimsExprs* inputs, int32_t nbInputs, IExprBuilder &exprBuilder) noexcept
+DimsExprs CustomScalarPlugin::getOutputDimensions(int32_t outputIndex, const DimsExprs* inputs, int32_t nbInputs, IExprBuilder &exprBuilder) noexcept
 {
     /* 一般来说所有插件的实现差不多一致 */
     return inputs[0];
 }
 
-size_t MyScalarPlugin::getWorkspaceSize(const PluginTensorDesc *inputs, int32_t nbInputs, const PluginTensorDesc *outputs, int32_t nbOutputs) const noexcept
+size_t CustomScalarPlugin::getWorkspaceSize(const PluginTensorDesc *inputs, int32_t nbInputs, const PluginTensorDesc *outputs, int32_t nbOutputs) const noexcept
 {
     /* 一般来说会使用builder创建时用的workspaceSize所以这里一般什么都不做 */
     return 0;
 }
 
-int32_t MyScalarPlugin::initialize() noexcept
+int32_t CustomScalarPlugin::initialize() noexcept
 {
     /* 这个一般会根据情况而定，建议每个插件都有一个自己的实现 */
     return 0;
 }
 
-void MyScalarPlugin::terminate() noexcept 
+void CustomScalarPlugin::terminate() noexcept 
 {
     /* 
      * 这个是析构函数调用的函数。一般和initialize配对的使用
@@ -105,7 +105,7 @@ void MyScalarPlugin::terminate() noexcept
     return;
 }
 
-void MyScalarPlugin::serialize(void *buffer) const noexcept
+void CustomScalarPlugin::serialize(void *buffer) const noexcept
 {
     /* 序列化也根据情况而定，每个插件自己定制 */
     memcpy(buffer, &mParams, sizeof(mParams));
@@ -113,14 +113,14 @@ void MyScalarPlugin::serialize(void *buffer) const noexcept
 
 }
 
-void MyScalarPlugin::destroy() noexcept
+void CustomScalarPlugin::destroy() noexcept
 {
     /* 一般来说所有插件的实现差不多一致 */
     delete this;
     return;
 }
 
-int32_t MyScalarPlugin::enqueue(
+int32_t CustomScalarPlugin::enqueue(
     const PluginTensorDesc* inputDesc, const PluginTensorDesc* outputDesc, 
     const void* const* inputs, void* const* outputs, 
     void* workspace, cudaStream_t stream) noexcept
@@ -134,7 +134,7 @@ int32_t MyScalarPlugin::enqueue(
         nElements *= inputDesc[0].dims.d[i];
     }
 
-    myScalarImpl(
+    customScalarImpl(
             static_cast<const float*>(inputs[0]),
             static_cast<float*>(outputs[0]), 
             mParams.scalar, 
@@ -144,19 +144,19 @@ int32_t MyScalarPlugin::enqueue(
     return 0;
 }
 
-IPluginV2DynamicExt* MyScalarPlugin::clone() const noexcept
+IPluginV2DynamicExt* CustomScalarPlugin::clone() const noexcept
 {
     /* 克隆一个Plugin对象，所有的插件的实现都差不多*/
-    auto p = new MyScalarPlugin(mName, &mParams, sizeof(mParams));
+    auto p = new CustomScalarPlugin(mName, &mParams, sizeof(mParams));
     p->setPluginNamespace(mNamespace.c_str());
     return p;
 }
 
-bool MyScalarPlugin::supportsFormatCombination(int32_t pos, const PluginTensorDesc* inOut, int32_t nbInputs, int32_t nbOutputs) noexcept
+bool CustomScalarPlugin::supportsFormatCombination(int32_t pos, const PluginTensorDesc* inOut, int32_t nbInputs, int32_t nbOutputs) noexcept
 {
     /* 
      * 设置这个Plugin支持的Datatype以及TensorFormat, 每个插件都有自己的定制
-     * 作为案例展示，这个myScalar插件只支持FP32，如果需要扩展到FP16以及INT8，需要在这里设置
+     * 作为案例展示，这个customScalar插件只支持FP32，如果需要扩展到FP16以及INT8，需要在这里设置
     */
     
     switch (pos) {
@@ -170,33 +170,33 @@ bool MyScalarPlugin::supportsFormatCombination(int32_t pos, const PluginTensorDe
     return false;
 }
 
-void MyScalarPlugin::configurePlugin(const DynamicPluginTensorDesc* in, int32_t nbInputs, const DynamicPluginTensorDesc* out, int32_t nbOutputs) noexcept
+void CustomScalarPlugin::configurePlugin(const DynamicPluginTensorDesc* in, int32_t nbInputs, const DynamicPluginTensorDesc* out, int32_t nbOutputs) noexcept
 {
     /* 一般不需要做任何使用，所有插件实现都差不多 */
     return;
 }
-void MyScalarPlugin::setPluginNamespace(const char* pluginNamespace) noexcept
+void CustomScalarPlugin::setPluginNamespace(const char* pluginNamespace) noexcept
 {
     /* 所有插件的实现都差不多 */
     mNamespace = pluginNamespace;
     return;
 }
-void MyScalarPlugin::attachToContext(cudnnContext* contextCudnn, cublasContext* contextCublas, IGpuAllocator *gpuAllocator) noexcept 
+void CustomScalarPlugin::attachToContext(cudnnContext* contextCudnn, cublasContext* contextCublas, IGpuAllocator *gpuAllocator) noexcept 
 {
     /* 一般不需要做任何使用，所有插件实现都差不多 */
     return;
 }
-void MyScalarPlugin::detachFromContext() noexcept 
+void CustomScalarPlugin::detachFromContext() noexcept 
 {
     /* 一般不需要做任何使用，所有插件实现都差不多 */
     return;
 }
 
 /******************************************************************/
-/*********************MyScalarPluginCreator部分********************/
+/*********************CustomScalarPluginCreator部分********************/
 /******************************************************************/
 
-MyScalarPluginCreator::MyScalarPluginCreator()
+CustomScalarPluginCreator::CustomScalarPluginCreator()
 {
     /* 
      * 每个插件的Creator构造函数需要定制，主要就是获取参数以及传递参数
@@ -210,30 +210,30 @@ MyScalarPluginCreator::MyScalarPluginCreator()
     mFC.fields   = mAttrs.data();
 }
 
-MyScalarPluginCreator::~MyScalarPluginCreator()
+CustomScalarPluginCreator::~CustomScalarPluginCreator()
 {
     /* 一般不需要做任何使用，所有插件实现都差不多 */
 }
 
-const char* MyScalarPluginCreator::getPluginName() const noexcept
+const char* CustomScalarPluginCreator::getPluginName() const noexcept
 {
     /* 所有插件实现都差不多 */
     return PLUGIN_NAME;
 }
 
-const char* MyScalarPluginCreator::getPluginVersion() const noexcept 
+const char* CustomScalarPluginCreator::getPluginVersion() const noexcept 
 {
     /* 所有插件实现都差不多 */
     return PLUGIN_VERSION;
 }
 
-const char* MyScalarPluginCreator::getPluginNamespace() const noexcept
+const char* CustomScalarPluginCreator::getPluginNamespace() const noexcept
 {
     /* 所有插件实现都差不多 */
     return mNamespace.c_str();
 }
 
-IPluginV2* MyScalarPluginCreator::createPlugin(const char* name, const PluginFieldCollection* fc) noexcept 
+IPluginV2* CustomScalarPluginCreator::createPlugin(const char* name, const PluginFieldCollection* fc) noexcept 
 {
     /*
      * 通过Creator创建一个Plugin的实现，这个时候会通过mFC中取出需要的参数, 并实例化一个Plugin
@@ -247,24 +247,24 @@ IPluginV2* MyScalarPluginCreator::createPlugin(const char* name, const PluginFie
             *paramMap[fc->fields[i].name] = *reinterpret_cast<const float*>(fc->fields[i].data);
         }
     }
-    return new MyScalarPlugin(name, scalar);
+    return new CustomScalarPlugin(name, scalar);
     
 }
 
-IPluginV2* MyScalarPluginCreator::deserializePlugin(const char* name, const void* serialData, size_t serialLength) noexcept
+IPluginV2* CustomScalarPluginCreator::deserializePlugin(const char* name, const void* serialData, size_t serialLength) noexcept
 {
     /* 反序列化插件其实就是实例化一个插件，所有插件实现都差不多 */
-    return new MyScalarPlugin(name, serialData, serialLength);
+    return new CustomScalarPlugin(name, serialData, serialLength);
 }
 
-void MyScalarPluginCreator::setPluginNamespace(const char* pluginNamespace) noexcept
+void CustomScalarPluginCreator::setPluginNamespace(const char* pluginNamespace) noexcept
 {
     /* 所有插件实现都差不多 */
     mNamespace = pluginNamespace;
     return;
 }
 
-const PluginFieldCollection* MyScalarPluginCreator::getFieldNames() noexcept
+const PluginFieldCollection* CustomScalarPluginCreator::getFieldNames() noexcept
 {
     /* 所有插件实现都差不多 */
     return &mFC;

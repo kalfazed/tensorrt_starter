@@ -8,7 +8,8 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-    Model model("models/onnx/resnet50.onnx");
+    Model model("models/onnx/sample.onnx");
+    // Model model("models/onnx/resnet50.onnx");
 
     if(!model.build()){
         LOGE("fail in building model");
