@@ -5,32 +5,32 @@ import onnxruntime
 import onnx
 import onnxsim
 import os
+import numpy as np
 from collections import OrderedDict
 
-class CustomScalarImpl(torch.autograd.Function):
+class CustomLeakyReLUImpl(torch.autograd.Function):
     @staticmethod
-    def symbolic(g, x, r, s):
-        return g.op("custom::customScalar", x, scalar_f=r, scale_f=s)
+    def symbolic(g, x, alpha):
+        return g.op("custom::customLeakyReLU", x, alpha_f=alpha)
 
     @staticmethod
-    def forward(ctx, x, r, s):
-        return (x + r) * s
+    def forward(ctx, x, alpha):
+        
 
-class CustomScalar(nn.Module):
-    def __init__(self, r, s):
+class CustomLeakyReLU(nn.Module):
+    def __init__(self, alpha):
         super().__init__()
-        self.scalar = r
-        self.scale  = s
+        self.alpha = alpha
 
     def forward(self, x):
-        return CustomScalarImpl.apply(x, self.scalar, self.scale)
+        return CustomLeakyReLUImpl.apply(x, self.alpha)
 
 
 class Model(torch.nn.Module):
     def __init__(self):
         super().__init__()
         self.conv   = nn.Conv2d(1, 3, (3, 3), padding=1)
-        self.act    = CustomScalar(1, 10)
+        self.act    = CustomLeakyReLU(0.01)
     
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -53,14 +53,14 @@ def setup_seed(seed):
 
 def export_norm_onnx(input, model):
     current_path = os.path.dirname(__file__)
-    file = current_path + "/../../models/onnx/sample_customScalar.onnx"
+    file = current_path + "/../../models/onnx/sample_customLeakyReLU.onnx"
     torch.onnx.export(
         model         = model, 
         args          = (input,),
         f             = file,
         input_names   = ["input0"],
         output_names  = ["output0"],
-        opset_version = 15)
+        opset_version = 11)
     print("Finished normal onnx export")
 
     # check the exported onnx model
@@ -82,6 +82,7 @@ def eval(input, model):
 
 if __name__ == "__main__":
     setup_seed(1)
+    torch.set_printoptions(precision=4, sci_mode=False)
     input = torch.tensor([[[
         [0.7576, 0.2793, 0.4031, 0.7347, 0.0293],
         [0.7999, 0.3971, 0.7544, 0.5695, 0.4388],

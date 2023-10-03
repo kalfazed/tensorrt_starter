@@ -5,9 +5,10 @@ include $(CONFIG)
 include $(CONFIG_LOCAL)
 
 BUILD_PATH    :=  build
-SRC_PATH      :=  src
+SRC_PATH      :=  src/cpp
 INC_PATH      :=  include
 CUDA_DIR      :=  /usr/local/cuda-$(CUDA_VER)
+TARGET_SO     :=  lib/custom-plugin.so
 
 CXX_SRC       +=  $(wildcard $(SRC_PATH)/*.cpp)
 KERNELS_SRC   :=  $(wildcard $(SRC_PATH)/*.cu)
@@ -28,15 +29,20 @@ CUDAFLAGS     :=  --shared -Xcompiler -fPIC
 
 INCS          :=  -I $(CUDA_DIR)/include \
                   -I $(SRC_PATH) \
-									-I $(OPENCV_INSTALL_DIR) \
-									-I $(INC_PATH)
+				  -I $(OPENCV_INSTALL_DIR) \
+				  -I $(TENSORRT_INSTALL_DIR)/include \
+				  -I $(INC_PATH)
 
 LIBS          :=  -L "$(CUDA_DIR)/lib64" \
+                  -L "$(TENSORRT_INSTALL_DIR)/lib" \
                   -lcudart -lcublas -lcudnn \
-									`pkg-config --libs opencv`
+				  -lnvinfer -lnvonnxparser\
+				  -lstdc++fs \
+				  `pkg-config --libs opencv4 2>/dev/null || pkg-config --libs opencv`
+
 
 ifeq ($(DEBUG),1)
-CUDAFLAGS     +=  -g -O0 -G
+CUDAFLAGS     +=  -g -G
 CXXFLAGS      +=  -g -O0
 else
 CUDAFLAGS     +=  -O3
@@ -51,15 +57,15 @@ CUDAFLAGS     +=  -w
 CXXFLAGS      +=  -w
 endif
 
-all:
-	$(MAKE) $(APP)
+all: 
+	$(MAKE) $(TARGET_SO)
 
 update: $(APP)
 	@echo finished updating $<
 
-$(APP): $(APP_DEPS) $(APP_OBJS)
-	@$(CUCC) $(APP_OBJS) -o $@ $(LIBS) $(INCS)
-	@echo finished building $@. Have fun!!
+$(TARGET_SO): $(APP_DEPS) $(APP_OBJS)
+	@$(CUCC) $(CUDAFLAGS) $(APP_OBJS) -o $@ $(LIBS) $(INCS)
+	@echo finished building custom_plugin.so
 
 show: 
 	@echo $(BUILD_PATH)
@@ -71,30 +77,30 @@ show:
 clean:
 	rm -rf $(APP)
 	rm -rf build
-	rm -rf results/*
 
 ifneq ($(MAKECMDGOALS), clean)
 -include $(APP_MKS)
 endif
 
+
 # Compile CXX
-$(BUILD_PATH)/%.cpp.o: $(SRC_PATH)/%.cpp
+$(BUILD_PATH)/%.cpp.o: $(SRC_PATH)/%.cpp 
 	@echo Compile CXX $@
 	@mkdir -p $(BUILD_PATH)
-	@$(CC) -o $@ -c $< $(CXXFLAGS) $(INCS)
+	@$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCS)
 $(BUILD_PATH)/%.cpp.mk: $(SRC_PATH)/%.cpp
 	@echo Compile Dependence CXX $@
 	@mkdir -p $(BUILD_PATH)
-	@$(CC) -M $< -MF $@ -MT $(@:.cpp.mk=.cpp.o) $(CXXFLAGS) $(INCS)
+	@$(CXX) -M $< -MF $@ -MT $(@:.cpp.mk=.cpp.o) $(CXXFLAGS) $(INCS) 
 
 # Compile CUDA
 $(BUILD_PATH)/%.cu.o: $(SRC_PATH)/%.cu
 	@echo Compile CUDA $@
 	@mkdir -p $(BUILD_PATH)
 	@$(CUCC) -o $@ -c $< $(CUDAFLAGS) $(INCS)
-$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)/%.cu
+$(BUILD_PATH)/%.cu.mk: $(SRC_PATH)%.cu
 	@echo Compile Dependence CUDA $@
 	@mkdir -p $(BUILD_PATH)
-	@$(CUCC) -M $< -MF $@ -MT $(@:.cu.mk=.cu.o) $(CUDAFLAGS) $(INCS)
+	@$(CUCC) -M $< -MF $@ -MT $(@:.cu.mk=.cu.o) $(CUDAFLAGS)
 
 .PHONY: all update show clean 

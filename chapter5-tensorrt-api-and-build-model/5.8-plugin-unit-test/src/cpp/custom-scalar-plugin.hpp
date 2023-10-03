@@ -41,6 +41,13 @@ public:
     int32_t     getNbOutputs() const noexcept override;
     size_t      getSerializationSize() const noexcept override;
     const char* getPluginNamespace() const noexcept override;
+    DataType    getOutputDataType(int32_t index, DataType const* inputTypes, int32_t nbInputs) const noexcept override;
+    DimsExprs   getOutputDimensions(int32_t outputIndex, const DimsExprs* input, int32_t nbInputs, IExprBuilder &exprBuilder) noexcept override;
+    size_t      getWorkspaceSize(const PluginTensorDesc *inputs, int32_t nbInputs, const PluginTensorDesc *outputs, int32_t nbOutputs) const noexcept override;
+
+    int32_t     initialize() noexcept override;
+    void        terminate() noexcept override;
+    void        serialize(void *buffer) const noexcept override;
     void        destroy() noexcept override;
     int32_t     enqueue(const PluginTensorDesc* inputDesc, const PluginTensorDesc* outputDesc, const void* const* ionputs, void* const* outputs, void* workspace, cudaStream_t stream) noexcept override; // 实际插件op执行的地方，具体实现forward的推理的CUDA/C++实现会放在这里面
     IPluginV2DynamicExt* clone() const noexcept override;

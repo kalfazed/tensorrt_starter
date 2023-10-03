@@ -9,7 +9,8 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
     // Model model("models/onnx/sample_mySelu.onnx", Model::precision::FP32);
-    Model model("models/onnx/sample_customScalar.onnx", Model::precision::FP32);
+    // Model model("models/onnx/sample_customScalar.onnx", Model::precision::FP32);
+    Model model("models/onnx/sample_customLeakyReLU.onnx", Model::precision::FP16);
     if(!model.build()){
         LOGE("fail in building model");
         return 0;
