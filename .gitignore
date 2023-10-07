@@ -35,6 +35,7 @@
 .cache/
 archive/
 build/
+config/
 results/
 compile_commands.json
 trt-cuda
