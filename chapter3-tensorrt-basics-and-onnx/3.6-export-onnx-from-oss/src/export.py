@@ -65,6 +65,17 @@ def parse_option():
 
     return args, config
 
+class Model(torch.nn.Module):
+    def __init__(self, backbone):
+        super().__init__()
+        self.backbone = backbone
+        self.softmax  = torch.nn.Softmax()
+
+    def forward(self, x):
+        x = self.backbone(x)
+        x = self.softmax(x)
+        return x
+
 def export_norm_onnx(model, file, input):
     torch.onnx.export(
         model         = model, 
@@ -72,7 +83,7 @@ def export_norm_onnx(model, file, input):
         f             = file,
         input_names   = ["input0"],
         output_names  = ["output0"],
-        opset_version = 9)
+        opset_version = 17)
 
     print("Finished normal onnx export")
 
@@ -88,14 +99,15 @@ def export_norm_onnx(model, file, input):
     onnx.save(model_onnx, file)
 
 def main(config):
-    model = build_model(config)
+    backbone = build_model(config)
+    model = Model(backbone=backbone)
 
-    input       = torch.rand(1, 3, 224, 224)
+    input = torch.rand(1, 3, 224, 224)
 
     model.eval()
-    export_norm_onnx(model, "../models/swin-tiny-after-simplify-opset9.rnnx", input)
+    # export_norm_onnx(model, "../models/swin-tiny-after-simplify-opset9.rnnx", input)
     # export_norm_onnx(model, "../models/swin-tiny-after-simplify-opset12.onnx", input)
-    # export_norm_onnx(model, "../models/swin-tiny-after-simplify-opset17.onnx", input)
+    export_norm_onnx(model, "../models/swin-tiny-after-simplify-opset17.onnx", input)
 
 
 if __name__ == '__main__':

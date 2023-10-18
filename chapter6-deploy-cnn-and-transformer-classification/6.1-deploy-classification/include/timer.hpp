@@ -48,7 +48,7 @@ void Timer::duration_cpu(std::string msg){
     else if(std::is_same<span, ns>::value) { str = "ns"; }
 
     std::chrono::duration<double, span> time = _cStop - _cStart;
-    LOG("%-60s uses %.6lf %s", msg.c_str(), time.count(), str.c_str());
+    LOGV("%-60s uses %.6lf %s", msg.c_str(), time.count(), str.c_str());
 }
 
 #endif //__TIMER_HPP__

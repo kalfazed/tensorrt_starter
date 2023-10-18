@@ -28,26 +28,16 @@ static void __kernelCheck(const char* file, const int line) {
     }
 }
 
-struct InferDeleter
-{
-    template <typename T>
-    void operator()(T* obj) const
-    {
-        delete obj;
-    }
-};
-
-template <typename T>
-using make_unique = std::unique_ptr<T, InferDeleter>;
-
-
 bool fileExists(const std::string fileName);
 bool fileRead(const std::string &path, std::vector<unsigned char> &data, size_t &size);
+// std::string getEnginePath(std::string onnxPath, model::precision prec);
 std::string getEnginePath(std::string onnxPath);
-std::vector<unsigned char> loadFile(const std::string &path);
+std::string getFileType(std::string filePath);
+std::string getFileName(std::string filePath);
 std::string printDims(const nvinfer1::Dims dims);
 std::string printTensor(float* tensor, int size);
 std::string printTensorShape(nvinfer1::ITensor* tensor);
 std::string getPrecision(nvinfer1::DataType type);
+std::vector<unsigned char> loadFile(const std::string &path);
 
 #endif //__UTILS_HPP__

@@ -1,11 +1,11 @@
-CONFIG        :=  ../config/Makefile.config
+CONFIG        :=  ../../config/Makefile.config
 CONFIG_LOCAL  :=  ./config/Makefile.config
 
 include $(CONFIG)
 include $(CONFIG_LOCAL)
 
 BUILD_PATH    :=  build
-SRC_PATH      :=  src
+SRC_PATH      :=  src/cpp
 INC_PATH      :=  include
 CUDA_DIR      :=  /usr/local/cuda-$(CUDA_VER)
 
@@ -28,16 +28,16 @@ CUDAFLAGS     :=  --shared -Xcompiler -fPIC
 
 INCS          :=  -I $(CUDA_DIR)/include \
                   -I $(SRC_PATH) \
-									-I $(OPENCV_INSTALL_DIR) \
-									-I $(TENSORRT_INSTALL_DIR)/include \
-									-I $(INC_PATH)
+				  -I $(OPENCV_INSTALL_DIR) \
+				  -I $(TENSORRT_INSTALL_DIR)/include \
+				  -I $(INC_PATH)
 
 LIBS          :=  -L "$(CUDA_DIR)/lib64" \
-									-L "$(TENSORRT_INSTALL_DIR)/lib" \
-                  -lcudart -lcublas -lcudnn \
-									-lnvinfer -lnvonnxparser\
-									-lstdc++fs \
-									`pkg-config --libs opencv`
+                  -L "$(TENSORRT_INSTALL_DIR)/lib" \
+				  -lcudart -lcublas -lcudnn \
+				  -lnvinfer -lnvonnxparser\
+				  -lstdc++fs \
+				  `pkg-config --libs opencv`
 
 
 ifeq ($(DEBUG),1)
@@ -57,13 +57,14 @@ CXXFLAGS      +=  -w
 endif
 
 all: 
-	$(MAKE) $(APP)
+	@mkdir -p bin
+	@bear --output config/compile_commands.json -- $(MAKE) $(APP)
 
 update: $(APP)
 	@echo finished updating $<
 
 $(APP): $(APP_DEPS) $(APP_OBJS)
-	@$(CXX) $(APP_OBJS) -o $@ $(LIBS) $(INCS)
+	@$(CXX) $(APP_OBJS) -o bin/$@ $(LIBS) $(INCS)
 	@echo finished building $@. Have fun!!
 
 show: 
@@ -76,6 +77,8 @@ show:
 clean:
 	rm -rf $(APP)
 	rm -rf build
+	rm -rf config/compile_commands.json
+	rm -rf bin
 
 ifneq ($(MAKECMDGOALS), clean)
 -include $(APP_MKS)

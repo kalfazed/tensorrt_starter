@@ -2,7 +2,7 @@
 #define __PREPROCESS_HPP__
 
 #include "opencv2/opencv.hpp"
-#include "timer.hpp"
+#include "trt_timer.hpp"
 
 namespace process{
 
