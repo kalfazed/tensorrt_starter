@@ -40,11 +40,11 @@ def export_norm_onnx(model, file, input):
 def get_backbone(type, dir):
     # Here, we only exported pretrained model in torchvision model zoo
     if type == "resnet":
-        backbone = torchvision.models.resnet18(pretrained=True)
-        file  = dir + "resnet18.onnx"
+        backbone = torchvision.models.resnet50(pretrained=True)
+        file  = dir + "resnet50.onnx"
     elif type == "vgg":
-        backbone = torchvision.models.vgg16(pretrained=True)
-        file  = dir + "vgg16.onnx"
+        backbone = torchvision.models.vgg19_bn(pretrained=True)
+        file  = dir + "vgg19.onnx"
     elif type == "mobilenet":
         backbone = torchvision.models.mobilenet_v2(pretrained=True)
         file  = dir + "mobilenetV2.onnx"
@@ -72,7 +72,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--type", type=str, default="resnet")
-    parser.add_argument("-d", "--dir", type=str, default="../models/")
+    parser.add_argument("-d", "--dir", type=str, default="../../models/onnx/")
     
     opt = parser.parse_args()
     main(opt)
