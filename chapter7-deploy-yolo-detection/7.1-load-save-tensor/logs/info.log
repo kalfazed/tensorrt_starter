@@ -62,3 +62,6 @@
 [2023-10-25::00:45:52] [INFO]: Succeeded loaded data as .npz file!
 [2023-10-25::00:45:52] [INFO]: Tensor shape:(3, 2, 4, 4)
 [2023-10-25::00:45:52] [INFO]: Tensor values:
+[2023-10-26::00:23:43] [INFO]: Succeeded loaded data as .npz file!
+[2023-10-26::00:23:43] [INFO]: Tensor shape:(3, 2, 4, 4)
+[2023-10-26::00:23:43] [INFO]: Tensor values:

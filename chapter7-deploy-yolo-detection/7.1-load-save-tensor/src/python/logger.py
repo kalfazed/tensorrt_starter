@@ -60,6 +60,3 @@ def test_logger(log_path):
     logger.warning('warning')
     logger.error('error')
     logger.critical('critical')
-
-if __name__ == '__main__':
-    test_logger("test.log")

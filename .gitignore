@@ -33,13 +33,14 @@
 
 # Others
 .cache/
+__pycache__/
 archive/
 build/
 results/
 compile_commands.json
 trt-cuda
 trt-infer
-.clangd
+# .clangd
 *.tar
 *.pth
 *.onnx
