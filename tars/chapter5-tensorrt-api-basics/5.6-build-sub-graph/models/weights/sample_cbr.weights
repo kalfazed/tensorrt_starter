@@ -1,0 +1,9 @@
+8
+conv.weight 27 be578f59 3d5de7fd 3c4bcbc7 3d2a83cd be04920c bf03231a be586bd2 3f0d08f7 bc005dd1 3f243af1 be908d47 3d8a930a bef7665f bbe3706a be8e998f be2627c3 be8c1e94 bd6ac825 bb069f5f bef8ff71 3ee06550 be4430e3 bd4e884f be8ad2f9 be67ab35 be007c56 be1c17f5
+conv.bias 3 3e3986f6 bea6d5da 3e53997b
+norm.weight 3 3f866666 3f866666 3f866666
+norm.bias 3 3d4ccccd 3d4ccccd 3d4ccccd
+norm.running_mean 3 00000000 00000000 00000000
+norm.running_var 3 3f800000 3f800000 3f800000
+norm.num_batches_tracked 1 00000000
+linear.weight 5 be3a4dc8 3f1e43aa 3d20cfdd 3f6d1bf0 bf75ab18

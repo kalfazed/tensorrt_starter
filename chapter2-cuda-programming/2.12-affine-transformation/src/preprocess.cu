@@ -50,7 +50,7 @@ struct AffineMatrix{
 };
 
 __device__ void affine_transformation(
-    float trans_matrix[6], 
+    float* trans_matrix, 
     int src_x, int src_y, 
     float* tar_x, float* tar_y)
 {
@@ -213,10 +213,9 @@ __global__ void resize_bilinear_BGR2RGB_shift_kernel(
 }
 
 __global__ void resize_warpaffine_BGR2RGB_kernel(
-    uint8_t*  tar, 
-    uint8_t*  src, 
-    TransInfo trans_info,
-    float*    trans_matrix)
+    uint8_t* tar, uint8_t* src, 
+    TransInfo trans,
+    AffineMatrix matrix)
 {
     float src_x, src_y;
 
@@ -225,7 +224,7 @@ __global__ void resize_warpaffine_BGR2RGB_kernel(
     int y = blockIdx.y * blockDim.y + threadIdx.y;
 
     // bilinear interpolation -- 通过逆仿射变换得到计算tar中的x, y所需要的src中的src_x, src_y
-    affine_transformation(trans_matrix, x + 0.5, y + 0.5, &src_x, &src_y);
+    affine_transformation(matrix.reverse, x + 0.5, y + 0.5, &src_x, &src_y);
 
     // bilinear interpolation -- 计算x,y映射到原图时最近的4个坐标
     int src_x1 = floor(src_x - 0.5);
@@ -233,7 +232,7 @@ __global__ void resize_warpaffine_BGR2RGB_kernel(
     int src_x2 = src_x1 + 1;
     int src_y2 = src_y1 + 1;
 
-    if (src_y1 < 0 || src_x1 < 0 || src_y1 > trans_info.src_h || src_x1 > trans_info.src_w) {
+    if (src_y1 < 0 || src_x1 < 0 || src_y1 > trans.src_h || src_x1 > trans.src_w) {
         // bilinear interpolation -- 对于越界的坐标不进行计算
     } else {
         // bilinear interpolation -- 计算原图上的坐标(浮点类型)在0~1之间的值
@@ -247,13 +246,14 @@ __global__ void resize_warpaffine_BGR2RGB_kernel(
         float a2_2 = tw * th;                  //左上
 
         // bilinear interpolation -- 计算4个坐标所对应的索引
-        int srcIdx1_1 = (src_y1 * trans_info.src_w + src_x1) * 3;  //左上
-        int srcIdx1_2 = (src_y1 * trans_info.src_w + src_x2) * 3;  //右上
-        int srcIdx2_1 = (src_y2 * trans_info.src_w + src_x1) * 3;  //左下
-        int srcIdx2_2 = (src_y2 * trans_info.src_w + src_x2) * 3;  //右下
+        int srcIdx1_1 = (src_y1 * trans.src_w + src_x1) * 3;  //左上
+        int srcIdx1_2 = (src_y1 * trans.src_w + src_x2) * 3;  //右上
+        int srcIdx2_1 = (src_y2 * trans.src_w + src_x1) * 3;  //左下
+        int srcIdx2_2 = (src_y2 * trans.src_w + src_x2) * 3;  //右下
+
 
         // bilinear interpolation -- 计算resized之后的图的索引
-        int tarIdx    = (y * trans_info.tar_w  + x) * 3;
+        int tarIdx    = (y * trans.tar_w  + x) * 3;
 
         // bilinear interpolation -- 实现bilinear interpolation + BGR2RGB
         tar[tarIdx + 0] = round(
@@ -307,10 +307,9 @@ void resize_bilinear_gpu(
     }
 
     // for affine transformation
-    TransInfo    trans_forward(srcW, srcH, tarW, tarH);
-    TransInfo    trans_reverse(tarW, tarH, srcW, srcH);
+    TransInfo    trans(srcW, srcH, tarW, tarH);
     AffineMatrix affine;
-    affine.init(trans_forward);
+    affine.init(trans);
     
     switch (tactis) {
     case 0:
@@ -326,7 +325,7 @@ void resize_bilinear_gpu(
         resize_bilinear_BGR2RGB_shift_kernel <<<dimGrid, dimBlock>>> (d_tar, d_src, tarW, tarH, srcW, srcH, scaled_w, scaled_h);
         break;
     case 4:
-        resize_warpaffine_BGR2RGB_kernel <<<dimGrid, dimBlock>>> (d_tar, d_src, trans_forward, affine.reverse);
+        resize_warpaffine_BGR2RGB_kernel <<<dimGrid, dimBlock>>> (d_tar, d_src, trans, affine);
         break;
     default:
         break;
