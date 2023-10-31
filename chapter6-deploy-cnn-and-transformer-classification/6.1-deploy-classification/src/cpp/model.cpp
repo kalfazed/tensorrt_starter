@@ -30,8 +30,8 @@ public:
             case Severity::kINFO:           str = YELLOW "[info]"  CLEAR;
             case Severity::kVERBOSE:        str = PURPLE "[verb]"  CLEAR;
         }
-        if (severity <= Severity::kINFO)
-            cout << str << string(msg) << endl;
+        // if (severity <= Severity::kINFO)
+        //     cout << str << string(msg) << endl;
     }
 };
 
@@ -90,9 +90,6 @@ bool Model::build(){
 
     if (builder->platformHasFastFp16() && mPrecision == nvinfer1::DataType::kHALF) {
         config->setFlag(nvinfer1::BuilderFlag::kFP16);
-        config->setFlag(nvinfer1::BuilderFlag::kPREFER_PRECISION_CONSTRAINTS);
-    } else if (builder->platformHasFastInt8() && mPrecision == nvinfer1::DataType::kINT8) {
-        config->setFlag(nvinfer1::BuilderFlag::kINT8);
         config->setFlag(nvinfer1::BuilderFlag::kPREFER_PRECISION_CONSTRAINTS);
     }
 

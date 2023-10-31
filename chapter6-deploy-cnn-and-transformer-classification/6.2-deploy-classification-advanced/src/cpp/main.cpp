@@ -8,7 +8,7 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
     /*这么实现目的在于让调用的整个过程精简化*/
-    string onnxPath      = "models/onnx/resnet50.onnx";
+    string onnxPath    = "models/onnx/resnet50.onnx";
 
     auto level         = logger::Level::VERB;
     auto params        = model::Params();

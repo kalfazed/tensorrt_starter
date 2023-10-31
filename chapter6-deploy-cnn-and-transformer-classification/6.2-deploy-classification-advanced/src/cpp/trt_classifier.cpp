@@ -148,7 +148,7 @@ bool Classifier::postprocess_gpu() {
         由于classification task的postprocess比较简单，所以CPU/GPU的处理这里用一样的
         对于像yolo这种detection model, postprocess会包含decode, nms这些处理。可以选择在CPU还是在GPU上跑
     */
-    postprocess_cpu();
+    return postprocess_cpu();
 
 }
 

@@ -58,9 +58,10 @@ endif
 
 all: 
 	@mkdir -p bin
-	@bear -o config/compile_commands.json $(MAKE) $(APP)
+	@bear --output config/compile_commands.json -- $(MAKE) $(APP)
 
 run: $(APP)
+	@$(MAKE) update
 	@./bin/$(APP)
 
 update: $(APP)

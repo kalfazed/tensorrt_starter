@@ -8,7 +8,7 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-    Model model("models/onnx/resnet50.onnx", Model::precision::FP32);
+    Model model("models/onnx/swin-tiny-opset17", Model::precision::FP32);
     // Model model("models/onnx/swin-tiny-opset12.onnx", Model::precision::FP32);
 
     if(!model.build()){

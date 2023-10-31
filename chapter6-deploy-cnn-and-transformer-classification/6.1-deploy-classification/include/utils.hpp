@@ -76,9 +76,6 @@ bool fileRead(const std::string &path, std::vector<unsigned char> &data, size_t 
 std::string getEnginePath(std::string onnxPath, Model::precision prec);
 std::vector<unsigned char> loadFile(const std::string &path);
 std::string printDims(const nvinfer1::Dims dims);
-// std::string printTensor(float* tensor, int size);
-// std::string printTensor(float* tensor, int size, int stride);
-// std::string printTensor(float* tensor, int size, int strideH, int strideW);
 std::string printTensor(float* tensor, int size, nvinfer1::Dims dim);
 std::string printTensorShape(nvinfer1::ITensor* tensor);
 std::string getPrecision(nvinfer1::DataType type);
