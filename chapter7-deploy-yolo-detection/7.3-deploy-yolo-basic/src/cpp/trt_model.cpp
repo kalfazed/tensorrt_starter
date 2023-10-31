@@ -4,6 +4,7 @@
 
 #include "NvInfer.h"
 #include "NvOnnxParser.h"
+#include "trt_calibrator.hpp"
 #include <string>
 
 using namespace std;
@@ -14,11 +15,11 @@ namespace model{
 
 Model::Model(string onnx_path, logger::Level level, Params params) {
     m_onnxPath      = onnx_path;
-    m_enginePath    = getEnginePath(onnx_path);
     m_workspaceSize = WORKSPACESIZE;
     m_logger        = make_shared<logger::Logger>(level);
     m_timer         = make_shared<timer::Timer>();
     m_params        = new Params(params);
+    m_enginePath    = changePath(onnx_path, "../engine", ".engine", getPrec(params.prec));
 }
 
 void Model::load_image(string image_path) {
@@ -26,8 +27,10 @@ void Model::load_image(string image_path) {
         LOGE("%s not found", image_path.c_str());
     } else {
         m_imagePath = image_path;
-        LOG("Model:      %s", getFileName(m_onnxPath).c_str());
-        LOG("Image:      %s", getFileName(m_imagePath).c_str());
+        LOG("*********************INFERENCE INFORMATION***********************");
+        LOG("\tModel:      %s", getFileName(m_onnxPath).c_str());
+        LOG("\tImage:      %s", getFileName(m_imagePath).c_str());
+        LOG("\tPrecision:  %s", getPrec(m_params->prec).c_str());
     }
 }
 
@@ -41,6 +44,8 @@ void Model::init_model() {
             LOG("%s has been generated! loading trt engine...", m_enginePath.c_str());
             load_engine();
         }
+    }else{
+        reset_task();
     }
 }
 
@@ -70,6 +75,13 @@ bool Model::build_engine() {
         config->setFlag(BuilderFlag::kINT8);
         config->setFlag(BuilderFlag::kPREFER_PRECISION_CONSTRAINTS);
     }
+
+    shared_ptr<Int8EntropyCalibrator> calibrator(new Int8EntropyCalibrator(
+        64, 
+        "calibration/calibration_list_coco.txt", 
+        "calibration/calibration_table.txt",
+        3 * 224 * 224, 224, 224));
+    config->setInt8Calibrator(calibrator.get());
 
     auto engine        = shared_ptr<ICudaEngine>(builder->buildEngineWithConfig(*network, *config), destroy_trt_ptr<ICudaEngine>);
     auto plan          = builder->buildSerializedNetwork(*network, *config);
@@ -195,5 +207,12 @@ void Model::print_network(INetworkDefinition &network, bool optimized) {
     }
 }
 
+string Model::getPrec(model::precision prec) {
+    switch(prec) {
+        case model::precision::FP16:   return "fp16";
+        case model::precision::INT8:   return "int8";
+        default:                       return "fp32";
+    }
+}
 
 } // namespace model

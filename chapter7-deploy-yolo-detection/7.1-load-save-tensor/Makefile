@@ -57,12 +57,23 @@ CUDAFLAGS     +=  -w
 CXXFLAGS      +=  -w
 endif
 
+ifeq (, $(shell which bear))
+BEARCMD       :=
+else
+ifeq (bear 3.0.18, $(shell bear --version))
+BEARCMD       := bear --output config/compile_commands.json --
+else
+BEARCMD       := bear -o config/compile_commands.json
+endif
+endif
 
 all: 
 	@mkdir -p bin
-	@bear --output config/compile_commands.json -- $(MAKE) $(APP)
+	@$(BEARCMD) $(MAKE) --no-print-directory $(APP)
+	@echo finished building $@. Have fun!!
 
-run: $(APP)
+run:
+	@$(MAKE) --no-print-directory update
 	@./bin/$(APP)
 
 update: $(APP)
@@ -70,7 +81,6 @@ update: $(APP)
 
 $(APP): $(APP_DEPS) $(APP_OBJS)
 	@$(CXX) $(APP_OBJS) -o bin/$@ $(LIBS) $(INCS)
-	@echo finished building $@. Have fun!!
 
 show: 
 	@echo $(BUILD_PATH)

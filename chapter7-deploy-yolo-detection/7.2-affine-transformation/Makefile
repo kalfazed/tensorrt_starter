@@ -4,6 +4,7 @@ CONFIG_LOCAL  :=  ./config/Makefile.config
 include $(CONFIG)
 include $(CONFIG_LOCAL)
 
+
 BUILD_PATH    :=  build
 SRC_PATH      :=  src/cpp
 INC_PATH      :=  include
@@ -23,7 +24,7 @@ APP_DEPS      +=  $(wildcard $(SRC_PATH)/*.h)
 
 
 CUCC          :=  $(CUDA_DIR)/bin/nvcc
-CXXFLAGS      :=  -std=c++14 -pthread -fPIC
+CXXFLAGS      :=  -std=c++11 -pthread -fPIC
 CUDAFLAGS     :=  --shared -Xcompiler -fPIC 
 
 INCS          :=  -I $(CUDA_DIR)/include \
@@ -35,10 +36,9 @@ INCS          :=  -I $(CUDA_DIR)/include \
 LIBS          :=  -L "$(CUDA_DIR)/lib64" \
                   -L "$(TENSORRT_INSTALL_DIR)/lib" \
 				  -lcudart -lcublas -lcudnn \
-				  -lnvinfer -lnvonnxparser \
+				  -lnvinfer -lnvonnxparser\
 				  -lstdc++fs \
-				  -lcnpy -lz \
-				  `pkg-config --libs opencv`
+				  `pkg-config --libs opencv4`
 
 
 ifeq ($(DEBUG),1)
@@ -58,11 +58,24 @@ CXXFLAGS      +=  -w
 endif
 
 
+ifeq (, $(shell which bear))
+BEARCMD       :=
+else
+ifeq (bear 3.0.18, $(shell bear --version))
+BEARCMD       := bear --output config/compile_commands.json --
+else
+BEARCMD       := bear -o config/compile_commands.json
+endif
+endif
+
+
 all: 
 	@mkdir -p bin
-	@bear --output config/compile_commands.json -- $(MAKE) $(APP)
+	@$(BEARCMD) $(MAKE) --no-print-directory $(APP)
+	@echo finished building $@. Have fun!!
 
-run: $(APP)
+run:
+	@$(MAKE) --no-print-directory update
 	@./bin/$(APP)
 
 update: $(APP)
@@ -70,7 +83,6 @@ update: $(APP)
 
 $(APP): $(APP_DEPS) $(APP_OBJS)
 	@$(CXX) $(APP_OBJS) -o bin/$@ $(LIBS) $(INCS)
-	@echo finished building $@. Have fun!!
 
 show: 
 	@echo $(BUILD_PATH)
@@ -84,7 +96,6 @@ clean:
 	rm -rf build
 	rm -rf config/compile_commands.json
 	rm -rf bin
-	rm -rf result/*
 
 ifneq ($(MAKECMDGOALS), clean)
 -include $(APP_MKS)

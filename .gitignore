@@ -38,6 +38,7 @@ archive/
 build/
 results/
 compile_commands.json
+calibration_table.txt
 trt-cuda
 trt-infer
 # .clangd
