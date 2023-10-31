@@ -74,6 +74,10 @@ void Detector::setup(void const* data, size_t size) {
     m_bindings[1] = m_outputMemory[1];
 }
 
+void Detector::reset_task(){
+    m_bboxes.clear();
+}
+
 bool Detector::preprocess_cpu() {
     /*Preprocess -- yolo的预处理并没有mean和std，所以可以直接skip掉mean和std的计算 */
 

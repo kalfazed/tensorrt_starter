@@ -52,7 +52,7 @@ def setup_seed(seed):
     torch.backends.cudnn.deterministic = True
 
 def export_norm_onnx(input, model):
-    current_path = os.path.dirname(__file__)
+    
     file = current_path + "/../../models/onnx/sample_customLeakyReLU.onnx"
     torch.onnx.export(
         model         = model, 

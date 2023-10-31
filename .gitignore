@@ -43,6 +43,7 @@ trt-infer
 # .clangd
 *.tar
 *.pth
+*.pt
 *.onnx
 *.engine
 *.o

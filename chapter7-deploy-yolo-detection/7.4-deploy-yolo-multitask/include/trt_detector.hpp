@@ -40,6 +40,7 @@ public:
 public:
     // 这里detection自己实现了一套前处理/后处理，以及内存分配的初始化
     virtual void setup(void const* data, std::size_t size) override;
+    virtual void reset_task() override;
     virtual bool preprocess_cpu() override;
     virtual bool preprocess_gpu() override;
     virtual bool postprocess_cpu() override;

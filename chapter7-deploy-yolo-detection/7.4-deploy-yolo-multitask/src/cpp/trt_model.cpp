@@ -14,7 +14,7 @@ namespace model{
 
 Model::Model(string onnx_path, logger::Level level, Params params) {
     m_onnxPath      = onnx_path;
-    m_enginePath    = getEnginePath(onnx_path);
+    m_enginePath    = getEnginePath(onnx_path, getPrec(params.prec));
     m_workspaceSize = WORKSPACESIZE;
     m_logger        = make_shared<logger::Logger>(level);
     m_timer         = make_shared<timer::Timer>();
@@ -26,8 +26,9 @@ void Model::load_image(string image_path) {
         LOGE("%s not found", image_path.c_str());
     } else {
         m_imagePath = image_path;
-        LOG("Model:      %s", getFileName(m_onnxPath).c_str());
-        LOG("Image:      %s", getFileName(m_imagePath).c_str());
+        LOG("************INFERENCE INFORMATION***********");
+        LOG("\tModel: %s", getFileName(m_onnxPath).c_str());
+        LOG("\tImage: %s", getFileName(m_imagePath).c_str());
     }
 }
 
@@ -41,6 +42,9 @@ void Model::init_model() {
             LOG("%s has been generated! loading trt engine...", m_enginePath.c_str());
             load_engine();
         }
+    }
+    else {
+        reset_task();
     }
 }
 
@@ -195,5 +199,12 @@ void Model::print_network(INetworkDefinition &network, bool optimized) {
     }
 }
 
+string Model::getPrec(model::precision prec) {
+    switch(prec) {
+        case model::precision::FP16:   return "fp16";
+        case model::precision::INT8:   return "int8";
+        default:                       return "fp32";
+    }
+}
 
 } // namespace model
