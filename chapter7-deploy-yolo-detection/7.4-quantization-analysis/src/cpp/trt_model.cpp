@@ -80,7 +80,7 @@ bool Model::build_engine() {
         64, 
         "calibration/calibration_list_coco.txt", 
         "calibration/calibration_table.txt",
-        3 * 224 * 224, 224, 224));
+        3 * 640 * 640, 640, 640));
     config->setInt8Calibrator(calibrator.get());
 
     auto engine        = shared_ptr<ICudaEngine>(builder->buildEngineWithConfig(*network, *config), destroy_trt_ptr<ICudaEngine>);

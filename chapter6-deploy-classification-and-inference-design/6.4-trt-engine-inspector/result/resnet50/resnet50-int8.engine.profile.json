@@ -1,0 +1,62 @@
+[
+  { "count" : 6402 }
+, { "name" : "Reformatting CopyNode for Input Tensor 0 to /backbone/conv1/Conv + /backbone/relu/Relu + /backbone/maxpool/MaxPool", "timeMs" : 32.8023, "averageMs" : 0.00512376, "medianMs" : 0.00512, "percentage" : 1.13193 }
+, { "name" : "/backbone/conv1/Conv + /backbone/relu/Relu + /backbone/maxpool/MaxPool", "timeMs" : 49.5778, "averageMs" : 0.00774412, "medianMs" : 0.007488, "percentage" : 1.71082 }
+, { "name" : "/backbone/layer1/layer1.0/conv1/Conv + /backbone/layer1/layer1.0/relu/Relu", "timeMs" : 42.9708, "averageMs" : 0.00671209, "medianMs" : 0.006144, "percentage" : 1.48283 }
+, { "name" : "/backbone/layer1/layer1.0/conv2/Conv + /backbone/layer1/layer1.0/relu_1/Relu", "timeMs" : 54.744, "averageMs" : 0.00855107, "medianMs" : 0.008192, "percentage" : 1.88909 }
+, { "name" : "/backbone/layer1/layer1.0/downsample/downsample.0/Conv", "timeMs" : 48.783, "averageMs" : 0.00761996, "medianMs" : 0.007232, "percentage" : 1.68339 }
+, { "name" : "/backbone/layer1/layer1.0/conv3/Conv + /backbone/layer1/layer1.0/Add + /backbone/layer1/layer1.0/relu_2/Relu", "timeMs" : 50.5105, "averageMs" : 0.00788981, "medianMs" : 0.008192, "percentage" : 1.74301 }
+, { "name" : "/backbone/layer1/layer1.1/conv1/Conv + /backbone/layer1/layer1.1/relu/Relu", "timeMs" : 46.6505, "averageMs" : 0.00728686, "medianMs" : 0.007168, "percentage" : 1.6098 }
+, { "name" : "/backbone/layer1/layer1.1/conv2/Conv + /backbone/layer1/layer1.1/relu_1/Relu", "timeMs" : 50.0908, "averageMs" : 0.00782425, "medianMs" : 0.008192, "percentage" : 1.72852 }
+, { "name" : "/backbone/layer1/layer1.1/conv3/Conv + /backbone/layer1/layer1.1/Add + /backbone/layer1/layer1.1/relu_2/Relu", "timeMs" : 47.5406, "averageMs" : 0.00742591, "medianMs" : 0.007168, "percentage" : 1.64052 }
+, { "name" : "/backbone/layer1/layer1.2/conv1/Conv + /backbone/layer1/layer1.2/relu/Relu", "timeMs" : 42.1526, "averageMs" : 0.00658429, "medianMs" : 0.00624, "percentage" : 1.45459 }
+, { "name" : "/backbone/layer1/layer1.2/conv2/Conv + /backbone/layer1/layer1.2/relu_1/Relu", "timeMs" : 52.9519, "averageMs" : 0.00827115, "medianMs" : 0.008192, "percentage" : 1.82725 }
+, { "name" : "/backbone/layer1/layer1.2/conv3/Conv + /backbone/layer1/layer1.2/Add + /backbone/layer1/layer1.2/relu_2/Relu", "timeMs" : 48.6222, "averageMs" : 0.00759485, "medianMs" : 0.007168, "percentage" : 1.67784 }
+, { "name" : "/backbone/layer2/layer2.0/conv1/Conv + /backbone/layer2/layer2.0/relu/Relu", "timeMs" : 51.168, "averageMs" : 0.00799249, "medianMs" : 0.008192, "percentage" : 1.76569 }
+, { "name" : "/backbone/layer2/layer2.0/conv2/Conv + /backbone/layer2/layer2.0/relu_1/Relu", "timeMs" : 56.0121, "averageMs" : 0.00874915, "medianMs" : 0.008928, "percentage" : 1.93285 }
+, { "name" : "/backbone/layer2/layer2.0/downsample/downsample.0/Conv", "timeMs" : 56.5837, "averageMs" : 0.00883844, "medianMs" : 0.009216, "percentage" : 1.95258 }
+, { "name" : "/backbone/layer2/layer2.0/conv3/Conv + /backbone/layer2/layer2.0/Add + /backbone/layer2/layer2.0/relu_2/Relu", "timeMs" : 48.8306, "averageMs" : 0.00762739, "medianMs" : 0.007296, "percentage" : 1.68503 }
+, { "name" : "/backbone/layer2/layer2.1/conv1/Conv + /backbone/layer2/layer2.1/relu/Relu", "timeMs" : 43.519, "averageMs" : 0.00679772, "medianMs" : 0.007168, "percentage" : 1.50174 }
+, { "name" : "/backbone/layer2/layer2.1/conv2/Conv + /backbone/layer2/layer2.1/relu_1/Relu", "timeMs" : 53.5598, "averageMs" : 0.00836611, "medianMs" : 0.008192, "percentage" : 1.84823 }
+, { "name" : "/backbone/layer2/layer2.1/conv3/Conv + /backbone/layer2/layer2.1/Add + /backbone/layer2/layer2.1/relu_2/Relu", "timeMs" : 46.6546, "averageMs" : 0.0072875, "medianMs" : 0.007168, "percentage" : 1.60995 }
+, { "name" : "/backbone/layer2/layer2.2/conv1/Conv + /backbone/layer2/layer2.2/relu/Relu", "timeMs" : 42.5925, "averageMs" : 0.006653, "medianMs" : 0.006368, "percentage" : 1.46977 }
+, { "name" : "/backbone/layer2/layer2.2/conv2/Conv + /backbone/layer2/layer2.2/relu_1/Relu", "timeMs" : 51.6745, "averageMs" : 0.00807161, "medianMs" : 0.008192, "percentage" : 1.78317 }
+, { "name" : "/backbone/layer2/layer2.2/conv3/Conv + /backbone/layer2/layer2.2/Add + /backbone/layer2/layer2.2/relu_2/Relu", "timeMs" : 46.1415, "averageMs" : 0.00720736, "medianMs" : 0.007168, "percentage" : 1.59224 }
+, { "name" : "/backbone/layer2/layer2.3/conv1/Conv + /backbone/layer2/layer2.3/relu/Relu", "timeMs" : 44.5825, "averageMs" : 0.00696383, "medianMs" : 0.007168, "percentage" : 1.53844 }
+, { "name" : "/backbone/layer2/layer2.3/conv2/Conv + /backbone/layer2/layer2.3/relu_1/Relu", "timeMs" : 52.4007, "averageMs" : 0.00818505, "medianMs" : 0.008192, "percentage" : 1.80823 }
+, { "name" : "/backbone/layer2/layer2.3/conv3/Conv + /backbone/layer2/layer2.3/Add + /backbone/layer2/layer2.3/relu_2/Relu", "timeMs" : 43.5434, "averageMs" : 0.00680153, "medianMs" : 0.007168, "percentage" : 1.50259 }
+, { "name" : "/backbone/layer3/layer3.0/conv1/Conv + /backbone/layer3/layer3.0/relu/Relu", "timeMs" : 47.0076, "averageMs" : 0.00734264, "medianMs" : 0.007168, "percentage" : 1.62213 }
+, { "name" : "/backbone/layer3/layer3.0/conv2/Conv + /backbone/layer3/layer3.0/relu_1/Relu", "timeMs" : 65.7451, "averageMs" : 0.0102695, "medianMs" : 0.01024, "percentage" : 2.26871 }
+, { "name" : "/backbone/layer3/layer3.0/downsample/downsample.0/Conv", "timeMs" : 49.3981, "averageMs" : 0.00771605, "medianMs" : 0.008192, "percentage" : 1.70462 }
+, { "name" : "/backbone/layer3/layer3.0/conv3/Conv + /backbone/layer3/layer3.0/Add + /backbone/layer3/layer3.0/relu_2/Relu", "timeMs" : 42.5836, "averageMs" : 0.00665161, "medianMs" : 0.006496, "percentage" : 1.46946 }
+, { "name" : "/backbone/layer3/layer3.1/conv1/Conv + /backbone/layer3/layer3.1/relu/Relu", "timeMs" : 47.3305, "averageMs" : 0.00739308, "medianMs" : 0.007168, "percentage" : 1.63327 }
+, { "name" : "/backbone/layer3/layer3.1/conv2/Conv + /backbone/layer3/layer3.1/relu_1/Relu", "timeMs" : 61.6151, "averageMs" : 0.00962435, "medianMs" : 0.009216, "percentage" : 2.1262 }
+, { "name" : "/backbone/layer3/layer3.1/conv3/Conv + /backbone/layer3/layer3.1/Add + /backbone/layer3/layer3.1/relu_2/Relu", "timeMs" : 43.6257, "averageMs" : 0.00681439, "medianMs" : 0.007168, "percentage" : 1.50543 }
+, { "name" : "/backbone/layer3/layer3.2/conv1/Conv + /backbone/layer3/layer3.2/relu/Relu", "timeMs" : 45.4247, "averageMs" : 0.0070954, "medianMs" : 0.007168, "percentage" : 1.56751 }
+, { "name" : "/backbone/layer3/layer3.2/conv2/Conv + /backbone/layer3/layer3.2/relu_1/Relu", "timeMs" : 58.7306, "averageMs" : 0.00917378, "medianMs" : 0.009216, "percentage" : 2.02666 }
+, { "name" : "/backbone/layer3/layer3.2/conv3/Conv + /backbone/layer3/layer3.2/Add + /backbone/layer3/layer3.2/relu_2/Relu", "timeMs" : 44.2982, "averageMs" : 0.00691943, "medianMs" : 0.007168, "percentage" : 1.52863 }
+, { "name" : "/backbone/layer3/layer3.3/conv1/Conv + /backbone/layer3/layer3.3/relu/Relu", "timeMs" : 45.526, "averageMs" : 0.00711121, "medianMs" : 0.007168, "percentage" : 1.571 }
+, { "name" : "/backbone/layer3/layer3.3/conv2/Conv + /backbone/layer3/layer3.3/relu_1/Relu", "timeMs" : 60.4795, "averageMs" : 0.00944697, "medianMs" : 0.009216, "percentage" : 2.08701 }
+, { "name" : "/backbone/layer3/layer3.3/conv3/Conv + /backbone/layer3/layer3.3/Add + /backbone/layer3/layer3.3/relu_2/Relu", "timeMs" : 42.8693, "averageMs" : 0.00669623, "medianMs" : 0.00688, "percentage" : 1.47932 }
+, { "name" : "/backbone/layer3/layer3.4/conv1/Conv + /backbone/layer3/layer3.4/relu/Relu", "timeMs" : 47.5045, "averageMs" : 0.00742025, "medianMs" : 0.007168, "percentage" : 1.63927 }
+, { "name" : "/backbone/layer3/layer3.4/conv2/Conv + /backbone/layer3/layer3.4/relu_1/Relu", "timeMs" : 58.8806, "averageMs" : 0.00919723, "medianMs" : 0.009216, "percentage" : 2.03184 }
+, { "name" : "/backbone/layer3/layer3.4/conv3/Conv + /backbone/layer3/layer3.4/Add + /backbone/layer3/layer3.4/relu_2/Relu", "timeMs" : 41.0526, "averageMs" : 0.00641246, "medianMs" : 0.006144, "percentage" : 1.41663 }
+, { "name" : "/backbone/layer3/layer3.5/conv1/Conv + /backbone/layer3/layer3.5/relu/Relu", "timeMs" : 46.5238, "averageMs" : 0.00726707, "medianMs" : 0.007168, "percentage" : 1.60543 }
+, { "name" : "/backbone/layer3/layer3.5/conv2/Conv + /backbone/layer3/layer3.5/relu_1/Relu", "timeMs" : 62.1085, "averageMs" : 0.00970142, "medianMs" : 0.009216, "percentage" : 2.14322 }
+, { "name" : "/backbone/layer3/layer3.5/conv3/Conv + /backbone/layer3/layer3.5/Add + /backbone/layer3/layer3.5/relu_2/Relu", "timeMs" : 42.3851, "averageMs" : 0.0066206, "medianMs" : 0.006336, "percentage" : 1.46261 }
+, { "name" : "/backbone/layer4/layer4.0/conv1/Conv + /backbone/layer4/layer4.0/relu/Relu", "timeMs" : 48.3719, "averageMs" : 0.00755575, "medianMs" : 0.007168, "percentage" : 1.66921 }
+, { "name" : "/backbone/layer4/layer4.0/conv2/Conv + /backbone/layer4/layer4.0/relu_1/Relu", "timeMs" : 83.5472, "averageMs" : 0.0130502, "medianMs" : 0.013312, "percentage" : 2.88303 }
+, { "name" : "/backbone/layer4/layer4.0/downsample/downsample.0/Conv", "timeMs" : 60.6063, "averageMs" : 0.00946677, "medianMs" : 0.009216, "percentage" : 2.09139 }
+, { "name" : "/backbone/layer4/layer4.0/conv3/Conv + /backbone/layer4/layer4.0/Add + /backbone/layer4/layer4.0/relu_2/Relu", "timeMs" : 47.0498, "averageMs" : 0.00734924, "medianMs" : 0.007168, "percentage" : 1.62358 }
+, { "name" : "/backbone/layer4/layer4.1/conv1/Conv + /backbone/layer4/layer4.1/relu/Relu", "timeMs" : 54.3219, "averageMs" : 0.00848514, "medianMs" : 0.008192, "percentage" : 1.87453 }
+, { "name" : "/backbone/layer4/layer4.1/conv2/Conv + /backbone/layer4/layer4.1/relu_1/Relu", "timeMs" : 82.1684, "averageMs" : 0.0128348, "medianMs" : 0.013024, "percentage" : 2.83545 }
+, { "name" : "/backbone/layer4/layer4.1/conv3/Conv + /backbone/layer4/layer4.1/Add + /backbone/layer4/layer4.1/relu_2/Relu", "timeMs" : 48.1584, "averageMs" : 0.0075224, "medianMs" : 0.007168, "percentage" : 1.66184 }
+, { "name" : "/backbone/layer4/layer4.2/conv1/Conv + /backbone/layer4/layer4.2/relu/Relu", "timeMs" : 53.5502, "averageMs" : 0.00836461, "medianMs" : 0.008192, "percentage" : 1.8479 }
+, { "name" : "/backbone/layer4/layer4.2/conv2/Conv + /backbone/layer4/layer4.2/relu_1/Relu", "timeMs" : 82.6324, "averageMs" : 0.0129073, "medianMs" : 0.013312, "percentage" : 2.85146 }
+, { "name" : "/backbone/layer4/layer4.2/conv3/Conv + /backbone/layer4/layer4.2/Add + /backbone/layer4/layer4.2/relu_2/Relu", "timeMs" : 46.6998, "averageMs" : 0.00729456, "medianMs" : 0.007168, "percentage" : 1.61151 }
+, { "name" : "/backbone/avgpool/GlobalAveragePool", "timeMs" : 33.7065, "averageMs" : 0.00526499, "medianMs" : 0.00512, "percentage" : 1.16313 }
+, { "name" : "Reformatting CopyNode for Input Tensor 0 to /backbone/fc/Gemm", "timeMs" : 0, "averageMs" : 0, "medianMs" : 0, "percentage" : 0 }
+, { "name" : "/backbone/fc/Gemm", "timeMs" : 72.208, "averageMs" : 0.011279, "medianMs" : 0.011264, "percentage" : 2.49173 }
+, { "name" : "reshape_after_/backbone/fc/Gemm", "timeMs" : 0, "averageMs" : 0, "medianMs" : 0, "percentage" : 0 }
+, { "name" : "/softmax/Softmax", "timeMs" : 27.1298, "averageMs" : 0.00423771, "medianMs" : 0.004096, "percentage" : 0.936188 }
+]

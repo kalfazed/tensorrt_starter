@@ -62,7 +62,7 @@ bool Model::build_engine() {
     auto parser        = shared_ptr<IParser>(createParser(*network, *m_logger), destroy_trt_ptr<IParser>);
 
     config->setMaxWorkspaceSize(m_workspaceSize);
-    config->setProfilingVerbosity(ProfilingVerbosity::kLAYER_NAMES_ONLY); //这里也可以设置为kDETAIL;
+    config->setProfilingVerbosity(ProfilingVerbosity::kDETAILED); //这里也可以设置为kDETAIL;
 
     if (!parser->parseFromFile(m_onnxPath.c_str(), 1)){
         return false;

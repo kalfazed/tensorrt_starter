@@ -10,7 +10,7 @@ int main(int argc, char const *argv[])
     /*这么实现目的在于让调用的整个过程精简化*/
     string onnxPath    = "models/onnx/yolov8x.onnx";
 
-    auto level         = logger::Level::VERB;
+    auto level         = logger::Level::INFO;
     auto params        = model::Params();
 
     params.img         = {640, 640, 3};
