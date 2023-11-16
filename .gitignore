@@ -31,12 +31,19 @@
 *.out
 *.app
 
-# Others
+# folders
 .cache/
 __pycache__/
 archive/
 build/
 results/
+tars/
+Swin-Transformer/
+ultralytics/
+CenterPoint/
+Lidar_AI_Solution/
+
+# others
 compile_commands.json
 calibration_table.txt
 trt-cuda
