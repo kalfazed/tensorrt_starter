@@ -214,7 +214,7 @@ bool Multitask::postprocess_cpu() {
         preprocess::affine_transformation(preprocess::affine_matrix.reverse, x0, y0, &x0, &y0);
         preprocess::affine_transformation(preprocess::affine_matrix.reverse, x1, y1, &x1, &y1);
         
-        bbox yolo_box(x0, y0, x1, y1, conf, label);
+        bbox yolo_box(x0, y0, x1, y1, conf, label, m_inputImage);
         yolo_box.mc = cv::Mat(1, 32, CV_32F, mc_ptr);
         bboxes.emplace_back(yolo_box);
     }
@@ -283,6 +283,8 @@ bool Multitask::postprocess_cpu() {
         roi = cv::Rect(0, 0, 160, 160 * m_inputImage.rows / m_inputImage.cols);
         roi.y = (160 - roi.height) / 2;
     }
+
+
 
     for (int i = 0;  i < m_bboxes.size(); i ++){
         cv::Mat dest, mask;

@@ -27,11 +27,20 @@ struct bbox {
     cv::Mat   mc;
     
     bbox() = default;
-    bbox(float x0, float y0, float x1, float y1, float conf, int label) : 
+    bbox(float x0, float y0, float x1, float y1, float conf, int label, cv::Mat img) : 
         x0(x0), y0(y0), x1(x1), y1(y1), 
         confidence(conf), flg_remove(false), 
         label(label){
             rect = cv::Rect_<int>(x0, y0, x1 - x0, y1 - y0);
+
+            // 如果rect越界，调整rect的大小
+            if (rect.x + rect.width > img.cols)
+                rect.width = img.cols - rect.x;
+            if (rect.y + rect.height > img.rows)
+                rect.height = img.rows - rect.y;
+            
+            rect.x = rect.x < 0 ? 0 : rect.x;
+            rect.y = rect.y < 0 ? 0 : rect.y;
         }
 };
 
