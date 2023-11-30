@@ -8,7 +8,7 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
     /*这么实现目的在于让调用的整个过程精简化*/
-    string onnxPath    = "models/onnx/yolov8x.onnx";
+    string onnxPath    = "models/onnx/yolov8n.onnx";
 
     auto level         = logger::Level::INFO;
     auto params        = model::Params();
@@ -16,7 +16,7 @@ int main(int argc, char const *argv[])
     params.img         = {640, 640, 3};
     params.task        = model::task_type::DETECTION;
     params.dev         = model::device::GPU;
-    params.prec        = model::precision::INT8;
+    params.prec        = model::precision::FP32;
 
     // 创建一个worker的实例, 在创建的时候就完成初始化
     auto worker   = thread::create_worker(onnxPath, level, params);
