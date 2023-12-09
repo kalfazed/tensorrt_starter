@@ -91,9 +91,31 @@ bool Detector::preprocess_cpu() {
     /*Preprocess -- 测速*/
     m_timer->start_cpu();
 
-    /*Preprocess -- resize(默认是bilinear interpolation)*/
-    cv::resize(m_inputImage, m_inputImage, 
-               cv::Size(m_params->img.w, m_params->img.h), 0, 0, cv::INTER_LINEAR);
+    /*Preprocess -- resize(手动实现一个CPU版本的letterbox)*/
+    int   input_w  = m_inputImage.cols;
+    int   input_h  = m_inputImage.rows;
+    int   target_w = m_params->img.w;
+    int   target_h = m_params->img.h;
+    float scale    = min(float(target_w)/input_w, float(target_h)/input_h);
+    int   new_w    = int(input_w * scale);
+    int   new_h    = int(input_h * scale);
+
+    preprocess::warpaffine_init(input_h, input_w, target_h, target_w);
+    
+    cv::Mat tar(target_w, target_h, CV_8UC3, cv::Scalar(0, 0, 0));
+    cv::Mat resized_img;
+    cv::resize(m_inputImage, resized_img, cv::Size(new_w, new_h));
+
+    /* 寻找resize后的图片在背景中的位置*/
+    int x, y;
+    x = (new_w < target_w) ? (target_w - new_w) / 2 : 0;
+    y = (new_h < target_h) ? (target_h - new_h) / 2 : 0;
+
+    cv::Rect roi(x, y, new_w, new_h);
+
+    /* 指定背景图片里居中的图片roi，把resized_img给放入到这个roi中*/
+    cv::Mat roiOfTar = tar(roi);
+    resized_img.copyTo(roiOfTar);
 
     /*Preprocess -- host端进行normalization和BGR2RGB, NHWC->NCHW*/
     int index;
@@ -112,8 +134,7 @@ bool Detector::preprocess_cpu() {
     /*Preprocess -- 将host的数据移动到device上*/
     CUDA_CHECK(cudaMemcpyAsync(m_inputMemory[1], m_inputMemory[0], m_inputSize, cudaMemcpyKind::cudaMemcpyHostToDevice, m_stream));
 
-    m_timer->stop_cpu();
-    m_timer->duration_cpu<timer::Timer::ms>("preprocess(CPU)");
+    m_timer->stop_cpu<timer::Timer::ms>("preprocess(CPU)");
     return true;
 }
 
@@ -134,8 +155,7 @@ bool Detector::preprocess_gpu() {
                                    m_params->img.h, m_params->img.w, 
                                    preprocess::tactics::GPU_WARP_AFFINE);
 
-    m_timer->stop_gpu();
-    m_timer->duration_gpu("preprocess(GPU)");
+    m_timer->stop_gpu("preprocess(GPU)");
     return true;
 }
 
@@ -285,11 +305,13 @@ bool Detector::postprocess_cpu() {
     LOG("\t\tDetected Objects: %d", final_bboxes.size());
     LOG("");
 
-    m_timer->stop_cpu();
-    m_timer->duration_cpu<timer::Timer::ms>("postprocess(CPU)");
+    m_timer->stop_cpu<timer::Timer::ms>("postprocess(CPU)");
 
     cv::imwrite(m_outputPath, m_inputImage);
-    LOG("\tsave image to %s\n", m_outputPath.c_str());
+    LOG("\tsave image to %s", m_outputPath.c_str());
+
+    m_timer->show();
+    printf("\n");
 
     return true;
 }

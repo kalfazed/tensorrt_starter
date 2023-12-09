@@ -90,8 +90,7 @@ bool Classifier::preprocess_cpu() {
     /*Preprocess -- 将host的数据移动到device上*/
     CUDA_CHECK(cudaMemcpyAsync(m_inputMemory[1], m_inputMemory[0], m_inputSize, cudaMemcpyKind::cudaMemcpyHostToDevice, m_stream));
 
-    m_timer->stop_cpu();
-    m_timer->duration_cpu<timer::Timer::ms>("preprocess(CPU)");
+    m_timer->stop_cpu<timer::Timer::ms>("preprocess(CPU)");
 
     return true;
 }
@@ -116,8 +115,7 @@ bool Classifier::preprocess_gpu() {
                                    m_params->img.h, m_params->img.w, 
                                    mean, std, preprocess::tactics::GPU_BILINEAR);
 
-    m_timer->stop_gpu();
-    m_timer->duration_gpu("preprocess(GPU)");
+    m_timer->stop_gpu("preprocess(GPU)");
     return true;
 }
 
@@ -136,11 +134,15 @@ bool Classifier::postprocess_cpu() {
     int pos = max_element(m_outputMemory[0], m_outputMemory[0] + m_params->num_cls) - m_outputMemory[0];
     float confidence = m_outputMemory[0][pos] * 100;
 
-    m_timer->stop_cpu();
-    m_timer->duration_cpu<timer::Timer::ms>("postprocess(CPU)");
+    m_timer->stop_cpu<timer::Timer::ms>("postprocess(CPU)");
 
     LOG("Result:     %s", labels.imagenet_labelstring(pos).c_str());   
-    LOG("Confidence  %.3f%%\n", confidence);   
+    LOG("Confidence  %.3f%%", confidence);   
+
+    m_timer->show();
+    printf("\n");
+
+
     return true;
 }
 

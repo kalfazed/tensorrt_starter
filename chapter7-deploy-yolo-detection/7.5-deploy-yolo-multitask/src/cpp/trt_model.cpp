@@ -46,6 +46,7 @@ void Model::init_model() {
         }
     }
     else {
+        m_timer->init();
         reset_task();
     }
 }
@@ -81,7 +82,7 @@ bool Model::build_engine() {
         64, 
         "calibration/calibration_list_coco.txt", 
         "calibration/calibration_table.txt",
-        3 * 224 * 224, 224, 224));
+        3 * 640 * 640, 640, 640));
     config->setInt8Calibrator(calibrator.get());
 
     for (int i = 0; i < network->getNbLayers(); i++){
@@ -166,8 +167,7 @@ bool Model::enqueue_bindings() {
         LOG("Error happens during DNN inference part, program terminated");
         return false;
     }
-    m_timer->stop_gpu();
-    m_timer->duration_gpu("trt-inference(GPU)");
+    m_timer->stop_gpu("trt-inference(GPU)");
     return true;
 }
 
