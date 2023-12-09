@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
 
     params.img         = {640, 640, 3};
     params.task        = model::task_type::MULTITASK;
-    params.dev         = model::device::GPU;
+    params.dev         = model::device::CPU;
     params.prec        = model::precision::FP16;
 
     // 创建一个worker的实例, 在创建的时候就完成初始化

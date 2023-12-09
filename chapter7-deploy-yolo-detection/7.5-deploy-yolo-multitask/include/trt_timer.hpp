@@ -24,13 +24,16 @@ public:
 public:
     void start_cpu();
     void start_gpu();
+
     void stop_cpu();
     void stop_gpu();
 
     template <typename span>
-    void duration_cpu(std::string msg);
+    void stop_cpu(std::string msg);
+    void stop_gpu(std::string msg);
 
-    void duration_gpu(std::string msg);
+    void show();
+    void init();
 
 private:
     std::chrono::time_point<std::chrono::high_resolution_clock> _cStart;
@@ -38,10 +41,14 @@ private:
     cudaEvent_t _gStart;
     cudaEvent_t _gStop;
     float _timeElasped;
+    std::vector<std::string> _timeMsgs;
 };
 
 template <typename span>
-void Timer::duration_cpu(std::string msg){
+void Timer::stop_cpu(std::string msg) {
+    _cStop = std::chrono::high_resolution_clock::now();
+
+    char buff[100];
     std::string str;
 
     if(std::is_same<span, s>::value) { str = "s"; }
@@ -50,7 +57,8 @@ void Timer::duration_cpu(std::string msg){
     else if(std::is_same<span, ns>::value) { str = "ns"; }
 
     std::chrono::duration<double, span> time = _cStop - _cStart;
-    LOGV("%-60s uses %.6lf %s", msg.c_str(), time.count(), str.c_str());
+    sprintf(buff, "\t%-60s uses %.6lf %s", msg.c_str(), time.count(), str.c_str());
+    _timeMsgs.emplace_back(buff);
 }
 
 } // namespace timer

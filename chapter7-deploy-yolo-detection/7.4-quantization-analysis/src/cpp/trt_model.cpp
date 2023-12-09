@@ -45,6 +45,7 @@ void Model::init_model() {
             load_engine();
         }
     }else{
+        m_timer->init();
         reset_task();
     }
 }
@@ -157,8 +158,7 @@ bool Model::enqueue_bindings() {
         LOG("Error happens during DNN inference part, program terminated");
         return false;
     }
-    m_timer->stop_gpu();
-    m_timer->duration_gpu("trt-inference(GPU)");
+    m_timer->stop_gpu("trt-inference(GPU)");
     return true;
 }
 

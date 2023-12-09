@@ -64,6 +64,7 @@ struct AffineMatrix{
 // 对结构体设置default instance
 extern  TransInfo    trans;
 extern  AffineMatrix affine_matrix;
+void    warpaffine_init(int srcH, int srcW, int tarH, int tarW);
 
 cv::Mat preprocess_resize_cpu(cv::Mat &src, const int& tarH, const int& tarW, float* mean, float* std, tactics tac);
 cv::Mat preprocess_resize_cpu(cv::Mat &src, const int& tarH, const int& tarW, tactics tac);
