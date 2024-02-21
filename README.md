@@ -1,14 +1,19 @@
-# CUDA and TensorRT Starter Workspace
+CUDA and TensorRT Starter Workspace
+===
+
 This repository guides freshmen who does not have background of parallel programming in C++ to learn CUDA and TensorRT from the beginning.
-The goals of webinar are as follows:
-- Understand how to write a fast CUDA kernel and how to optimized the performance
-- Be familar with onnx structure, and customize onnx if necessary
-- Understand the factors that influence the precision and performance when deploy a model
-- Be familar with TensorRT C++ API, and write some custome plugin
-- Study a good C++ coding habit when creating a inference framework
-- Deploy basic classification, detection, and multi-task model.
-- Learn how to implment a int8 quantization calibration
-- Understand the working flow to recover the precision when the deployed model has had precision.
+
+- [CUDA and TensorRT Starter Workspace](#cuda-and-tensorrt-starter-workspace)
+  - [How to install](#how-to-install)
+  - [How to run](#how-to-run)
+  - [Chapter description](#chapter-description)
+    - [chapter1-build-environment](#chapter1-build-environment)
+    - [chapter2-cuda-programming](#chapter2-cuda-programming)
+    - [chapter3-tensorrt-basics-and-onnx](#chapter3-tensorrt-basics-and-onnx)
+    - [chapter4-tensorrt-optimiztion](#chapter4-tensorrt-optimiztion)
+    - [chapter5-tensorrt-api-basics](#chapter5-tensorrt-api-basics)
+    - [chapter6-deploy-classification-and-inference-design](#chapter6-deploy-classification-and-inference-design)
+    - [chapter7-deploy-yolo-detection](#chapter7-deploy-yolo-detection)
 
 This repository is still working in progress(~24/02/21). I will add some more samples and more detailed description in the future. Please feel free to contribute to this repository
 
