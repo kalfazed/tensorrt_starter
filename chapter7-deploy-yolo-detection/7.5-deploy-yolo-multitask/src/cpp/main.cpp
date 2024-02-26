@@ -1,7 +1,6 @@
 #include "trt_model.hpp"
 #include "trt_logger.hpp"
 #include "trt_worker.hpp"
-#include "utils.hpp"
 
 using namespace std;
 
@@ -10,7 +9,7 @@ int main(int argc, char const *argv[])
     /*这么实现目的在于让调用的整个过程精简化*/
     string onnxPath    = "models/onnx/yolov8n-seg.onnx";
 
-    auto level         = logger::Level::VERB;
+    auto level         = logger::Level::DEBUG;
     auto params        = model::Params();
 
     params.img         = {640, 640, 3};
