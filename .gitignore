@@ -44,6 +44,7 @@ CenterPoint/
 Lidar_AI_Solution/
 
 # others
+Makefile.config
 compile_commands.json
 calibration_table.txt
 trt-cuda
@@ -56,3 +57,6 @@ trt-infer
 *.engine
 *.o
 *.mk
+*-fp16*
+*-fp32*
+*-int8*

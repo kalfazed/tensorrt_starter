@@ -24,7 +24,7 @@ APP_DEPS      +=  $(wildcard $(SRC_PATH)/*.h)
 
 
 CUCC          :=  $(CUDA_DIR)/bin/nvcc
-CXXFLAGS      :=  -std=c++11 -pthread -fPIC
+CXXFLAGS      :=  -std=c++17 -pthread -fPIC
 CUDAFLAGS     :=  --shared -Xcompiler -fPIC 
 
 INCS          :=  -I $(CUDA_DIR)/include \
@@ -35,6 +35,8 @@ INCS          :=  -I $(CUDA_DIR)/include \
 
 LIBS          :=  -L "$(CUDA_DIR)/lib64" \
                   -L "$(TENSORRT_INSTALL_DIR)/lib" \
+				  -Wl,-rpath "$(CUDA_DIR)/lib64" \
+				  -Wl,-rpath "$(TENSORRT_INSTALL_DIR)/lib" \
 				  -lcudart -lcublas -lcudnn \
 				  -lnvinfer -lnvonnxparser\
 				  -lstdc++fs \

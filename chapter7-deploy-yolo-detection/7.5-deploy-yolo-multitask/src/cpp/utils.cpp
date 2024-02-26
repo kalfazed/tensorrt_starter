@@ -5,10 +5,11 @@
 #include <string>
 #include "utils.hpp"
 #include "NvInfer.h"
+#include <filesystem>
 #include "trt_model.hpp"
 #include "trt_logger.hpp"
 
-
+namespace fs = std::filesystem;
 using namespace std;
 
 bool fileExists(const string fileName) {
@@ -79,37 +80,31 @@ vector<string> loadDataList(const string& file){
     return list;
 }
 
-string printDims(const nvinfer1::Dims dims){
-    int n = 0;
-    char buff[100];
-    string result;
-
-    n += snprintf(buff + n, sizeof(buff) - n, "[ ");
-    for (int i = 0; i < dims.nbDims; i++){
-        n += snprintf(buff + n, sizeof(buff) - n, "%d", dims.d[i]);
+string printDims(const nvinfer1::Dims dims) {
+    std::ostringstream oss;
+    oss << "[";
+    for (int i = 0; i < dims.nbDims; i ++) {
+        oss << std::fixed << dims.d[i];
         if (i != dims.nbDims - 1) {
-            n += snprintf(buff + n, sizeof(buff) - n, ", ");
+            oss << " x ";
         }
     }
-    n += snprintf(buff + n, sizeof(buff) - n, " ]");
-    result = buff;
-    return result;
+    oss << "]";
+    return oss.str();
+
 }
 
 string printTensor(float* tensor, int size){
-    int n = 0;
-    char buff[100];
-    string result;
-    n += snprintf(buff + n, sizeof(buff) - n, "[ ");
-    for (int i = 0; i < size; i++){
-        n += snprintf(buff + n, sizeof(buff) - n, "%8.4lf", tensor[i]);
-        if (i != size - 1){
-            n += snprintf(buff + n, sizeof(buff) - n, ", ");
+    std::ostringstream oss;
+    oss << "[ ";
+    for (int i = 0; i < size; i ++) {
+        oss << std::fixed << std::setprecision(4) << tensor[i];
+        if (i != size - 1) {
+            oss << ", ";
         }
     }
-    n += snprintf(buff + n, sizeof(buff) - n, " ]");
-    result = buff;
-    return result;
+    oss << " ]";
+    return oss.str();
 }
 
 
@@ -127,26 +122,24 @@ string printTensorShape(nvinfer1::ITensor* tensor){
     return str;
 }
 
-string changePath(string srcPath, string relativePath, string postfix, string tag){
-    int name_l = srcPath.rfind("/");
-    int name_r = srcPath.rfind(".");
 
-    int dir_l  = 0;
-    int dir_r  = srcPath.rfind("/");
+string changePath(string srcPath, string relativePath, 
+                  string postfix, string tag){
+    fs::path sourcePath(srcPath);
+    fs::path basePath = sourcePath.parent_path();
+    fs::path filename = sourcePath.stem();
 
-    string newPath;
+    fs::path newPath = basePath / relativePath / filename;
 
-    newPath = srcPath.substr(dir_l, dir_r + 1);
-    newPath += relativePath;
-    newPath += srcPath.substr(name_l, name_r - name_l);
+    if (!tag.empty()) {
+        newPath += "-" + tag;
+    }
 
-    if (!tag.empty())
-        newPath += "-" + tag + postfix;
-    else
-        newPath += postfix;
+    newPath += postfix;
 
-    return newPath;
+    return newPath.string();
 }
+
 
 string getOutputPath(string srcPath, string postfix){
     int pos = srcPath.rfind(".");

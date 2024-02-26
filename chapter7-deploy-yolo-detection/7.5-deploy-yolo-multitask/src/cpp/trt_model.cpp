@@ -179,12 +179,14 @@ void Model::print_network(INetworkDefinition &network, bool optimized) {
 
     for (int i = 0; i < inputCount; i++) {
         auto input = network.getInput(i);
-        LOGV("Input info: %s:%s", input->getName(), printTensorShape(input).c_str());
+        string dimInfo = printDims(input->getDimensions());
+        LOGV("Input info: %s:%s", input->getName(), dimInfo.c_str());
     }
 
     for (int i = 0; i < outputCount; i++) {
         auto output = network.getOutput(i);
-        LOGV("Output info: %s:%s", output->getName(), printTensorShape(output).c_str());
+        string dimInfo = printDims(output->getDimensions());
+        LOGV("Output info: %s:%s", output->getName(), dimInfo.c_str());
     }
     
     int layerCount = optimized ? m_engine->getNbLayers() : network.getNbLayers();
@@ -201,10 +203,13 @@ void Model::print_network(INetworkDefinition &network, bool optimized) {
             }
             auto output  = layer->getOutput(0);
 
+            auto dimInput  = printDims(input->getDimensions());
+            auto dimOutput = printDims(output->getDimensions());
+
             LOGV("layer_info: %-40s:%-25s->%-25s[%s]", 
                 layer->getName(),
-                printTensorShape(input).c_str(),
-                printTensorShape(output).c_str(),
+                dimInput.c_str(),
+                dimOutput.c_str(),
                 getPrecision(layer->getPrecision()).c_str());
         }
 
