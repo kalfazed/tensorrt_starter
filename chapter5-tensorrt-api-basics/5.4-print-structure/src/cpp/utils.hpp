@@ -63,7 +63,6 @@ static void __log_info(Level level, const char* format, ...) {
     va_end(args);
 
     if (level == Level::ERROR) {
-        free(msg);
         exit(1);
     }
 }
