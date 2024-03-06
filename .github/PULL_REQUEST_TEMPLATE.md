@@ -19,5 +19,5 @@ List up what you have changed in the code bases if the PR is big.
 
 ## Related issues
 <!--
-  In this section please link any issues, tasks or Jira tickets.
+  In this section please link any issues, tasks.
 -->
