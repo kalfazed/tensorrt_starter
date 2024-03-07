@@ -32,12 +32,10 @@ bool fileRead(const string &path, vector<unsigned char> &data, size_t &size){
     trtModelStream.seekg(0, ios::end);
     size = trtModelStream.tellg();
 
-    vector<uint8_t> tmp;
     trtModelStream.seekg(0, ios::beg);
-    tmp.resize(size);
 
     /* 将trtModelStream中的stream通过read函数写入modelMem中*/
-    trtModelStream.read((char*)data[0], size);
+    trtModelStream.read((char*)&data[0], size);
     return true;
 }
 
