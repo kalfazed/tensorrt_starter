@@ -56,17 +56,13 @@ static void __log_info(Level level, const char* format, ...) {
     } else if (level == Level::VERB) {
         n += snprintf(msg + n, sizeof(msg) - n, PURPLE "[verb]: " CLEAR);
     } else {
-        n += snprintf(msg + n, sizeof(msg) - n, RED    "[verb]: " CLEAR);
+        n += snprintf(msg + n, sizeof(msg) - n, RED    "[error]: " CLEAR);
     }
     n += vsnprintf(msg + n, sizeof(msg) - n, format, args);
 
     fprintf(stdout, "%s\n", msg);
     va_end(args);
 
-    if (level == Level::ERROR) {
-        free(msg);
-        exit(1);
-    }
 }
 
 bool fileExists(const std::string fileName);
