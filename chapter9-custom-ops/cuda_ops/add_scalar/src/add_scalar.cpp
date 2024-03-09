@@ -5,8 +5,15 @@
 
 #include "../../utils/timer.hpp"
 
+// CUDA function declarations
 void custom_add_cuda(torch::Tensor array, float scalar);
 
+/*
+  Function: add scalar (forward, cuda)
+  Args:
+    array:   input array
+    scalar:  scalar value
+*/
 void custom_add(torch::Tensor array, float scalar) {
     custom_add_cuda(array, scalar);
 }
