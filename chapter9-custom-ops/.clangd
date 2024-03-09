@@ -1,0 +1,11 @@
+CompileFlags:
+  Add:
+    - "-I/usr/local/cuda-11.8/include"
+    - "-I/usr/local/include/opencv4"
+    - "-I/usr/local/include/eigen3"
+    - "-I/home/t2-auto/miniconda3/envs/trt-starter/include"
+    - "-I/home/t2-auto/miniconda3/envs/trt-starter/include/python3.10"
+    - "-I/home/t2-auto/miniconda3/envs/trt-starter/lib/python3.10/site-packages/torch/include"
+    - "-I/home/t2-auto/miniconda3/envs/trt-starter/lib/python3.10/site-packages/torch/include/torch/csrc/api/include"
+    - "-I/home/t2-auto/packages/TensorRT-8.6.1.6/include"
+    - "-I/home/t2-auto/Code/deployment/custom_ops/cuda_ops/utils"

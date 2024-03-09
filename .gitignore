@@ -49,6 +49,7 @@ compile_commands.json
 calibration_table.txt
 trt-cuda
 trt-infer
+*.egg-info/
 # .clangd
 *.tar
 *.pth
