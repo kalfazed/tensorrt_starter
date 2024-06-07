@@ -1,0 +1,5 @@
+4
+conv.weight 27 befb4be9 beb6501b 3dfca450 3e9f28a3 3d8a92ea bef7665c bbe3712d be8e998f 3cf4ffa5 be342203 3deede0a be0b934a 3d3f55bd bd325bd7 be0ca6a7 becd7ae2 bdbe64bd bda75cc8 3eb63415 be033b79 3da24728 3f0ab37a be80db04 be819bc3 3ec749f9 3dea897b bdc535db
+conv.bias 3 3e3986f6 bea6d5da 3e53997b
+deconv.weight 27 be62d124 be8141b3 3e9af35d 3e2b8d01 3d581224 bf33fbdb 3e6dfdd4 3eadb52f be2ccc6c becdfd59 be9df0be 3e4688c4 bef78dd8 3dc53e0c 3ea72a24 bda8e3a6 bef582ac 3e30edfa be602c41 bee081a5 bf026749 3e175b27 3e382126 3f1feadd 3e3c1838 3eeebfcd befa079e
+deconv.bias 1 be63d590

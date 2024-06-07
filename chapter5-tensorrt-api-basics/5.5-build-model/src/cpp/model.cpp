@@ -30,11 +30,11 @@ public:
     virtual void log (Severity severity, const char* msg) noexcept override{
         string str;
         switch (severity){
-            case Severity::kINTERNAL_ERROR: str = RED    "[fatal]" CLEAR;
-            case Severity::kERROR:          str = RED    "[error]" CLEAR;
-            case Severity::kWARNING:        str = BLUE   "[warn]"  CLEAR;
-            case Severity::kINFO:           str = YELLOW "[info]"  CLEAR;
-            case Severity::kVERBOSE:        str = PURPLE "[verb]"  CLEAR;
+            case Severity::kINTERNAL_ERROR: str = RED    "[fatal]" CLEAR; break;
+            case Severity::kERROR:          str = RED    "[error]" CLEAR; break;
+            case Severity::kWARNING:        str = BLUE   "[warn]"  CLEAR; break;
+            case Severity::kINFO:           str = YELLOW "[info]"  CLEAR; break;
+            case Severity::kVERBOSE:        str = PURPLE "[verb]"  CLEAR; break;
         }
     }
 };
@@ -146,6 +146,20 @@ bool Model::build_from_weights(){
         build_batchNorm(*network, mWts);
     } else if (mWtsPath == "models/weights/sample_cbr.weights") {
         build_cbr(*network, mWts);
+    } else if (mWtsPath == "models/weights/sample_pooling.weights") {
+        build_pooling(*network, mWts);
+    } else if (mWtsPath == "models/weights/sample_upsample.weights") {
+        build_upsample(*network, mWts);
+    } else if (mWtsPath == "models/weights/sample_deconv.weights") {
+        build_deconv(*network, mWts);
+    } else if (mWtsPath == "models/weights/sample_concat.weights") {
+        build_concat(*network, mWts);
+    } else if (mWtsPath == "models/weights/sample_elementwise.weights") {
+        build_elementwise(*network, mWts);
+    } else if (mWtsPath == "models/weights/sample_reduce.weights") {
+        build_reduce(*network, mWts);
+    } else if (mWtsPath == "models/weights/sample_slice.weights") {
+        build_slice(*network, mWts);
     } else {
         return false;
     }
@@ -534,6 +548,203 @@ void Model::build_cbr(nvinfer1::INetworkDefinition& network, map<string, nvinfer
 
     leaky->getOutput(0) ->setName("output0");
     network.markOutput(*leaky->getOutput(0));
+}
+
+/*
+ * network
+ *
+ *  -- input --    ITensor
+ *  ---- | ----
+ *  --- conv --    Ilayer
+ *  ---- | ----
+ *  --- pool --    IPoolingLayer
+ *  ---- | ----
+ *  -- output -    ITensor
+ */
+// 给之前的案例加一个pooling层
+void Model::build_pooling(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+    auto data = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
+    // output channel 等于 3
+    auto conv = network.addConvolutionNd(*data, 3, nvinfer1::DimsHW{3, 3}, mWts["conv.weight"], mWts["conv.bias"]);
+    conv->setName("conv1");
+    conv->setStride(nvinfer1::DimsHW(1, 1));
+
+    auto pool = network.addPoolingNd(*conv->getOutput(0), nvinfer1::PoolingType::kMAX, nvinfer1::DimsHW{2, 2});
+    pool->setStride(nvinfer1::DimsHW{2, 2});
+    pool->setName("pool1");
+
+    pool->getOutput(0)->setName("output0");
+    network.markOutput(*pool->getOutput(0));
+}
+
+/*
+ * network
+ *
+ *  -- input --    ITensor
+ *  ---- | ----
+ *  --- conv --    Ilayer
+ *  ---- | ----
+ *  - Upsample -   IResizeLayer
+ *  ---- | ----
+ *  -- output -    ITensor
+ */
+// 上采样层的创建
+void Model::build_upsample(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+    auto data = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
+    // output channel 等于 3
+    auto conv = network.addConvolutionNd(*data, 3, nvinfer1::DimsHW{3, 3}, mWts["conv.weight"], mWts["conv.bias"]);
+    conv->setName("conv1");
+    conv->setStride(nvinfer1::DimsHW(1, 1));
+
+    auto upsample = network.addResize(*conv->getOutput(0));
+    // upsample->setAlignCorners(true);
+    upsample->setOutputDimensions(nvinfer1::Dims4{1, 3, 6, 6});
+    upsample->setResizeMode(nvinfer1::ResizeMode::kNEAREST);
+    upsample->setName("upsample");
+
+    upsample->getOutput(0)->setName("output0");
+    network.markOutput(*upsample->getOutput(0));
+}
+
+/*
+ * network
+ *
+ *  -- input --    ITensor
+ *  ---- | ----
+ *  --- conv --    Ilayer
+ *  ---- | ----
+ *  -- deconv--   IDeconvolutionLayer
+ *  ---- | ----
+ *  -- output -    ITensor
+ */
+// 反卷积层的创建
+void Model::build_deconv(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+    auto data = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
+    // output channel 等于 3
+    auto conv = network.addConvolutionNd(*data, 3, nvinfer1::DimsHW{3, 3}, mWts["conv.weight"], mWts["conv.bias"]);
+    conv->setName("conv1");
+    conv->setStrideNd(nvinfer1::DimsHW(1, 1));
+
+    auto deconv1 = network.addDeconvolutionNd(*conv->getOutput(0), conv->getNbOutputMaps(), nvinfer1::DimsHW{3, 3}, mWts["deconv.weight"], mWts["deconv.bias"]);
+    deconv1->setStrideNd(nvinfer1::DimsHW{1, 1});
+    deconv1->setNbOutputMaps(1);
+    deconv1->setName("deconv");
+
+    deconv1->getOutput(0)->setName("output0");
+    network.markOutput(*deconv1->getOutput(0));
+}
+
+//      input
+//       /   \
+//    conv1  conv2
+//     |      |
+//      \    /
+//       \  /
+//      concat  IConcatenationLayer
+//        |
+//      output
+// concat层的创建
+void Model::build_concat(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+    auto data = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
+    auto conv1 = network.addConvolutionNd(*data, 3, nvinfer1::DimsHW{3, 3}, mWts["conv1.weight"], mWts["conv1.bias"]);
+    conv1->setName("conv1");
+    conv1->setStrideNd(nvinfer1::DimsHW(1, 1));
+
+    auto conv2 = network.addConvolutionNd(*data, 3, nvinfer1::DimsHW{3, 3}, mWts["conv2.weight"], mWts["conv2.bias"]);
+    conv2->setName("conv2");
+    conv2->setStrideNd(nvinfer1::DimsHW(1, 1));
+
+    nvinfer1::ITensor* Tensors[]{conv1->getOutput(0), conv2->getOutput(0)};
+    auto cat = network.addConcatenation(Tensors, 2);
+    cat->setName("concat");
+
+    cat->getOutput(0)->setName("output0");
+    network.markOutput(*cat->getOutput(0));
+}
+
+// elementwise和const的创建
+void Model::build_elementwise(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+    auto data = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
+    // output channel 等于 3
+    auto conv = network.addConvolutionNd(*data, 3, nvinfer1::DimsHW{3, 3}, mWts["conv.weight"], mWts["conv.bias"]);
+    conv->setName("conv1");
+    conv->setStrideNd(nvinfer1::DimsHW(1, 1));
+
+    nvinfer1::Weights Div_225{nvinfer1::DataType::kFLOAT, nullptr, 3};
+    float* wgt = reinterpret_cast<float*>(malloc(sizeof(float) * 3));
+    for (int i = 0; i < 3; ++i) {
+        wgt[i] = 255.0f;
+    }
+    Div_225.values = wgt;
+
+    auto con = network.addConstant(nvinfer1::Dims4{1, 3, 1, 1}, Div_225);
+    // 通道维度上做除法
+    auto elem = network.addElementWise(*conv->getOutput(0), *con->getOutput(0), nvinfer1::ElementWiseOperation::kDIV);
+
+    elem->setName("elem");
+
+    elem->getOutput(0)->setName("output0");
+    network.markOutput(*elem->getOutput(0));
+}
+
+/*
+ * network
+ *
+ *  -- input --    ITensor
+ *  ---- | ----
+ *  ---linear--    Ilayer
+ *  ---- | ----
+ *  -- reduce --   IReduceLayer
+ *  ---- | ----
+ *  - softmax -    ISoftMaxLayer
+ *  ---- | ----
+ *  -- output -    ITensor
+ */
+// reduce和softmax层的创建
+void Model::build_reduce(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+    auto data = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 1, 5});
+    auto fc = network.addFullyConnected(*data, 1, mWts["linear.weight"], {});
+    fc->setName("linear1");
+
+    // reduce常见的操作包括求和（sum）、求平均（average）、求最大值（max）等
+    // 可以指定是否在输出中保留减少的维度
+    auto reduce = network.addReduce(*fc->getOutput(0), nvinfer1::ReduceOperation::kAVG, 1, false);
+
+    auto softmax = network.addSoftMax(*reduce->getOutput(0));
+    //! Bit 0 corresponds to the N dimension boolean.
+    //! Bit 1 corresponds to the C dimension boolean.
+    //! Bit 2 corresponds to the H dimension boolean.
+    //! Bit 3 corresponds to the W dimension boolean.
+    softmax->setAxes(1);
+
+    softmax->getOutput(0)->setName("output0");
+    network.markOutput(*softmax->getOutput(0));
+}
+
+// slice层的创建
+void Model::build_slice(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+    auto data = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
+    // output channel 等于 3
+    auto conv = network.addConvolutionNd(*data, 4, nvinfer1::DimsHW{3, 3}, mWts["conv.weight"], mWts["conv.bias"]);
+    conv->setName("conv1");
+    conv->setStrideNd(nvinfer1::DimsHW(1, 1));
+
+    // 获取卷积层输出的维度
+    auto d = conv->getOutput(0)->getDimensions();
+
+    // 添加第一个切片层，提取前两个通道
+    auto split1 = network.addSlice(*conv->getOutput(0), nvinfer1::Dims4{0, 0, 0, 0}, nvinfer1::Dims4{1, d.d[1] / 2, d.d[2], d.d[3]}, nvinfer1::Dims4{1, 1, 1, 1});
+    split1->setName("slice1");
+
+    // 添加第二个切片层，提取后两个通道
+    // auto split2 = network.addSlice(*conv->getOutput(0), nvinfer1::Dims4{0, 2, 0, 0}, nvinfer1::Dims4{1, d.d[1] / 2, d.d[2], d.d[3]}, nvinfer1::Dims4{1, 1, 1, 1});
+    // split2->setName("slice2");
+
+    // 将切片层的输出标记为网络输出
+    split1->getOutput(0)->setName("output1");
+    // split2->getOutput(0)->setName("output2");
+    network.markOutput(*split1->getOutput(0));
+    // network.markOutput(*split2->getOutput(0));
 }
 
 void Model::init_data(nvinfer1::Dims input_dims, nvinfer1::Dims output_dims){

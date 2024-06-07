@@ -28,7 +28,14 @@ private:
     void build_reshape(nvinfer1::INetworkDefinition& network, std::map<std::string, nvinfer1::Weights> mWts);
     void build_batchNorm(nvinfer1::INetworkDefinition& network, std::map<std::string, nvinfer1::Weights> mWts);
     void build_cbr(nvinfer1::INetworkDefinition& network, std::map<std::string, nvinfer1::Weights> mWts);
-
+    void build_pooling(nvinfer1::INetworkDefinition& network, std::map<std::string, nvinfer1::Weights> mWts);
+    void build_upsample(nvinfer1::INetworkDefinition& network, std::map<std::string, nvinfer1::Weights> mWts);
+    void build_deconv(nvinfer1::INetworkDefinition& network, std::map<std::string, nvinfer1::Weights> mWts);
+    void build_concat(nvinfer1::INetworkDefinition& network, std::map<std::string, nvinfer1::Weights> mWts);
+    void build_elementwise(nvinfer1::INetworkDefinition& network, std::map<std::string, nvinfer1::Weights> mWts);
+    void build_reduce(nvinfer1::INetworkDefinition& network, std::map<std::string, nvinfer1::Weights> mWts);
+    void build_slice(nvinfer1::INetworkDefinition& network, std::map<std::string, nvinfer1::Weights> mWts);
+    
     bool constructNetwork();
     bool preprocess();
     void print_network(nvinfer1::INetworkDefinition &network, bool optimized);
