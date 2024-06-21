@@ -1,6 +1,0 @@
-CompileFlags:
-  CompilationDatabase: config/
-  Add:
-    - -I${__FILE__}/inlcude/
-    - -I/usr/local/cuda/include
-    - -I/home/kalfazed/packages/TensorRT-8.6.1.6/include

@@ -44,7 +44,7 @@ CenterPoint/
 Lidar_AI_Solution/
 
 # others
-Makefile.config
+# Makefile.config
 compile_commands.json
 calibration_table.txt
 trt-cuda
