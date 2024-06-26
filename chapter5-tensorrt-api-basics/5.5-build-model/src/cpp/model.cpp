@@ -644,7 +644,7 @@ void Model::build_deconv(nvinfer1::INetworkDefinition& network, map<string, nvin
 //        |
 //      output
 // concat层的创建
-void Model::build_concat(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+void Model::build_concat(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts, int concatDim) {
     auto data = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
     auto conv1 = network.addConvolutionNd(*data, 3, nvinfer1::DimsHW{3, 3}, mWts["conv1.weight"], mWts["conv1.bias"]);
     conv1->setName("conv1");
@@ -657,11 +657,25 @@ void Model::build_concat(nvinfer1::INetworkDefinition& network, map<string, nvin
     nvinfer1::ITensor* Tensors[]{conv1->getOutput(0), conv2->getOutput(0)};
     auto cat = network.addConcatenation(Tensors, 2);
     cat->setName("concat");
+    cat->setAxis(concatDim); // 设置拼接的维度(默认是通道维度上进行拼接)
 
     cat->getOutput(0)->setName("output0");
     network.markOutput(*cat->getOutput(0));
 }
 
+/*
+ * network
+ *
+ *  -- input --    ITensor
+ *  ---- | ----
+ *  ---linear--    Ilayer
+ *  ---- | ----
+ *  -- reduce --   IReduceLayer
+ *  ---- | ----
+ *  - softmax -    ISoftMaxLayer
+ *  ---- | ----
+ *  -- output -    ITensor
+ */
 // elementwise和const的创建
 void Model::build_elementwise(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
     auto data = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
@@ -721,8 +735,19 @@ void Model::build_reduce(nvinfer1::INetworkDefinition& network, map<string, nvin
     network.markOutput(*softmax->getOutput(0));
 }
 
+/*
+ * network
+ *
+ *  -- input --     ITensor
+ *  ---- | ----
+ *  --- conv ---    IConvolutionLayer
+ *  ---- | ----
+ *  -- slice --     ISliceLayer
+ *  ---- | ----
+ *  -- output --    ITensor
+ */
 // slice层的创建
-void Model::build_slice(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts) {
+void Model::build_slice(nvinfer1::INetworkDefinition& network, map<string, nvinfer1::Weights> mWts, int sliceDim, int sliceIndex) {
     auto data = network.addInput("input0", nvinfer1::DataType::kFLOAT, nvinfer1::Dims4{1, 1, 5, 5});
     // output channel 等于 3
     auto conv = network.addConvolutionNd(*data, 4, nvinfer1::DimsHW{3, 3}, mWts["conv.weight"], mWts["conv.bias"]);
@@ -732,19 +757,22 @@ void Model::build_slice(nvinfer1::INetworkDefinition& network, map<string, nvinf
     // 获取卷积层输出的维度
     auto d = conv->getOutput(0)->getDimensions();
 
-    // 添加第一个切片层，提取前两个通道
-    auto split1 = network.addSlice(*conv->getOutput(0), nvinfer1::Dims4{0, 0, 0, 0}, nvinfer1::Dims4{1, d.d[1] / 2, d.d[2], d.d[3]}, nvinfer1::Dims4{1, 1, 1, 1});
-    split1->setName("slice1");
+    // 定义切片的起始位置和大小
+    nvinfer1::Dims4 start{0, 0, 0, 0};
+    nvinfer1::Dims4 size{1, d.d[1], d.d[2], d.d[3]};
+    nvinfer1::Dims4 stride{1, 1, 1, 1};
 
-    // 添加第二个切片层，提取后两个通道
-    // auto split2 = network.addSlice(*conv->getOutput(0), nvinfer1::Dims4{0, 2, 0, 0}, nvinfer1::Dims4{1, d.d[1] / 2, d.d[2], d.d[3]}, nvinfer1::Dims4{1, 1, 1, 1});
-    // split2->setName("slice2");
+    // 根据 sliceDim 设置起始位置和切片大小
+    start.d[sliceDim] = sliceIndex * (d.d[sliceDim] / 2);
+    size.d[sliceDim] = d.d[sliceDim] / 2;
+
+    // 添加切片层
+    auto slice = network.addSlice(*conv->getOutput(0), start, size, stride);
+    slice->setName("slice1");
 
     // 将切片层的输出标记为网络输出
-    split1->getOutput(0)->setName("output1");
-    // split2->getOutput(0)->setName("output2");
-    network.markOutput(*split1->getOutput(0));
-    // network.markOutput(*split2->getOutput(0));
+    slice->getOutput(0)->setName("output0");
+    network.markOutput(*slice->getOutput(0));
 }
 
 void Model::init_data(nvinfer1::Dims input_dims, nvinfer1::Dims output_dims){

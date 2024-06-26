@@ -7,8 +7,9 @@ import struct
 import os
 
 class Model(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, concat_dim=1):
         super().__init__()
+        self.concat_dim = concat_dim
         self.conv1 = nn.Conv2d(1, 3, (3, 3))
         self.conv2 = nn.Conv2d(1, 3, (3, 3))
 
@@ -25,7 +26,7 @@ class Model(torch.nn.Module):
     def forward(self, x):
         x1 = self.conv1(x)
         x2 = self.conv2(x)
-        x = torch.cat((x1, x2), dim=1)  # 在通道维度上拼接
+        x = torch.cat((x1, x2), dim=self.concat_dim)  # 在通道维度上拼接
         return x
 
 def setup_seed(seed):

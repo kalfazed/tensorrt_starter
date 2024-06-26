@@ -7,9 +7,12 @@ import struct
 import os
 
 class Model(nn.Module):
-    def __init__(self):
+    def __init__(self, slice_dim=1, slice_index=0):
         super(Model, self).__init__()
+        self.slice_dim = slice_dim
+        self.slice_index = slice_index
         self.conv = nn.Conv2d(1, 4, (3, 3))  # 卷积层，输入通道为1，输出通道为4，卷积核大小为3x3
+        
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
@@ -21,8 +24,13 @@ class Model(nn.Module):
 
     def forward(self, x):
         x = self.conv(x)
-        x1 = x[:, :(x.shape[1]//2), :, :]  # 沿通道维度进行二等分
-        # x2 = x[:, (x.shape[1]//2):, :, :]
+        split_indices = x.shape[self.slice_dim] // 2
+        if self.slice_dim == 1:
+            x1 = x[:, :split_indices, :, :] if self.slice_index == 0 else x[:, split_indices:, :, :]
+        elif self.slice_dim == 2:
+            x1 = x[:, :, :split_indices, :] if self.slice_index == 0 else x[:, :, split_indices:, :]
+        elif self.slice_dim == 3:
+            x1 = x[:, :, :, :split_indices] if self.slice_index == 0 else x[:, :, :, split_indices:]
         return x1
 
 def setup_seed(seed):
@@ -92,7 +100,9 @@ if __name__ == "__main__":
         [0.4550, 0.5725, 0.4980, 0.9371, 0.6556],
         [0.3138, 0.1980, 0.4162, 0.2843, 0.3398]]]])
 
-    model = Model()
+    slice_dim = 1  # 选择维度
+    slice_index = 0  # 选择切片
+    model = Model(slice_dim=slice_dim, slice_index=slice_index)
     
     # 以bytes形式导出权重
     export_weight(model);
