@@ -125,9 +125,9 @@ bool Detector::preprocess_cpu() {
     for (int i = 0; i < m_inputDims.d[2]; i++) {
         for (int j = 0; j < m_inputDims.d[3]; j++) {
             index = i * m_inputDims.d[3] * m_inputDims.d[1] + j * m_inputDims.d[1];
-            m_inputMemory[0][offset_ch2++] = m_inputImage.data[index + 0] / 255.0f;
-            m_inputMemory[0][offset_ch1++] = m_inputImage.data[index + 1] / 255.0f;
-            m_inputMemory[0][offset_ch0++] = m_inputImage.data[index + 2] / 255.0f;
+            m_inputMemory[0][offset_ch2++] = tar.data[index + 0] / 255.0f;
+            m_inputMemory[0][offset_ch1++] = tar.data[index + 1] / 255.0f;
+            m_inputMemory[0][offset_ch0++] = tar.data[index + 2] / 255.0f;
         }
     }
 

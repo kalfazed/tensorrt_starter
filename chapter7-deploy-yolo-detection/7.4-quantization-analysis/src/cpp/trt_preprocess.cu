@@ -363,7 +363,7 @@ __global__ void warpaffine_BGR2RGB_kernel(
     int src_x2 = src_x1 + 1;
     int src_y2 = src_y1 + 1;
 
-    if (src_y1 < 0 || src_x1 < 0 || src_y1 > trans.src_h || src_x1 > trans.src_w) {
+    if (src_y1 < 0 || src_x1 < 0 || src_y2 > trans.src_h || src_x2 > trans.src_w) {
     } else {
         float tw   = src_x - src_x1;
         float th   = src_y - src_y1;

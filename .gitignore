@@ -37,7 +37,7 @@ __pycache__/
 Makefile.config
 archive/
 build/
-results/
+result/
 tars/
 Swin-Transformer/
 ultralytics/
