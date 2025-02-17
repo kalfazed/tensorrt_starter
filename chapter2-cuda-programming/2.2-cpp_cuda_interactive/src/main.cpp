@@ -8,10 +8,10 @@ void print_one_dim(int inputSize, int blockSize){
     dim3 block(blockSize);
     dim3 grid(gridSize);
 
-    // print_idx_device(block, grid);
-    // print_dim_device(block, grid);
-    // print_thread_idx_per_block_device(block, grid);
-    print_thread_idx_device(block, grid);
+    // print_idx_device(grid, block);
+    // print_dim_device(grid, block);
+    // print_thread_idx_per_block_device(grid, block);
+    print_thread_idx_device(grid, block);
 }
 
 void print_two_dim(int inputSize, int blockSize){
@@ -20,10 +20,10 @@ void print_two_dim(int inputSize, int blockSize){
     dim3 block(blockSize, blockSize);
     dim3 grid(gridSize, gridSize);
 
-    // print_idx_device(block, grid);
-    // print_dim_device(block, grid);
-    // print_thread_idx_per_block_device(block, grid);
-    print_thread_idx_device(block, grid);
+    // print_idx_device(grid, block);
+    // print_dim_device(grid, block);
+    // print_thread_idx_per_block_device(grid, block);
+    print_thread_idx_device(grid, block);
 }
 
 
